@@ -6,6 +6,7 @@ export default function Login() {
 
     return (
         <>
+          
             <div className="bg-gradient-primary">
                 <div className="container">
                     <div className="row justify-content-center">
@@ -87,10 +88,13 @@ export default function Login() {
            
         </div>
     </div>
+    
 </footer>
+
 
                 </div>
             </div>
+           
             <script src="%PUBLIC_URL%/assets/vendor/jquery/jquery.min.js"></script>
             <script src="%PUBLIC_URL%/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
             <script src="%PUBLIC_URL%/assets/vendor/jquery-easing/jquery.easing.min.js"></script>
