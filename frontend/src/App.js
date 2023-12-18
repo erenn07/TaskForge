@@ -1,24 +1,21 @@
-
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
+import Dashboard from "./components/pages/Dashboard";
+import Login from "./components/pages/login";
+import Register from "./components/pages/register";
+import { Routes, Route, Navigate } from 'react-router-dom';
+function App(){
+    return(
        
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+          
 
+     
+        <Routes>
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+  
+  
+    
+    </Routes>
+    );
+}
 export default App;
