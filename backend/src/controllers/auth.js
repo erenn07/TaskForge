@@ -3,14 +3,18 @@ import bcrypt from 'bcrypt';
 import User from '../models/User.js';
 
 const register = async (req, res, next) => {
+
+  console.log("register calıstı")
   const { firstName,lastName, email,phone,password } = req.body;
 
   try {
+    console.log("burdayım be burdayım")
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ firstName,lastName, email,phone, password: hashedPassword });
     await user.save();
-    res.json({ message: 'Registration successful' });
+    res.status(201).json({ message: 'Registeration successfull' });
   } catch (error) {
+    res.status(400).json({message:"server error"})
     next(error);
   }
 };
@@ -19,7 +23,7 @@ const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email});
+    const user = await User.findOne({email:email});
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }

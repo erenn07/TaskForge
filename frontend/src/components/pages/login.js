@@ -1,7 +1,36 @@
+import { useState, useEffect } from "react";
+import api from "../../services/api.js"
 import React from 'react';
 
 
 export default function Login() {
+
+    const [form, setForm] = useState({
+        email:"",
+        password:""
+      });
+
+
+
+    const LoginData = async()=>{
+        const response= await api.user.login(form)
+        if(response.status ===201){
+            console.log("hatasız")
+        }else if (response.status===400){
+            console.log("400 geldi")
+        }else{
+            console.log("hatayı bilmiyoruz")
+        }
+    }
+
+      const onChange = async(prop,value)=>{
+        setForm({
+            ...form,
+            [prop]:value,
+        })
+      }
+
+
 
 
     return (
@@ -25,6 +54,7 @@ export default function Login() {
                                                     <div className="form-group">
                                                         <input
                                                             type="email"
+                                                            onChange={(e) => onChange("email", e.target.value)}
                                                             className="form-control form-control-user"
                                                             id="exampleInputEmail"
                                                             aria-describedby="emailHelp"
@@ -34,6 +64,7 @@ export default function Login() {
                                                     <div className="form-group">
                                                         <input
                                                             type="password"
+                                                            onChange={(e) => onChange("password", e.target.value)}
                                                             className="form-control form-control-user"
                                                             id="exampleInputPassword"
                                                             placeholder="Password"
@@ -51,7 +82,7 @@ export default function Login() {
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <a href="./Dashboard" className="btn btn-primary btn-user btn-block">
+                                                    <a onClick={LoginData} className="btn btn-primary btn-user btn-block">
                                                         Login
                                                     </a>
                                                     <hr />

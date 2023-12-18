@@ -10,14 +10,24 @@ dotenv.config()
 const app = express()
 const port = 3001
 
-connectDB()
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Methods", "GET, POST ,PUT,DELETE,PATCH");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, x-access-token");
+  res.header("Access-Control-Allow-Credentials", "true");
+
+
+  next();
+});
 
 app.use(express.json())
 
-
+connectDB()
 
 app.use("/auth",authRoutes)
-app.use("/user",userRoutes)
+// app.use("/user",userRoutes)
+
 
 
 app.listen(port, () => {

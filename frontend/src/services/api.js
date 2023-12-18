@@ -30,11 +30,11 @@ instance.interceptors.response.use(
 export default{
     user:{
         async login(email,password){
-            const response = await instance.post("/user/login",{email,password});
+            const response = await instance.post("/auth/login",{email,password});
             return response.data;
         },
         async register(payload){
-            const response = await instance.post(payload);
+            const response = await instance.post("/auth/register",payload);
             return response.data;
         }
     }
