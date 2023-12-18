@@ -24,29 +24,8 @@ const UserSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
-    _id: { type: mongoose.Schema.Types.ObjectId,
-       required: true 
-      },
-
   },
 );
-
-/* UserSchema.pre('save', async function (next) {
-    const user = this;
-    if (!user.isModified('password')) return next();
-  
-    try {
-      const salt = await bcrypt.genSalt();
-      user.password = await bcrypt.hash(user.password, salt);
-      next();
-    } catch (error) {
-      return next(error);
-    }
-  });
-  
-  UserSchema.methods.comparePassword = async function (password) {
-    return bcrypt.compare(password, this.password);
-  }; */
 
 const User = mongoose.model('User', UserSchema);
 
