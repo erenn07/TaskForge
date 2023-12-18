@@ -9,17 +9,20 @@ export default function Login() {
         email:"",
         password:""
       });
-
+      const [email, setEmail] = useState("");
+      const [password, setPassword] = useState("");
 
 
     const LoginData = async()=>{
-        const response= await api.user.login(form)
-        if(response.status ===201){
-            console.log("hatasız")
-        }else if (response.status===400){
-            console.log("400 geldi")
+        const response= await api.user.login(email,password)
+
+        console.log("bu apiden gelen login cevabı:",response)
+        if(response.status ===200){
+            console.log("işlem başarılı")
+        }else if (response.status===401){
+            console.log("401 hatası")
         }else{
-            console.log("hatayı bilmiyoruz")
+            
         }
     }
 
@@ -55,7 +58,7 @@ export default function Login() {
                                                     <div className="form-group">
                                                         <input
                                                             type="email"
-                                                            onChange={(e) => onChange("email", e.target.value)}
+                                                            onChange={(e) => setEmail(e.target.value) }
                                                             className="form-control form-control-user"
                                                             id="exampleInputEmail"
                                                             aria-describedby="emailHelp"
@@ -65,7 +68,7 @@ export default function Login() {
                                                     <div className="form-group">
                                                         <input
                                                             type="password"
-                                                            onChange={(e) => onChange("password", e.target.value)}
+                                                            onChange={(e) => setPassword(e.target.value) }
                                                             className="form-control form-control-user"
                                                             id="exampleInputPassword"
                                                             placeholder="Password"
