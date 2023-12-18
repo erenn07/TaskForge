@@ -1,6 +1,9 @@
 import React from 'react';
 
+
 export default function Login() {
+
+
     return (
         <>
             <div className="bg-gradient-primary">
@@ -10,10 +13,10 @@ export default function Login() {
                             <div className="card o-hidden border-0 shadow-lg my-5">
                                 <div className="card-body p-0">
                                     <div className="row">
-                                        <div className="col-lg-6 d-none d-lg-block bg-login-image">
-                                            <img  src="./assets/img/taskForge.png"></img>
+                                        <div className="col-lg-6 d-none d-lg-block bg-login-image  ">
+                                  
                                         </div>
-                                        <div className="col-lg-6">
+                                        <div className="col-lg-6 ">
                                             <div className="p-5">
                                                 <div className="text-center">
                                                     <h1 className="h4 text-gray-900 mb-4">Welcome </h1>
@@ -58,6 +61,7 @@ export default function Login() {
                                                     <a href="index.html" className="btn btn-facebook btn-user btn-block">
                                                         <i className="fab fa-facebook-f fa-fw"></i> Login with Facebook
                                                     </a>
+                                                   
                                                 </form>
                                                 <hr />
                                                 <div className="text-center">
@@ -77,6 +81,14 @@ export default function Login() {
                             </div>
                         </div>
                     </div>
+                    <footer class="sticky-footer ">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto ">
+           
+        </div>
+    </div>
+</footer>
+
                 </div>
             </div>
             <script src="%PUBLIC_URL%/assets/vendor/jquery/jquery.min.js"></script>

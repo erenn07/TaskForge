@@ -10862,17 +10862,20 @@ a:focus {
 }
 
 .bg-login-image {
-  background-image: url('./assets/img/taskForge.png');
+  background-image: url('https://i.hizliresim.com/bvm97uy.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+
   
 }
 
 
 
+
+
 .bg-register-image {
-  background: url("https://source.unsplash.com/Mv9hjnEUHR4/600x800");
+  background: url("https://i.hizliresim.com/bvm97uy.png");
   background-position: center;
   background-size: cover;
 }
