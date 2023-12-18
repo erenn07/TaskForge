@@ -9,14 +9,15 @@ function Dashboard() {
     <div id="wrapper">
 
 
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-primary1 sidebar sidebar-dark accordion" id="accordionSidebar">
 
   
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
+        <div class="sidebar-brand-icon ">
+            <img src="./assets/img/logo.png"  ></img>
             {/* <i class="fas fa-laugh-wink"></i> */}
         </div>
-        <div class="sidebar-brand-text mx-3">TASK FORGE</div>
+        <div class="sidebar-brand-text mx-3"></div>
     </a>
 
     <hr class="sidebar-divider my-0"/>

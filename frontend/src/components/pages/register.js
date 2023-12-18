@@ -55,7 +55,8 @@ const onChange =async (prop,value)=>{
 <div class="bg-gradient-primary">
 
 <div class="container">
-
+<div className="row justify-content-center">
+<div className="col-xl-10 col-lg-12 col-md-9">
     <div class="card o-hidden border-0 shadow-lg my-5">
         <div class="card-body p-0">
           
@@ -84,6 +85,12 @@ const onChange =async (prop,value)=>{
                                      class="form-control form-control-user" id="exampleLastName"
                                         placeholder="Last Name"/>
                                 </div>
+
+                               
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" class="form-control form-control-user" id="exampleInputPhoneNumber"
+                                    placeholder="Phone Number"/>
                             </div>
                             <div class="form-group">
                                 <input 
@@ -153,6 +160,8 @@ const onChange =async (prop,value)=>{
 
 <script src="%PUBLIC_URL%/assets/js/sb-admin-2.min.js"></script>
 
+</div>
+</div>
 </div>
     );
 }
