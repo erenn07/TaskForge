@@ -85,10 +85,10 @@ const onChange =async (prop,value)=>{
 
                                
                             </div>
-                            <div class="form-group">
+                            {/* <div class="form-group">
                                 <input type="tel" class="form-control form-control-user" id="exampleInputPhoneNumber"
                                     placeholder="Phone Number"/>
-                            </div>
+                            </div> */}
                             <div class="form-group">
                                 <input 
                                 type="email"
