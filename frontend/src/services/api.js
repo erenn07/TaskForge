@@ -44,7 +44,7 @@ export default{
               Authorization:`Bearer ${token}`,
             }
            });
-          return response;
+          return response.data;
         }
     }
 }
