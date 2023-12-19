@@ -37,8 +37,13 @@ export default{
             const response = await instance.post("/auth/register",payload,{ withCredentials: true });
             return response.data;
         },
-        async getUser(){
-          const response = await instance.get("/user/getProfile",{ withCredentials: true });
+        async getUser(token){
+          const response = await instance.get("/user/getProfile",{ 
+            withCredentials: true,
+            headers:{
+              Authorization:`Bearer ${token}`,
+            }
+           });
           return response;
         }
     }

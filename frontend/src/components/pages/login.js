@@ -25,8 +25,9 @@ export default function Login() {
         if(response.success){
            
             navigate('/dashboard');
-            const form = await api.user.getUser()
-            console.log("bu form",form)
+            const userToken = response.token;
+            const form = await api.user.getUser(userToken);
+            console.log("bu form",form);
             console.log('işlem başarılı')
         }else if (!response.success){
             window.location.reload();
