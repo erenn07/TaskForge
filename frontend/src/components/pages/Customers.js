@@ -2,7 +2,7 @@ import logo from '../../../src/logo.svg';
 import '../../App.css';
 
 
-function Dashboard() {
+function Customers() {
   return (
     <>
     <div id="page-top"> 
@@ -54,7 +54,7 @@ function Dashboard() {
 
            
             <li class="nav-item">
-                <a class="nav-link " href="/projectManagement" data-target="#collapseUtilities"
+                <a class="nav-link " href="projectManagement" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Proje Yönetimi</span>
@@ -345,7 +345,7 @@ function Dashboard() {
 
     
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">MERHABA BU BİR KARŞILAMA SAYFASIDIR.</h1>
+            <h1 class="h3 mb-0 text-gray-800">MERHABA BU BİR MÜŞTERİLER SAYFASIDIR.</h1>
             {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                     class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
         </div>
@@ -743,4 +743,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Customers;
