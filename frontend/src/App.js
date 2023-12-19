@@ -2,10 +2,11 @@
 import Customers from "./components/pages/Customers";
 import Dashboard from "./components/pages/Dashboard";
 import Bills from "./components/pages/bills";
-import BusinessRegistration from "./components/pages/businessRegistration";
-import Login from "./components/pages/login";
-import ProjectManagement from "./components/pages/projectManagement";
-import Register from "./components/pages/register";
+import BusinessRegistration from "./components/pages/businessRegistration.js";
+
+import Login from "./components/pages/login.js";
+import ProjectManagement from "./components/pages/projectManagement.js";
+import Register from "./components/pages/register.js";
 import { Routes, Route, Navigate } from 'react-router-dom';
 // import { useState, useEffect } from "react";
 // import axios from "axios"
