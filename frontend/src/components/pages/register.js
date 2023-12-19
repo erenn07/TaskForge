@@ -1,11 +1,12 @@
 
 import { useState, useEffect } from "react";
 import api from "../../services/api.js"
+import { useNavigate } from "react-router-dom";
 
 
 export default function Register(){
 
-
+const navigate = useNavigate();
     const [form, setForm] = useState({
         firstName: "",
         lastName:"",
@@ -30,6 +31,7 @@ console.log("bu form",form)
 
 
     if(response.status ===201){
+        navigate("/login")
         console.log("hatasız")
     }else if (response.status===400){
         console.log("400 geldi")
@@ -85,10 +87,8 @@ const onChange =async (prop,value)=>{
 
                                
                             </div>
-                            <div class="form-group">
-                                <input type="tel" class="form-control form-control-user" id="exampleInputPhoneNumber"
-                                    placeholder="Phone Number"/>
-                            </div>
+                        
+                        
                             <div class="form-group">
                                 <input 
                                 type="email"

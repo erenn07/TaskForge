@@ -1,38 +1,38 @@
-import { useState, useEffect } from "react";
+import { useState,useEffect  } from "react";
+import {useNavigate} from "react-router-dom";
 import api from "../../services/api.js"
 import React from 'react';
+import axios from 'axios';
 
 
 export default function Login() {
 
-    const [form, setForm] = useState({
-        email:"",
-        password:""
-      });
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
       const [email, setEmail] = useState("");
       const [password, setPassword] = useState("");
+        const navigate = useNavigate();
 
+        useEffect(() => {
+       
+          }, []);
 
-    const LoginData = async()=>{
+    const LoginData = async(e)=>{
+        e.preventDefault();
         const response= await api.user.login(email,password)
 
         console.log("bu apiden gelen login cevabı:",response)
-        if(response.status ===200){
-            console.log("işlem başarılı")
-        }else if (response.status===401){
-            console.log("401 hatası")
-        }else{
-            
+ 
+        if(response.success){
+           
+            navigate('/dashboard');
+            const form = await api.user.getUser()
+            console.log("bu form",form)
+            console.log('işlem başarılı')
+        }else if (!response.success){
+            window.location.reload();
+         
         }
     }
-
-      const onChange = async(prop,value)=>{
-        setForm({
-            ...form,
-            [prop]:value,
-        })
-      }
-
 
 
 

@@ -26,7 +26,7 @@ app.use(express.json())
 connectDB()
 
 app.use("/auth",authRoutes)
-// app.use("/user",userRoutes)
+app.use("/user",userRoutes)
 
 
 

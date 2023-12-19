@@ -20,7 +20,7 @@ instance.interceptors.response.use(
     if (401 === error.response.status && error.response) {
       
       localStorage.clear();
-      window.location.href = "/";
+      //window.location.href = "/login";
     } else {
       return Promise.reject(error);
     }
@@ -34,8 +34,12 @@ export default{
             return response.data;
         },
         async register(payload){
-            const response = await instance.post("/auth/register",payload);
+            const response = await instance.post("/auth/register",payload,{ withCredentials: true });
             return response.data;
+        },
+        async getUser(){
+          const response = await instance.get("/user/getProfile",{ withCredentials: true });
+          return response;
         }
     }
 }
