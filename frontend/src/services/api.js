@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3001/",
+  baseURL: "https://taskforge-4yve.onrender.com",
 });
 
 instance.interceptors.request.use((config) => {
@@ -50,7 +50,7 @@ export default{
         async logout(){
 
           try {
-            const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
+            const response = await axios.get("https://taskforge-4yve.onrender.com/auth/logout", { withCredentials: true });
 
               return response
           
