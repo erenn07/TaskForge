@@ -1,4 +1,53 @@
+
+import { useState, useEffect } from "react";
+import api from "../../services/api.js"
+import { useNavigate } from "react-router-dom";
+
+
 export default function Register(){
+
+const navigate = useNavigate();
+    const [form, setForm] = useState({
+        firstName: "",
+        lastName:"",
+        email:"",
+        phone:"",
+        password:"",
+        passwordConfirmation:""
+
+      });
+    
+    
+    
+    
+    
+
+
+const RegisterData= async ()=>{
+
+console.log("bu form",form)
+    const response = await api.user.register(form)
+    console.log("bu apiden gelen cevap:",response)
+
+
+    if(response.status ===201){
+        navigate("/login")
+        console.log("hatasız")
+    }else if (response.status===400){
+        console.log("400 geldi")
+    }else{
+        console.log("hatayı bilmiyoruz")
+    }
+}
+
+
+const onChange =async (prop,value)=>{
+ setForm({
+    ...form,
+   [prop]:value,
+})
+}
+
     return(
 
 
@@ -20,35 +69,59 @@ export default function Register(){
                         <form class="user">
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="text" class="form-control form-control-user" id="exampleFirstName"
+                                    <input 
+                                    type="text"
+                                  
+                                    onChange={(e) => onChange("firstName", e.target.value)}
+
+                                     class="form-control form-control-user" id="exampleFirstName"
                                         placeholder="First Name"/>
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control form-control-user" id="exampleLastName"
+                                    <input 
+                                    type="text"
+                                    onChange={(e) => onChange("lastName", e.target.value)}
+                                     class="form-control form-control-user" id="exampleLastName"
                                         placeholder="Last Name"/>
                                 </div>
 
                                
                             </div>
+                        
+                        
                             <div class="form-group">
-                                <input type="tel" class="form-control form-control-user" id="exampleInputPhoneNumber"
-                                    placeholder="Phone Number"/>
+                                <input 
+                                type="email"
+                                onChange={(e) => onChange("email", e.target.value)}
+                                class="form-control form-control-user" id="exampleInputEmail"
+                                placeholder="Email Address"/>
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control form-control-user" id="exampleInputEmail"
-                                    placeholder="Email Address"/>
+                                <input 
+                                type="phone"
+                                onChange={(e) => onChange("phone", e.target.value)}
+                                class="form-control form-control-user" id="exampleInputEmail"
+                                placeholder="Phone Number"/>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-6 mb-3 mb-sm-0">
-                                    <input type="password" class="form-control form-control-user"
+                                    <input 
+                                    type="password"
+                                    onChange={(e) => onChange("password", e.target.value)}
+                                     class="form-control form-control-user"
                                         id="exampleInputPassword" placeholder="Password"/>
                                 </div>
                                 <div class="col-sm-6">
-                                    <input type="password" class="form-control form-control-user"
-                                        id="exampleRepeatPassword" placeholder="Repeat Password"/>
+                                    <input 
+                                    type="password"
+                                    onChange={(e) => onChange("passwordConfirmation", e.target.value)}
+                                    class="form-control form-control-user"
+                                    id="exampleRepeatPassword" placeholder="Repeat Password"/>
                                 </div>
                             </div>
-                            <a href="/login" class="btn btn-primary btn-user btn-block">
+                            <a 
+                            onClick={RegisterData}
+                             class="btn btn-primary btn-user btn-block">
                                 Register Account
                             </a>
                             <hr/>

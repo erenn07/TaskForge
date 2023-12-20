@@ -1,7 +1,40 @@
+import { useState,useEffect  } from "react";
+import {useNavigate} from "react-router-dom";
+import api from "../../services/api.js"
 import React from 'react';
+import axios from 'axios';
 
 
 export default function Login() {
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+      const [email, setEmail] = useState("");
+      const [password, setPassword] = useState("");
+        const navigate = useNavigate();
+
+        useEffect(() => {
+       
+          }, []);
+
+    const LoginData = async(e)=>{
+        e.preventDefault();
+        const response= await api.user.login(email,password)
+
+        console.log("bu apiden gelen login cevabı:",response)
+ 
+        if(response.success){
+           
+            navigate('/dashboard');
+            const userToken = response.token;
+            const form = await api.user.getUser(userToken);
+            console.log("bu form",form);
+            console.log('işlem başarılı')
+        }else if (!response.success){
+            window.location.reload();
+         
+        }
+    }
+
 
 
     return (
@@ -26,6 +59,7 @@ export default function Login() {
                                                     <div className="form-group">
                                                         <input
                                                             type="email"
+                                                            onChange={(e) => setEmail(e.target.value) }
                                                             className="form-control form-control-user"
                                                             id="exampleInputEmail"
                                                             aria-describedby="emailHelp"
@@ -35,6 +69,7 @@ export default function Login() {
                                                     <div className="form-group">
                                                         <input
                                                             type="password"
+                                                            onChange={(e) => setPassword(e.target.value) }
                                                             className="form-control form-control-user"
                                                             id="exampleInputPassword"
                                                             placeholder="Password"
@@ -52,7 +87,7 @@ export default function Login() {
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <a href="./Dashboard" className="btn btn-primary btn-user btn-block">
+                                                    <a onClick={LoginData} className="btn btn-primary btn-user btn-block">
                                                         Login
                                                     </a>
                                                     <hr />

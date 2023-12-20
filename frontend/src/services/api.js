@@ -20,7 +20,7 @@ instance.interceptors.response.use(
     if (401 === error.response.status && error.response) {
       
       localStorage.clear();
-      window.location.href = "/";
+      //window.location.href = "/login";
     } else {
       return Promise.reject(error);
     }
@@ -30,12 +30,36 @@ instance.interceptors.response.use(
 export default{
     user:{
         async login(email,password){
-            const response = await instance.post("/user/login",{email,password});
+            const response = await instance.post("/auth/login",{email,password},{ withCredentials: true });
             return response.data;
         },
         async register(payload){
-            const response = await instance.post(payload);
+            const response = await instance.post("/auth/register",payload,{ withCredentials: true });
             return response.data;
+        },
+        async getUser(token){
+          const response = await instance.get("/user/getProfile",{ 
+            withCredentials: true,
+            headers:{
+              Authorization:`Bearer ${token}`,
+            }
+           });
+          return response;
+        },
+ 
+        async logout(){
+
+          try {
+            const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
+
+              return response
+          
+          }catch(error){
+            alert(error)
+          
         }
-    }
-}
+
+ 
+ 
+      }
+    }}
