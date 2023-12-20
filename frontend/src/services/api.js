@@ -30,7 +30,7 @@ instance.interceptors.response.use(
 export default{
     user:{
         async login(email,password){
-            const response = await instance.post("/auth/login",{email,password});
+            const response = await instance.post("/auth/login",{email,password},{ withCredentials: true });
             return response.data;
         },
         async register(payload){
@@ -45,6 +45,21 @@ export default{
             }
            });
           return response;
+        },
+ 
+        async logout(){
+
+          try {
+            const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
+
+              return response
+          
+          }catch(error){
+            alert(error)
+          
         }
-    }
-}
+
+ 
+ 
+      }
+    }}

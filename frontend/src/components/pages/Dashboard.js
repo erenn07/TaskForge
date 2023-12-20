@@ -1,8 +1,27 @@
 import logo from '../../../src/logo.svg';
 import '../../App.css';
+import api from "../../services/api.js"
+import {useNavigate} from "react-router-dom";
 
 
 function Dashboard() {
+    const navigate = useNavigate();
+
+    const logout = async()=>{
+        const response= await api.user.logout()
+
+        console.log("bu apiden gelen login cevabı:",response)
+ 
+        if(response){
+           
+            navigate('/login');
+           
+        }else{
+            alert("error")
+        }
+    }
+
+    
   return (
     <>
     <div id="page-top"> 
@@ -323,7 +342,7 @@ function Dashboard() {
                         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                         Settings
                     </a>
-                    <a class="dropdown-item" href="/login">
+                    <a onClick={logout}    class="dropdown-item" >
                         <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                         Logout
                     </a>

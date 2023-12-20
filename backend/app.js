@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import authRoutes from './src/routes/auth.js';
 import userRoutes from './src/routes/user.js';
+import cookieParser from 'cookie-parser';
 
 
 dotenv.config()
@@ -20,6 +21,8 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use(cookieParser())
 
 app.use(express.json())
 
