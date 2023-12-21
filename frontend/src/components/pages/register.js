@@ -30,7 +30,7 @@ console.log("bu form",form)
     console.log("bu apiden gelen cevap:",response)
 
 
-    if(response.success){
+    if(response.status ===201){
         navigate("/login")
         console.log("hatasız")
     }else if (response.status===400){
