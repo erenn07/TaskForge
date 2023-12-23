@@ -31,7 +31,7 @@ console.log("bu form",form)
 
 
     if(response.status ===201){
-        navigate("/login")
+        navigate("/")
         console.log("hatasız")
     }else if (response.status===400){
         console.log("400 geldi")
@@ -137,7 +137,7 @@ const onChange =async (prop,value)=>{
                             <a class="small" href="forgot-password.html">Forgot Password?</a>
                         </div>
                         <div class="text-center">
-                            <a class="small" href="/login">Already have an account? Login!</a>
+                            <a class="small" href="/">Already have an account? Login!</a>
                         </div>
                     </div>
                 </div>

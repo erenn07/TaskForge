@@ -76,23 +76,20 @@ const logout = (req, res) => {
 
 
 
-const checkUser=async(req,res)=>{
+const checkUser = (req, res) => {
+    try {
 
-  // const userId=req.user
-  
-  
-  //     if(req.user){
-  
-  //       return res.json({loggedIn:true,userId})
-  
-  //     }
-  //   else {
-  
-  //     return res.json({loggedIn:false})
-  
-  //   }
-  
-  } 
+
+        if (req.cookies.jwt) {
+            res.json({ loggedIn: true  });
+        } else {
+            res.json({ loggedIn: false });
+        }
+    } catch (error) {
+        console.error('Hata:', error);
+        res.status(500).json({ error: 'Sunucu hatası' });
+    }
+};
   
 
 export { register, login ,checkUser,logout};

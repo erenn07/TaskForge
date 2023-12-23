@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 const instance = axios.create({
   baseURL: "http://localhost:3001/",
 });
@@ -57,9 +58,32 @@ export default{
           }catch(error){
             alert(error)
           
-        }
+        }},
 
- 
- 
+
+
+async checkUser(){
+  
+    try {
+        const response = await axios.get("http://localhost:3001/auth/checkUser", {withCredentials: true});
+
+          return response
+      
+      }catch(error){
+        alert(error)
+      
+
+    }
+}
+
+  
+  
+
       }
-    }}
+  
+  
+  
+  
+  
+  
+  }
