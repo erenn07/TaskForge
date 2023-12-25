@@ -13,25 +13,25 @@ function Dashboard() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    // useEffect(() => {
-    //     const checkUserToken = async () => {
-    //         try {
-    //             const response = await api.user.checkUser();
-    //             if (response && response.data.loggedIn) {
-    //                 setIsLoggedIn(true); 
-    //             } else {
-    //                 setIsLoggedIn(false); 
-    //                 navigate('/'); 
-    //             }
-    //         } catch (error) {
-    //             console.error('Oturum kontrol hatası:', error);
-    //             setIsLoggedIn(false); 
-    //             navigate('/'); 
-    //         }
-    //     };
+    useEffect(() => {
+        const checkUserToken = async () => {
+            try {
+                const response = await api.user.checkUser();
+                if (response && response.data.loggedIn) {
+                    setIsLoggedIn(true); 
+                } else {
+                    setIsLoggedIn(false); 
+                    navigate('/'); 
+                }
+            } catch (error) {
+                console.error('Oturum kontrol hatası:', error);
+                setIsLoggedIn(false); 
+                navigate('/'); 
+            }
+        };
 
-    //     checkUserToken();
-    // }, [navigate]);
+        checkUserToken();
+    }, [navigate]);
 
 
     // const logout = async()=>{
@@ -49,7 +49,7 @@ function Dashboard() {
     // }
 
    
-  return  (
+  return isLoggedIn ? (
     <>
     <div id="page-top"> 
     <div id="wrapper">
@@ -589,7 +589,7 @@ function Dashboard() {
    
     </>
    
-  );
+  ) : null;
    
 }
 
