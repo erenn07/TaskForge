@@ -16,30 +16,40 @@ const navigate = useNavigate();
         passwordConfirmation:""
 
       });
-    
-    
-    
-    
-    
-
 
 const RegisterData= async ()=>{
 
 console.log("bu form",form)
+    
+try {
     const response = await api.user.register(form)
     console.log("bu apiden gelen cevap:",response)
 
-
-    if(response.status ===201){
+    if(response.status===201){    
+        alert(response.data.message)
         navigate("/login")
-        console.log("hatasız")
-    }else if (response.status===400){
-        console.log("400 geldi")
     }else{
-        console.log("hatayı bilmiyoruz")
+        if (response.message){
+          alert(response.message);  
+        }else{
+        alert("Unexpected response from server")
+    }}
+}catch (error) {
+    if (error.response) {
+      if (error.response.status === 409) {
+        alert(error.response.data.message);
+      } else if (error.response.status===400) { 
+        alert(error.response.data.message);
+      }else{     
+        alert("Server error. Please try again later.");
+      }
+    } else if (error.request) {
+      alert("No response from server. Please try again later.");
+    } else {
+      alert("Request failed. Please check your internet connection and try again.");
     }
-}
-
+  }
+};
 
 const onChange =async (prop,value)=>{
  setForm({
