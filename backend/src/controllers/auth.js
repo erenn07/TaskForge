@@ -62,23 +62,8 @@ const login = async (req, res, next) => {
       const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
       expiresIn: '1d'
     });
-<<<<<<< HEAD
-
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
-      sameSite: 'none',
-      secure: true
-    });
-
-
-    // console.log("mesaj",req.user)
-    // console.log("mesaj222",req.user.email)
-    res.status(200).json({ success:true,token:token });
-=======
  
     res.status(200).json({ success:true,token:token ,message:"Login successful"});
->>>>>>> Eren
     }
 
     
@@ -87,46 +72,6 @@ const login = async (req, res, next) => {
   }
 };
 
-<<<<<<< HEAD
-const logout = (req, res) => {
-  try {
-    res.clearCookie('jwt'); 
-    res.status(200).json({
-      succeded: true,
-      message: 'User logged out successfully',
-    });
-  } catch (error) {
-    res.status(500).json({
-      succeded: false,
-      error: 'Server error',
-    });
-  }
-};
-
-
-
-
-const checkUser=async(req,res)=>{
-
-  // const userId=req.user
-  
-  
-  //     if(req.user){
-  
-  //       return res.json({loggedIn:true,userId})
-  
-  //     }
-  //   else {
-  
-  //     return res.json({loggedIn:false})
-  
-  //   }
-  
-  } 
-  
-
-export { register, login ,checkUser,logout};
-=======
 const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
@@ -138,4 +83,3 @@ const validatePhone = (phone) => {
 };  
 
 export { register, login};
->>>>>>> Eren
