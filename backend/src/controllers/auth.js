@@ -56,7 +56,7 @@ const login = async (req, res, next) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).json({ message: 'Incorrect password' });
+      return res.status(402).json({success:false, message: 'Incorrect password' });
     }else{
 
       const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
@@ -66,9 +66,8 @@ const login = async (req, res, next) => {
     res.cookie('jwt', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
-      secure: true,
-      sameSite:'none'
-      
+      sameSite: 'none',
+      secure: true
     });
 
 
