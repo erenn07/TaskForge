@@ -5,17 +5,41 @@ import { authenticate } from '../middlewares/auth.js';
 
 const register = async (req, res, next) => {
 
-  console.log("register calıstı")
-  const { firstName,lastName, email,phone,password } = req.body;
+  const { firstName,lastName, email,phone,password,passwordConfirmation} = req.body;
 
   try {
-    console.log("burdayım be burdayım")
+    const isEmailValid = validateEmail(email);
+    if (!isEmailValid) {
+      return res.status(400).json({ success: false, message: 'Geçerli bir email adresi giriniz.' });
+    }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ success: false, message: 'Bu email adresi zaten kullanımda. Lütfen başka bir email kullanın.' });
+    }
+
+    if (!validatePhone(phone)) {
+      return res.status(400).json({ success: false, message: 'Telefon numarası sadece sayı içermelidir ve 10 haneli olmalıdır.' });
+    }
+
+    const existingNumber = await User.findOne({ phone });
+    if (existingNumber) {
+      return res.status(400).json({ success: false, message: 'Bu telefon numarası zaten kullanımda. Lütfen başka bir telefon numarası kullanın.' });
+    }
+
+    if (password !==passwordConfirmation) {
+      return res.status(400).json({
+        success: false,
+        message: 'Passwords are not matched',
+      });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = new User({ firstName,lastName, email,phone, password: hashedPassword });
     await user.save();
-    res.status(201).json({ message: 'Registeration successfull' });
+    res.status(201).json({success:true, message: 'Registeration successful' });
   } catch (error) {
-    res.status(400).json({message:"server error"})
+    res.status(400).json({success:false,message:"server error"})
     next(error);
   }
 };
@@ -75,25 +99,32 @@ const logout = (req, res) => {
 };
 
 
+const validateEmail = (email) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validatePhone = (phone) => {
+  const phoneRegex = /^\d{10}$/;
+  return phoneRegex.test(phone);
+};  
 
 
-const checkUser=async(req,res)=>{
 
-  // const userId=req.user
-  
-  
-  //     if(req.user){
-  
-  //       return res.json({loggedIn:true,userId})
-  
-  //     }
-  //   else {
-  
-  //     return res.json({loggedIn:false})
-  
-  //   }
-  
-  } 
+const checkUser = (req, res) => {
+    try {
+
+
+        if (req.cookies.jwt) {
+            res.json({ loggedIn: true  });
+        } else {
+            res.json({ loggedIn: false });
+        }
+    } catch (error) {
+        console.error('Hata:', error);
+        res.status(500).json({ error: 'Sunucu hatası' });
+    }
+};
   
 
 export { register, login ,checkUser,logout};

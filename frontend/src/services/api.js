@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 const instance = axios.create({
   baseURL: "https://taskforge-4yve.onrender.com",
 });
@@ -57,9 +58,32 @@ export default{
           }catch(error){
             alert(error)
           
-        }
+        }},
 
- 
- 
+
+
+async checkUser(){
+  
+    try {
+        const response = await axios.get("https://taskforge-4yve.onrender.com/auth/checkUser", {withCredentials: true});
+
+          return response
+      
+      }catch(error){
+        alert(error)
+      
+
+    }
+}
+
+  
+  
+
       }
-    }}
+  
+  
+  
+  
+  
+  
+  }
