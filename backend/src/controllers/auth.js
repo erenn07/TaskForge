@@ -87,9 +87,7 @@ const logout = (req, res) => {
   try {
     res.clearCookie('jwt',{
       domain: 'https://taskforge-4yve.onrender.com', 
-      path: '/', // Çerezin geçerli olduğu path
-      secure: true, // Sadece HTTPS üzerinden çalışsın (opsiyonel, bağlamınıza bağlı)
-      httpOnly: true // Sadece HTTP üzerinden erişilebilsin (JavaScript tarafından değil)
+   
     }); 
     res.status(200).json({
       succeded: true,
