@@ -33,7 +33,7 @@ const navigate = useNavigate();
         
             if(response.status===201){    
                 alert(response.data.message)
-                navigate("/login")
+                navigate("/")
             }else{
                 if (response.message){
                   alert(response.message);  
