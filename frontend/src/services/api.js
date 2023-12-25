@@ -53,7 +53,7 @@ export default{
           try {
             const response = await axios.get("https://taskforge-4yve.onrender.com/auth/logout", { withCredentials: true });
 
-              return response
+              return response.data;
           
           }catch(error){
             alert(error)
