@@ -10,7 +10,7 @@ function Header() {
       const response = await api.user.logout();
       console.log('Bu apiden gelen logout cevabı:', response);
 
-      if (response.succeeded) {
+      if (response.succeded) {
         navigate('/login');
       } else {
         alert('Error');
