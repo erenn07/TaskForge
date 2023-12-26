@@ -86,7 +86,7 @@ const login = async (req, res, next) => {
 const logout = (req, res) => {
   try {
     res.clearCookie('jwt',{
-      domain: 'https://taskforge-4yve.onrender.com', 
+      domain: 'taskforge-4yve.onrender.com', 
    
     }); 
     res.status(200).json({
