@@ -11,7 +11,7 @@ function Header() {
       console.log('Bu apiden gelen logout cevabı:', response);
 
       if (response) {
-        navigate('/login');
+        navigate('/');
       } else {
         alert('Error');
       }
