@@ -85,10 +85,7 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res) => {
   try {
-    const token= req.cookies.jwt;
-    if(!token){
-      return res.status(400).json({message: "token is not found"});
-    }
+  
     res.clearCookie('jwt',{
       domain: 'taskforge-4yve.onrender.com', 
       path:"/"
