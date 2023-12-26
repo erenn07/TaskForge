@@ -87,7 +87,7 @@ const logout = async (req, res) => {
   try {
     const token = req.cookies;
     console.log("token budur:",token)
-    res.clearCookie('jwt', {domain:"taskforgee.netlify.app",path:"/",secure: true, httpOnly: true, sameSite: 'None'}); 
+    res.clearCookie('jwt', {path:"/"}); 
     res.status(200).json({
       succeded: true,
       message: 'User logged out successfully',
