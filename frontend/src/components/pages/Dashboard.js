@@ -49,7 +49,7 @@ function Dashboard() {
     // }
 
    
-  return  (
+  return (
     <>
     <div id="page-top"> 
     <div id="wrapper">
@@ -589,7 +589,7 @@ function Dashboard() {
    
     </>
    
-  );
+  ) ;
    
 }
 

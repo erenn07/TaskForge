@@ -65,6 +65,7 @@ const login = async (req, res, next) => {
 
     res.cookie('jwt', token, {
       httpOnly: true,
+      path:"/",
       maxAge: 1000 * 60 * 60 * 24,
       secure: true,
       sameSite:'none'
@@ -83,10 +84,16 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = (req, res) => {
+const logout = async (req, res) => {
   try {
-    res.clearCookie('jwt'); 
-    res.status(200).json({
+    const token = req.cookies;
+    console.log("token budur:",token)
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      path: '/',
+      secure: true,
+      sameSite: 'none'
+    });    res.status(200).json({
       succeded: true,
       message: 'User logged out successfully',
     });
