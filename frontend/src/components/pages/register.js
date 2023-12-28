@@ -16,40 +16,47 @@ const navigate = useNavigate();
         passwordConfirmation:""
 
       });
-
-const RegisterData= async ()=>{
-
-console.log("bu form",form)
     
-try {
-    const response = await api.user.register(form)
-    console.log("bu apiden gelen cevap:",response)
+    
+    
+    
+    
 
-    if(response.status===201){    
-        alert(response.data.message)
-        navigate("/login")
-    }else{
-        if (response.message){
-          alert(response.message);  
-        }else{
-        alert("Unexpected response from server")
-    }}
-}catch (error) {
-    if (error.response) {
-      if (error.response.status === 409) {
-        alert(error.response.data.message);
-      } else if (error.response.status===400) { 
-        alert(error.response.data.message);
-      }else{     
-        alert("Server error. Please try again later.");
-      }
-    } else if (error.request) {
-      alert("No response from server. Please try again later.");
-    } else {
-      alert("Request failed. Please check your internet connection and try again.");
-    }
-  }
-};
+
+      const RegisterData= async ()=>{
+
+        console.log("bu form",form)
+        
+        try {
+            const response = await api.user.register(form)
+            console.log("bu apiden gelen cevap:",response)
+        
+            if(response.status===201){    
+                alert(response.data.message)
+                navigate("/")
+            }else{
+                if (response.message){
+                  alert(response.message);  
+                }else{
+                alert("Unexpected response from server")
+            }}
+        }catch (error) {
+            if (error.response) {
+              if (error.response.status === 409) {
+                alert(error.response.data.message);
+              } else if (error.response.status===400) { 
+                alert(error.response.data.message);
+              }else{     
+                alert("Server error. Please try again later.");
+              }
+            } else if (error.request) {
+              alert("No response from server. Please try again later.");
+            } else {
+              alert("Request failed. Please check your internet connection and try again.");
+            }
+          }
+        };
+
 
 const onChange =async (prop,value)=>{
  setForm({
@@ -147,7 +154,7 @@ const onChange =async (prop,value)=>{
                             <a class="small" href="forgot-password.html">Forgot Password?</a>
                         </div>
                         <div class="text-center">
-                            <a class="small" href="/login">Already have an account? Login!</a>
+                            <a class="small" href="/">Already have an account? Login!</a>
                         </div>
                     </div>
                 </div>

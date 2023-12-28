@@ -1,7 +1,8 @@
 import axios from "axios";
 
+
 const instance = axios.create({
-  baseURL: "https://taskforge-4yve.onrender.com",
+  baseURL: "https://taskforge.onrender.com",
 });
 
 instance.interceptors.request.use((config) => {
@@ -30,15 +31,15 @@ instance.interceptors.response.use(
 export default{
     user:{
         async login(email,password){
-            const response = await instance.post("https://taskforge-4yve.onrender.com/auth/login",{email,password},{ withCredentials: true });
+            const response = await instance.post("https://taskforge.onrender.com/auth/login",{email,password},{ withCredentials: true });
             return response.data;
         },
         async register(payload){
-            const response = await instance.post("https://taskforge-4yve.onrender.com/auth/register",payload,{ withCredentials: true });
+            const response = await instance.post("https://taskforge.onrender.com/auth/register",payload,{ withCredentials: true });
             return response.data;
         },
         async getUser(token){
-          const response = await instance.get("https://taskforge-4yve.onrender.com/user/getProfile",{ 
+          const response = await instance.get("https://taskforge.onrender.com/user/getProfile",{ 
             withCredentials: true,
             headers:{
               Authorization:`Bearer ${token}`,
@@ -50,16 +51,39 @@ export default{
         async logout(){
 
           try {
-            const response = await axios.get("https://taskforge-4yve.onrender.com/auth/logout", { withCredentials: true });
+            const response = await axios.get("https://taskforge.onrender.com/auth/logout", { withCredentials: true });
 
-              return response
+              return response.data;
           
           }catch(error){
             alert(error)
           
-        }
+        }},
 
- 
- 
+
+
+async checkUser(){
+  
+    try {
+        const response = await axios.get("https://taskforge.onrender.com/auth/checkUser", {withCredentials: true});
+
+          return response
+      
+      }catch(error){
+        alert(error)
+      
+
+    }
+}
+
+  
+  
+
       }
-    }}
+  
+  
+  
+  
+  
+  
+  }

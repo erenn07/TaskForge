@@ -16,42 +16,43 @@ export default function Login() {
        
           }, []);
 
-    const LoginData = async(e)=>{
-        e.preventDefault();
-        try{
-        const response= await api.user.login(email,password)
-
-        console.log("bu apiden gelen login cevabı:",response)
- 
-        console.log(response)
-        if(response.success){
-            alert(response.message)
-            navigate('/dashboard');
-            const userToken = response.token;
-            const form = await api.user.getUser(userToken)
-            console.log("bu form",form);
-        }else{
-            if (response.message){
-              alert(response.message);  
+          const LoginData = async(e)=>{
+            e.preventDefault();
+            try{
+            const response= await api.user.login(email,password)
+    
+            console.log("bu apiden gelen login cevabı:",response)
+    
+            console.log(response)
+            if(response.success){
+                navigate('/dashboard');
+                const userToken = response.token;
+                const form = await api.user.getUser(userToken)
+                console.log("bu form",form);
             }else{
-            alert("Unexpected response from server")
-        }}
-    }catch (error) {
-            if (error.response) {
-              if (error.response.status === 404) {
-                alert(error.response.data.message);
-              } else if (error.response.status===401) { 
-                alert(error.response.data.message);
-              }else{     
-                alert("Server error. Please try again later.");
+                if (response.message){
+                  alert(response.message);  
+                }else{
+                alert("Unexpected response from server")
+            }}
+        }catch (error) {
+                if (error.response) {
+                  if (error.response.status === 404) {
+                    alert(error.response.data.message);
+                  } else if (error.response.status===401) { 
+                    alert(error.response.data.message);
+                  }else{     
+                    alert("Server error. Please try again later.");
+                  }
+                } else if (error.request) {
+                  alert("No response from server. Please try again later.");
+                } else {
+                  alert("Request failed. Please check your internet connection and try again.");
+                }
               }
-            } else if (error.request) {
-              alert("No response from server. Please try again later.");
-            } else {
-              alert("Request failed. Please check your internet connection and try again.");
-            }
-          }
-        };
+            };
+
+
 
     return (
         <>

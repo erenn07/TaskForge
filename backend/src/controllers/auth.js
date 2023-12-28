@@ -65,6 +65,7 @@ const login = async (req, res, next) => {
 
     res.cookie('jwt', token, {
       httpOnly: true,
+      path:"/",
       maxAge: 1000 * 60 * 60 * 24,
       secure: true,
       sameSite:'none'
@@ -83,6 +84,28 @@ const login = async (req, res, next) => {
   }
 };
 
+const logout = async (req, res) => {
+  try {
+    const token = req.cookies;
+    console.log("token budur:",token)
+    res.clearCookie('jwt', {
+      httpOnly: true,
+      path: '/',
+      secure: true,
+      sameSite: 'none'
+    });    res.status(200).json({
+      succeded: true,
+      message: 'User logged out successfully',
+    });
+  } catch (error) {
+    res.status(500).json({
+      succeded: false,
+      error: 'Server error',
+    });
+  }
+};
+
+
 const validateEmail = (email) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
@@ -92,5 +115,23 @@ const validatePhone = (phone) => {
   const phoneRegex = /^\d{10}$/;
   return phoneRegex.test(phone);
 };  
+
+
+
+const checkUser = (req, res) => {
+    try {
+
+
+        if (req.cookies.jwt) {
+            res.json({ loggedIn: true  });
+        } else {
+            res.json({ loggedIn: false });
+        }
+    } catch (error) {
+        console.error('Hata:', error);
+        res.status(500).json({ error: 'Sunucu hatası' });
+    }
+};
+  
 
 export { register, login};
