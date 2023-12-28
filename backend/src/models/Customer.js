@@ -25,6 +25,10 @@ const CustomerSchema = new mongoose.Schema(
         required: true,
         
     },
+    creatorID:{
+      type:String,
+      required:false
+    }
   },
 );
 
