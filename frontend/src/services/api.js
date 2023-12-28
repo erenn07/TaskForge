@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const instance = axios.create({
-  baseURL: "https://localhost:3001/",
+  baseURL: "http://localhost:3001/",
 });
 
 instance.interceptors.request.use((config) => {
@@ -31,15 +31,15 @@ instance.interceptors.response.use(
 export default{
     user:{
         async login(email,password){
-            const response = await instance.post("https://localhost:3001/auth/login",{email,password},{ withCredentials: true });
+            const response = await instance.post("/auth/login",{email,password},{ withCredentials: true });
             return response.data;
         },
         async register(payload){
-            const response = await instance.post("https://localhost:3001/auth/register",payload,{ withCredentials: true });
-            return response.data;
+            const response = await instance.post("/auth/register",payload,{ withCredentials: true });
+            return response;
         },
         async getUser(token){
-          const response = await instance.get("https://localhost:3001/user/getProfile",{ 
+          const response = await instance.get("/user/getProfile",{ 
             withCredentials: true,
             headers:{
               Authorization:`Bearer ${token}`,
@@ -51,41 +51,34 @@ export default{
         async logout(){
 
           try {
-            const response = await axios.get("https://localhost:3001/auth/logout", { withCredentials: true });
+            const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
 
-              return response.data;
+              return response
           
           }catch(error){
             alert(error)
           
         }},
 
-      async checkUser(){
-        
-          try {
-              const response = await axios.get("https://localhost:3001/auth/checkUser", {withCredentials: true});
 
-                return response
-            
-            }catch(error){
-              alert(error)
-            
 
-          }
-      },
+async checkUser(){
+  
+    try {
+        const response = await axios.get("http://localhost:3001/auth/checkUser", {withCredentials: true});
 
-      async addCustomer(payload){
-        try {
-          const response = await axios.post("https://localhost:3001/user/addCustomer",payload, {withCredentials: true});
-            return response
-        
-        }catch(error){
-          alert(error)
-        
+          return response
+      
+      }catch(error){
+        alert(error)
+      
+
+    }
+}
+
 
       }
-      }
+  
 
-      }
   
   }
