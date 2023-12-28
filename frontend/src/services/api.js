@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const instance = axios.create({
-  baseURL: "https://taskforge.onrender.com",
+  baseURL: "https://localhost:3001/",
 });
 
 instance.interceptors.request.use((config) => {
@@ -31,15 +31,15 @@ instance.interceptors.response.use(
 export default{
     user:{
         async login(email,password){
-            const response = await instance.post("https://taskforge.onrender.com/auth/login",{email,password},{ withCredentials: true });
+            const response = await instance.post("https://localhost:3001/auth/login",{email,password},{ withCredentials: true });
             return response.data;
         },
         async register(payload){
-            const response = await instance.post("https://taskforge.onrender.com/auth/register",payload,{ withCredentials: true });
+            const response = await instance.post("https://localhost:3001/auth/register",payload,{ withCredentials: true });
             return response.data;
         },
         async getUser(token){
-          const response = await instance.get("https://taskforge.onrender.com/user/getProfile",{ 
+          const response = await instance.get("https://localhost:3001/user/getProfile",{ 
             withCredentials: true,
             headers:{
               Authorization:`Bearer ${token}`,
@@ -51,7 +51,7 @@ export default{
         async logout(){
 
           try {
-            const response = await axios.get("https://taskforge.onrender.com/auth/logout", { withCredentials: true });
+            const response = await axios.get("https://localhost:3001/auth/logout", { withCredentials: true });
 
               return response.data;
           
@@ -60,30 +60,32 @@ export default{
           
         }},
 
+      async checkUser(){
+        
+          try {
+              const response = await axios.get("https://localhost:3001/auth/checkUser", {withCredentials: true});
 
+                return response
+            
+            }catch(error){
+              alert(error)
+            
 
-async checkUser(){
-  
-    try {
-        const response = await axios.get("https://taskforge.onrender.com/auth/checkUser", {withCredentials: true});
+          }
+      },
 
-          return response
-      
-      }catch(error){
-        alert(error)
-      
-
-    }
-}
-
-  
-  
+      async addCustomer(payload){
+        try {
+          const response = await axios.post("https://localhost:3001/user/addCustomer",payload, {withCredentials: true});
+            return response
+        
+        }catch(error){
+          alert(error)
+        
 
       }
-  
-  
-  
-  
-  
+      }
+
+      }
   
   }
