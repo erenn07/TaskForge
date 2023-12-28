@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3001/",
+  baseURL: "https://taskforge-4yve.onrender.com",
 });
 
 instance.interceptors.request.use((config) => {
@@ -30,21 +30,36 @@ instance.interceptors.response.use(
 export default{
     user:{
         async login(email,password){
-            const response = await instance.post("/auth/login",{email,password},{ withCredentials: true });
+            const response = await instance.post("https://taskforge-4yve.onrender.com/auth/login",{email,password},{ withCredentials: true });
             return response.data;
         },
         async register(payload){
-            const response = await instance.post("/auth/register",payload,{ withCredentials: true });
-            return response;
+            const response = await instance.post("https://taskforge-4yve.onrender.com/auth/register",payload,{ withCredentials: true });
+            return response.data;
         },
         async getUser(token){
-          const response = await instance.get("/user/getProfile",{ 
+          const response = await instance.get("https://taskforge-4yve.onrender.com/user/getProfile",{ 
             withCredentials: true,
             headers:{
               Authorization:`Bearer ${token}`,
             }
            });
           return response;
+        },
+ 
+        async logout(){
+
+          try {
+            const response = await axios.get("https://taskforge-4yve.onrender.com/auth/logout", { withCredentials: true });
+
+              return response
+          
+          }catch(error){
+            alert(error)
+          
         }
-    }
-}
+
+ 
+ 
+      }
+    }}

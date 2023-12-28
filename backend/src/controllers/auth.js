@@ -62,8 +62,19 @@ const login = async (req, res, next) => {
       const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
       expiresIn: '1d'
     });
- 
-    res.status(200).json({ success:true,token:token ,message:"Login successful"});
+
+    res.cookie('jwt', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+      secure: true,
+      sameSite:'none'
+      
+    });
+
+
+    // console.log("mesaj",req.user)
+    // console.log("mesaj222",req.user.email)
+    res.status(200).json({ success:true,token:token });
     }
 
     
