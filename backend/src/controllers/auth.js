@@ -50,13 +50,13 @@ const login = async (req, res, next) => {
   try {
     const user = await User.findOne({email:email});
     if (!user) {
-      return res.status(404).json({ message: 'Invalid email. Please try again later.' });
+      return res.status(404).json({ message: 'User not found' });
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(401).json({ success: false, message: 'Incorrect password'});
+      return res.status(401).json({ message: 'Incorrect password' });
     }else{
 
       const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
@@ -65,11 +65,9 @@ const login = async (req, res, next) => {
 
     res.cookie('jwt', token, {
       httpOnly: true,
-      path:"/",
       maxAge: 1000 * 60 * 60 * 24,
-      secure: true,
-      sameSite:'none'
-      
+      sameSite: 'none',
+      secure: true
     });
 
 
@@ -84,16 +82,10 @@ const login = async (req, res, next) => {
   }
 };
 
-const logout = async (req, res) => {
+const logout = (req, res) => {
   try {
-    const token = req.cookies;
-    console.log("token budur:",token)
-    res.clearCookie('jwt', {
-      httpOnly: true,
-      path: '/',
-      secure: true,
-      sameSite: 'none'
-    });    res.status(200).json({
+    res.clearCookie('jwt'); 
+    res.status(200).json({
       succeded: true,
       message: 'User logged out successfully',
     });
@@ -134,4 +126,4 @@ const checkUser = (req, res) => {
 };
   
 
-export { register, login};
+export { register, login ,checkUser,logout};
