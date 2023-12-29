@@ -52,7 +52,7 @@ export default{
 
           try {
             const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
-            const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
+            
 
               return response
           
