@@ -52,8 +52,9 @@ export default{
 
           try {
             const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
+            const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
 
-              return response.data;
+              return response
           
           }catch(error){
             alert(error)
@@ -67,23 +68,92 @@ async checkUser(){
     try {
         const response = await axios.get("http://localhost:3001/auth/checkUser", {withCredentials: true});
 
-          return response
-      
-      }catch(error){
-        alert(error)
-      
+                  return response
+              
+              }catch(error){
+                alert(error)
+              }
+        }
 
-    }
-}
 
-  
-  
+      },
+      customer:{
+        async getCustomers(){
+          try {
+            const response = await axios.get("http://localhost:3001/customer/getCustomers", {withCredentials: true});
 
+              return response.data;
+          
+          }catch(error){
+            alert(error)
+          }
+        },
+        async addCustomer(payload){
+          try {
+            const response = await axios.post("http://localhost:3001/customer/addCustomer",payload ,{withCredentials: true});
+
+              return response.data;
+          
+          }catch(error){
+            alert(error)
+          }
+        }
+      },
+      project:{
+        async addProject(payload){
+          try {
+            const response = await axios.post("http://localhost:3001/project/addProject",payload ,{withCredentials: true});
+
+              return response.data;
+          
+          }catch(error){
+            alert(error)
+          }
+        },
+        async getProjects(payload){
+          try {
+            const response = await axios.get("http://localhost:3001/project/getProjects" ,{withCredentials: true});
+
+              return response.data;
+          
+          }catch(error){
+            alert(error)
+          }
+        },
+        async getProjectDetails(payload){
+          try {
+            const response = await axios.get("http://localhost:3001/project/getProjectDetails" ,{withCredentials: true});
+
+              return response.data;
+          
+          }catch(error){
+            alert(error)
+          }
+        }
+      },
+      task:{
+        async addTask(payload){
+          try {
+            const response = await axios.post("http://localhost:3001/task/addTask" ,payload,{withCredentials: true});
+
+              return response.data;
+          
+          }catch(error){
+            alert(error)
+          }
+        },
+        async getTask(){
+          try {
+            const response = await axios.get("http://localhost:3001/task/getTask" ,{withCredentials: true});
+
+              return response.data;
+          
+          }catch(error){
+            alert(error)
+          }
+        }
       }
   
-  
-  
-  
-  
+
   
   }

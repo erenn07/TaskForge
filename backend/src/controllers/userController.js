@@ -1,3 +1,4 @@
+import Customer from '../models/Customer.js';
 import User from '../models/User.js';
 
 
@@ -11,6 +12,8 @@ const getProfile = async(req,res)=>{
         throw error;
       }
 }
+
+
 
 
 export{getProfile}
