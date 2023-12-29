@@ -47,6 +47,7 @@ function App(){
   <Route path="/bills" element={isLoggedIn ? <Bills /> : <Navigate to="/" />} />
   <Route path="/businessRegistration" element={isLoggedIn ? <BusinessRegistration /> : <Navigate to="/" />} />
   <Route path="/projectManagement" element={isLoggedIn ? <ProjectManagement /> : <Navigate to="/" />} />
+  
   <Route
   path="/customers"
   element={isLoggedIn ? <Customers /> : <Navigate to="/" />}

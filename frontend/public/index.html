@@ -17,6 +17,35 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
    
     <title>TASK FORGE</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+  
+      .kanban-container {
+        display: flex;
+        justify-content: space-around;
+        color:white;
+      }
+  
+      .kanban-column {
+        flex: 1;
+        padding: 16px;
+        border: 1px solid #ddd;
+        margin: 8px;
+        background-color: #003466;
+        height:550px;
+      }
+  
+      .kanban-task {
+        margin: 8px 0;
+        padding: 8px;
+        border: 1px solid #ccc;
+        background-color: #e5eaef;
+        cursor: grab;
+        color:black;
+      }
+    </style>
 
     <link href="%PUBLIC_URL%/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -30,6 +59,8 @@
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+
+ 
     <script src="%PUBLIC_URL%/assets/vendor/jquery/jquery.min.js"></script>
     <script src="%PUBLIC_URL%/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
