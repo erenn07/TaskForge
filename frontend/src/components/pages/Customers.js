@@ -1,8 +1,307 @@
 import logo from '../../../src/logo.svg';
 import '../../App.css';
 import Header from './componentss/header';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import api from '../../services/api';
+import {
+  GridRowModes,
+  DataGrid,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridRowEditStopReasons,
+} from '@mui/x-data-grid';
+import {
+  randomCreatedDate,
+  randomTraderName,
+  randomId,
+  randomArrayItem,
+} from '@mui/x-data-grid-generator';
+import axios from 'axios';
+const roles = ['Market', 'Finance', 'Development'];
+const randomRole = () => {
+  return randomArrayItem(roles);
+};
+
+
+// const initialRows = [
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 25,
+//     joinDate: randomCreatedDate(),
+//     role: randomRole(),
+//   },
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 36,
+//     joinDate: randomCreatedDate(),
+//     role: randomRole(),
+//   },
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 19,
+//     role: randomRole(),
+//   },
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 28,
+//     joinDate: randomCreatedDate(),
+//     role: randomRole(),
+//   },
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 23,
+//     joinDate: randomCreatedDate(),
+//     role: randomRole(),
+//   },
+// ];
+function EditToolbar(props) {
+    const { setRows, setRowModesModel } = props;
+  
+    const handleClick = () => {
+      const id = randomId();
+      setRows((oldRows) => [...oldRows, { id, email: '', number: '', isNew: true }]);
+      setRowModesModel((oldModel) => ({
+        ...oldModel,
+        [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+      }));
+    };
+    return (
+        <GridToolbarContainer>
+          <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+            Müşteri Ekle
+          </Button>
+        </GridToolbarContainer>
+      );
+    
+}
 
 function Customers() {
+
+    const [rows, setRows] = React.useState([]);
+    const [rowModesModel, setRowModesModel] = React.useState({});
+    const [name, setName] = React.useState('');
+const [email, setEmail] = React.useState('');
+const [number, setNumber] = React.useState('');
+const [projectName, setProjectName] = React.useState('');
+
+
+React.useEffect(() => {
+  async function fetchCustomers() {
+    try {
+      const response = await axios.get('http://localhost:3001/customer/getCustomers');
+      setRows(response.data); // Gelen verileri tabloya set ediyoruz
+    } catch (error) {
+      console.error('Veriler alınırken hata oluştu:', error);
+    }
+  }
+
+  fetchCustomers(); // useEffect içinde API'den veri çekme işlemi
+}, []); // Boş bağımlılık dizisi, bileşen yüklendiğinde yalnızca bir kez çalışmasını sağlar
+
+// ... diğer state'ler ve fonksiyonlar
+
+const columnss = [
+  { field: 'name', headerName: 'Adı', width: 180, editable: true },
+  {
+    field: 'email',
+    headerName: 'E-Posta',
+    type: 'String',
+    width: 80,
+    align: 'left',
+    headerAlign: 'left',
+    editable: true,
+  },
+  {
+    field: 'number',
+    headerName: 'Numara',
+    type: 'String',
+    width: 180,
+    editable: true,
+  },
+  {
+    field: 'proje Adı',
+    headerName: 'Proje Adı',
+    width: 220,
+    editable: true,
+  },
+  //   {
+  //     field: 'actions',
+  //     type: 'actions',
+  //     headerName: 'Actions',
+  //     width: 100,
+  //     cellClassName: 'actions',
+  //   }
+];
+
+
+
+
+
+
+
+const handleFormSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const newCustomer = {
+      name,
+      email,
+      number,
+      project_name: projectName,
+    };
+
+    // Backend API'ye POST isteği gönderin ve yeni müşteriyi ekleyin
+    const response = await axios.post('http://localhost:3001/customer/addCustomer', newCustomer);
+
+    console.log('Yeni müşteri eklendi:', response.data);
+
+    // Ekleme işlemi başarılı olduktan sonra, inputları sıfırlayabilirsiniz:
+    setName('');
+    setEmail('');
+    setNumber('');
+    setProjectName('');
+  } catch (error) {
+    console.error('Müşteri eklenirken hata oluştu:', error);
+  }
+};
+
+
+
+    const handleRowEditStop = (params, event) => {
+      if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+        event.defaultMuiPrevented = true;
+      }
+    };
+  
+
+    const handleNameChange = (event) => {
+      setName(event.target.value);
+    };
+    
+    const handleEmailChange = (event) => {
+      setEmail(event.target.value);
+    };
+    
+    const handleNumberChange = (event) => {
+      setNumber(event.target.value);
+    };
+    
+    const handleProjectNameChange = (event) => {
+      setProjectName(event.target.value);
+    };
+    
+
+
+    const handleEditClick = (id) => () => {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    };
+  
+    const handleSaveClick = (id) => () => {
+      setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+    };
+  
+    const handleDeleteClick = (id) => () => {
+      setRows(rows.filter((row) => row.id !== id));
+    };
+  
+    const handleCancelClick = (id) => () => {
+      setRowModesModel({
+        ...rowModesModel,
+        [id]: { mode: GridRowModes.View, ignoreModifications: true },
+      });
+  
+      const editedRow = rows.find((row) => row.id === id);
+      if (editedRow.isNew) {
+        setRows(rows.filter((row) => row.id !== id));
+      }
+    };
+  
+    const processRowUpdate = (newRow) => {
+      const updatedRow = { ...newRow, isNew: false };
+      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      return updatedRow;
+    };
+  
+    const handleRowModesModelChange = (newRowModesModel) => {
+      setRowModesModel(newRowModesModel);
+    };
+  
+
+    const addCustomer = async () => {
+      try {
+        const newCustomer = {
+          name: name,
+          email: email,
+          number: number,
+          project_name: projectName,
+        };
+    
+        // API'ye POST isteği gönderin ve yeni müşteriyi ekleyin
+        const response = await axios.post('http://localhost:3001/customer/addCustomer', newCustomer);
+    
+        console.log('Yeni müşteri eklendi:', response.data);
+    
+        // Ekleme işlemi başarılı olduktan sonra, inputları sıfırlayabilirsiniz:
+        setName('');
+        setEmail('');
+        setNumber('');
+        setProjectName('');
+    
+        // Yeni müşteriyi rows state'ine eklemek isterseniz:
+        // setRows([...rows, response.data]);
+      } catch (error) {
+        console.error('Müşteri eklenirken hata oluştu:', error);
+      }
+    };
+    
+
+
+    const columns = [
+      { field: 'name', headerName: 'Adı', width: 180, editable: true },
+      {
+        field: 'email',
+        headerName: 'E-Posta',
+        type: 'String',
+        width: 80,
+        align: 'left',
+        headerAlign: 'left',
+        editable: true,
+      },
+      {
+        field: 'number',
+        headerName: 'Numara',
+        type: 'String',
+        width: 180,
+        editable: true,
+      },
+      {
+        field: 'proje Adı',
+        headerName: 'Proje Adı',
+        width: 220,
+        editable: true,
+      
+    },
+    //   {
+    //     field: 'actions',
+    //     type: 'actions',
+    //     headerName: 'Actions',
+    //     width: 100,
+    //     cellClassName: 'actions',
+    //   }
+    ]
+      
   return (
     <>
     <div id="page-top"> 
@@ -127,6 +426,7 @@ function Customers() {
     <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
     <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
 </div> */}
+   
 
 
 
@@ -141,377 +441,65 @@ function Customers() {
 
 
     <div class="container-fluid">
-
+    <form onSubmit={handleFormSubmit}>
+      <label>
+        Adı:
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      </label>
+      <label>
+        E-Posta:
+        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      <label>
+        Numara:
+        <input type="text" value={number} onChange={(e) => setNumber(e.target.value)} />
+      </label>
+      <label>
+        Proje Adı:
+        <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
+      </label>
+      <button type="submit">Müşteri Ekle</button>
+    </form>
     
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">MERHABA BU BİR MÜŞTERİLER SAYFASIDIR.</h1>
+        <div class="flex align-items-center  mb-4">
+            {/* <h1 class="h3 mb-0 text-gray-800"></h1> */}
+
+          
+
+    <Box
+      sx={{
+        height: 500,
+        width: '100%',
+        marginRight: 200,
+        '& .actions': {
+          color: 'text.secondary',
+        },
+        '& .textPrimary': {
+          color: 'text.primary',
+        },
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar,
+        }}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+      />
+    </Box>
+    <Button onClick={addCustomer}>Müşteri Ekle</Button>
             {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                     class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
         </div>
 
-{/*      
-        <div class="row">
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Earnings (Monthly)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Earnings (Annual)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                </div>
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                    </div>
-                                    <div class="col">
-                                    <div class="progress progress-sm mr-2">
-    <div
-        class="progress-bar bg-info"
-        role="progressbar"
-        style={{ width: '50%' }}
-        aria-valuenow={50}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Pending Requests</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-comments fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    
-
-        <div class="row">
-
-          
-            <div class="col-xl-8 col-lg-7">
-                <div class="card shadow mb-4">
-                    
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                   
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="myAreaChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
-                  
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                  
-                    <div class="card-body">
-                        <div class="chart-pie pt-4 pb-2">
-                            <canvas id="myPieChart"></canvas>
-                        </div>
-                        <div class="mt-4 text-center small">
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-primary"></i> Direct
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-success"></i> Social
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-info"></i> Referral
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-   
-        <div class="row">
-
-         
-            <div class="col-lg-6 mb-4">
-
-               
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                    </div>
-                    <div class="card-body">
-                        <h4 class="small font-weight-bold">Server Migration <span
-                                class="float-right">20%</span></h4>
-                        <div class="progress mb-4">
-    <div
-        class="progress-bar bg-danger"
-        role="progressbar"
-        style={{ width: '20%' }}
-        aria-valuenow={20}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Sales Tracking <span
-                                class="float-right">40%</span></h4>
-                       <div class="progress mb-4">
-    <div
-        class="progress-bar bg-warning"
-        role="progressbar"
-        style={{ width: '40%' }}
-        aria-valuenow={40}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Customer Database <span
-                                class="float-right">60%</span></h4>
-                      <div class="progress mb-4">
-    <div
-        class="progress-bar"
-        role="progressbar"
-        style={{ width: "60%" }}
-        aria-valuenow={60}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Payout Details <span
-                                class="float-right">80%</span></h4>
-                       <div class="progress mb-4">
-    <div
-        class="progress-bar bg-info"
-        role="progressbar"
-        style={{ width: '80%' }}
-        aria-valuenow={80}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Account Setup <span
-                                class="float-right">Complete!</span></h4>
-                     <div class="progress">
-    <div
-        class="progress-bar bg-success"
-        role="progressbar"
-        style={{ width: '100%' }}
-        aria-valuenow={100}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                    </div>
-                </div>
-
-              
-                <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-primary text-white shadow">
-                            <div class="card-body">
-                                Primary
-                                <div class="text-white-50 small">#4e73df</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-success text-white shadow">
-                            <div class="card-body">
-                                Success
-                                <div class="text-white-50 small">#1cc88a</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-info text-white shadow">
-                            <div class="card-body">
-                                Info
-                                <div class="text-white-50 small">#36b9cc</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-warning text-white shadow">
-                            <div class="card-body">
-                                Warning
-                                <div class="text-white-50 small">#f6c23e</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-danger text-white shadow">
-                            <div class="card-body">
-                                Danger
-                                <div class="text-white-50 small">#e74a3b</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-secondary text-white shadow">
-                            <div class="card-body">
-                                Secondary
-                                <div class="text-white-50 small">#858796</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-light text-black shadow">
-                            <div class="card-body">
-                                Light
-                                <div class="text-black-50 small">#f8f9fc</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-dark text-white shadow">
-                            <div class="card-body">
-                                Dark
-                                <div class="text-white-50 small">#5a5c69</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-lg-6 mb-4">
-
-              
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                    </div>
-                    <div class="card-body">
-                    <div class="text-center">
-    <img
-        class="img-fluid px-3 px-sm-4 mt-3 mb-4"
-        style={{ width: '25rem' }}
-        src="img/undraw_posting_photo.svg"
-        alt="..."
-    />
-</div>
-
-                        <p>Add some quality, svg illustrations to your project courtesy of <a
-                                target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                            constantly updated collection of beautiful svg images that you can use
-                            completely free and without attribution!</p>
-                        <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                            unDraw &rarr;</a>
-                    </div>
-                </div>
-
-                
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                    </div>
-                    <div class="card-body">
-                        <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                            CSS bloat and poor page performance. Custom CSS classes are used to create
-                            custom components and custom utility classes.</p>
-                        <p class="mb-0">Before working with this theme, you should become familiar with the
-                            Bootstrap framework, especially the utility classes.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div> */}
 
     </div>
   

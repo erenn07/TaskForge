@@ -33,7 +33,7 @@ const addCustomer= async(req,res)=>{
 
     const getCustomers=async(req,res)=>{
         try {
-          const user = User.findById(req.user._id);
+          const user = User.find({});
           const customers = user.customers;
           console.log("musteriler",customers)
         } catch (error) {
