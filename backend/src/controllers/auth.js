@@ -63,12 +63,12 @@ const login = async (req, res, next) => {
       expiresIn: '1d'
     });
 
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
-      sameSite: 'none',
-      secure: true
-    });
+    // res.cookie('jwt', token, {
+    //   httpOnly: true,
+    //   maxAge: 1000 * 60 * 60 * 24,
+    //   sameSite: 'none',
+    //   secure: true
+    // });
 
 
     // console.log("mesaj",req.user)
@@ -110,20 +110,19 @@ const validatePhone = (phone) => {
 
 
 
-const checkUser = (req, res) => {
-    try {
+// const checkUser = (req, res) => {
+//     try {
 
-
-        if (req.cookies.jwt) {
-            res.json({ loggedIn: true  });
-        } else {
-            res.json({ loggedIn: false });
-        }
-    } catch (error) {
-        console.error('Hata:', error);
-        res.status(500).json({ error: 'Sunucu hatası' });
-    }
-};
+//         if (req.cookies.jwt) {
+//             res.json({ loggedIn: true  });
+//         } else {
+//             res.json({ loggedIn: false });
+//         }
+//     } catch (error) {
+//         console.error('Hata:', error);
+//         res.status(500).json({ error: 'Sunucu hatası' });
+//     }
+// };
   
 
-export { register, login ,checkUser,logout};
+export { register, login ,logout};

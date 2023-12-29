@@ -51,29 +51,33 @@ export default{
         async logout(){
 
           try {
+         
+         localStorage.removeItem('userToken')
             const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
             
 
               return response
           
-          }catch(error){
+         
+         
+            }catch(error){
             alert(error)
           
         }},
 
 
 
-async checkUser(){
+// async checkUser(){
   
-    try {
-        const response = await axios.get("http://localhost:3001/auth/checkUser", {withCredentials: true});
+//     try {
+//         const response = await axios.get("http://localhost:3001/auth/checkUser", {withCredentials: true});
 
-                  return response
+//                   return response
               
-              }catch(error){
-                alert(error)
-              }
-        }
+//               }catch(error){
+//                 alert(error)
+//               }
+//         }
 
 
       },

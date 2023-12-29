@@ -23,12 +23,18 @@ export default function Login() {
     
             console.log("bu apiden gelen login cevabı:",response)
     
-            console.log(response)
+            console.log(response,"resppp")
             if(response.success){
                 navigate('/dashboard');
                 const userToken = response.token;
-                const form = await api.user.getUser(userToken)
-                console.log("bu form",form);
+               // const form = await api.user.getUser(userToken)
+                console.log("resp succes ici",);
+
+                localStorage.setItem('userToken',userToken)
+                
+                console.log("Local Storage'daki userToken:", localStorage.getItem('userToken'));
+
+
             }else{
                 if (response.message){
                   alert(response.message);  
