@@ -1,10 +1,12 @@
 import Customer from "../models/Customer.js";
 import User from "../models/User.js";
 
-
 const addCustomer= async(req,res)=>{
     try {
-      const {firstName, lastName,phone,email,projectName} = req.body;
+      
+      const {name, surname,phone,email,projectName,userId} = req.body;
+
+      console.log("add customer ici ",userId)
 
       const isEmailValid = validateEmail(email);
       if (!isEmailValid) {
@@ -16,12 +18,12 @@ const addCustomer= async(req,res)=>{
       }
 
       const customer = await Customer.create({
-        firstName:firstName,
-        lastName:lastName,
+        firstName:name,
+        lastName:surname,
         phone:phone,
         projectName:projectName,
         email:email,
-        creatorID:req.user._id
+        creatorID:userId
       })
         await customer.save();
         res.status(200).json({message:'customer added successfully'})
@@ -33,9 +35,16 @@ const addCustomer= async(req,res)=>{
 
     const getCustomers=async(req,res)=>{
         try {
-          const user = User.find({});
-          const customers = user.customers;
-          console.log("musteriler",customers)
+
+          const user=req.user
+          console.log(user)
+          const { userId } = req.query;
+          const customer = await Customer.find({creatorID:userId});
+         // const customers = customer.customers;
+          console.log("musteriler",customer)
+
+          res.status(200).json({customer})
+
         } catch (error) {
             
         }

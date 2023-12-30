@@ -24,10 +24,13 @@ import {
   randomArrayItem,
 } from '@mui/x-data-grid-generator';
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
+
 const roles = ['Market', 'Finance', 'Development'];
 const randomRole = () => {
   return randomArrayItem(roles);
 };
+
 
 
 // const initialRows = [
@@ -66,76 +69,61 @@ const randomRole = () => {
 //     role: randomRole(),
 //   },
 // ];
-function EditToolbar(props) {
-    const { setRows, setRowModesModel } = props;
+// function EditToolbar(props) {
+//     const { setRows, setRowModesModel } = props;
   
-    const handleClick = () => {
-      const id = randomId();
-      setRows((oldRows) => [...oldRows, { id, email: '', number: '', isNew: true }]);
-      setRowModesModel((oldModel) => ({
-        ...oldModel,
-        [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      }));
-    };
-    return (
-        <GridToolbarContainer>
-          <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-            Müşteri Ekle
-          </Button>
-        </GridToolbarContainer>
-      );
+//     const handleClick = () => {
+//       const id = randomId();
+//       setRows((oldRows) => [...oldRows, { id, email: '', number: '', isNew: true }]);
+//       setRowModesModel((oldModel) => ({
+//         ...oldModel,
+//         [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+//       }));
+//     };
+//     return (
+//         <GridToolbarContainer>
+//           <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+//             Müşteri Ekle
+//           </Button>
+//         </GridToolbarContainer>
+//       );
     
-}
+// }
 
 function Customers() {
 
     const [rows, setRows] = React.useState([]);
     const [rowModesModel, setRowModesModel] = React.useState({});
     const [name, setName] = React.useState('');
+    const [surname, setsurName] = React.useState('');
+
 const [email, setEmail] = React.useState('');
-const [number, setNumber] = React.useState('');
+const [phone, setPhone] = React.useState('');
 const [projectName, setProjectName] = React.useState('');
+const userToken=localStorage.getItem('userToken')
 
-
+const user=jwtDecode(userToken)
+const userId=user.userId
 React.useEffect(() => {
   async function fetchCustomers() {
     try {
-      const response = await axios.get('http://localhost:3001/customer/getCustomers');
-      setRows(response.data); // Gelen verileri tabloya set ediyoruz
+      const response = await api.customer.getCustomers(userId);
+      const modifiedRows = response.data.customer.map((customer) => ({
+        ...customer,
+        id: customer._id, 
+      }));
+      setRows(modifiedRows);
+      console.log('musteriler : ', response.data);
     } catch (error) {
       console.error('Veriler alınırken hata oluştu:', error);
     }
   }
 
-  fetchCustomers(); // useEffect içinde API'den veri çekme işlemi
-}, []); // Boş bağımlılık dizisi, bileşen yüklendiğinde yalnızca bir kez çalışmasını sağlar
+  fetchCustomers(); 
+}, []); 
 
-// ... diğer state'ler ve fonksiyonlar
 
-const columnss = [
-  { field: 'name', headerName: 'Adı', width: 180, editable: true },
-  {
-    field: 'email',
-    headerName: 'E-Posta',
-    type: 'String',
-    width: 80,
-    align: 'left',
-    headerAlign: 'left',
-    editable: true,
-  },
-  {
-    field: 'number',
-    headerName: 'Numara',
-    type: 'String',
-    width: 180,
-    editable: true,
-  },
-  {
-    field: 'proje Adı',
-    headerName: 'Proje Adı',
-    width: 220,
-    editable: true,
-  },
+
   //   {
   //     field: 'actions',
   //     type: 'actions',
@@ -143,38 +131,18 @@ const columnss = [
   //     width: 100,
   //     cellClassName: 'actions',
   //   }
-];
-
-
-
-
-
-
 
 const handleFormSubmit = async (e) => {
   e.preventDefault();
 
-  try {
-    const newCustomer = {
-      name,
-      email,
-      number,
-      project_name: projectName,
-    };
+    const response = await api.customer.addCustomer(name,surname,email,phone,projectName,userId);
 
-    // Backend API'ye POST isteği gönderin ve yeni müşteriyi ekleyin
-    const response = await axios.post('http://localhost:3001/customer/addCustomer', newCustomer);
-
-    console.log('Yeni müşteri eklendi:', response.data);
-
-    // Ekleme işlemi başarılı olduktan sonra, inputları sıfırlayabilirsiniz:
     setName('');
+    setsurName('')
     setEmail('');
-    setNumber('');
+    setPhone('');
     setProjectName('');
-  } catch (error) {
-    console.error('Müşteri eklenirken hata oluştu:', error);
-  }
+  
 };
 
 
@@ -194,9 +162,7 @@ const handleFormSubmit = async (e) => {
       setEmail(event.target.value);
     };
     
-    const handleNumberChange = (event) => {
-      setNumber(event.target.value);
-    };
+   
     
     const handleProjectNameChange = (event) => {
       setProjectName(event.target.value);
@@ -239,55 +205,32 @@ const handleFormSubmit = async (e) => {
     };
   
 
-    const addCustomer = async () => {
-      try {
-        const newCustomer = {
-          name: name,
-          email: email,
-          number: number,
-          project_name: projectName,
-        };
     
-        // API'ye POST isteği gönderin ve yeni müşteriyi ekleyin
-        const response = await axios.post('http://localhost:3001/customer/addCustomer', newCustomer);
-    
-        console.log('Yeni müşteri eklendi:', response.data);
-    
-        // Ekleme işlemi başarılı olduktan sonra, inputları sıfırlayabilirsiniz:
-        setName('');
-        setEmail('');
-        setNumber('');
-        setProjectName('');
-    
-        // Yeni müşteriyi rows state'ine eklemek isterseniz:
-        // setRows([...rows, response.data]);
-      } catch (error) {
-        console.error('Müşteri eklenirken hata oluştu:', error);
-      }
-    };
-    
-
 
     const columns = [
-      { field: 'name', headerName: 'Adı', width: 180, editable: true },
+      //{ field: '_id', headerName: 'ID', width: 100 },
+
+      { field: 'firstName', headerName: 'Adı', width: 100, editable: true },
+      { field: 'lastName', headerName: 'Soyadı', width: 100, editable: true },
+
       {
         field: 'email',
         headerName: 'E-Posta',
         type: 'String',
-        width: 80,
+        width: 160,
         align: 'left',
         headerAlign: 'left',
         editable: true,
       },
       {
-        field: 'number',
+        field: 'phone',
         headerName: 'Numara',
         type: 'String',
-        width: 180,
+        width: 120,
         editable: true,
       },
       {
-        field: 'proje Adı',
+        field: 'projectName',
         headerName: 'Proje Adı',
         width: 220,
         editable: true,
@@ -447,12 +390,16 @@ const handleFormSubmit = async (e) => {
         <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <label>
+        Soyadı:
+        <input type="text" value={surname} onChange={(e) => setsurName(e.target.value)} />
+      </label>
+      <label>
         E-Posta:
         <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
       </label>
       <label>
         Numara:
-        <input type="text" value={number} onChange={(e) => setNumber(e.target.value)} />
+        <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
       </label>
       <label>
         Proje Adı:
@@ -466,7 +413,20 @@ const handleFormSubmit = async (e) => {
 
           
 
-    <Box
+            <div style={{ height: 500, width: '100%' }}>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        pageSize={10}
+        rowsPerPageOptions={[10, 20, 50]}
+        checkboxSelection
+      />
+    </div>
+
+
+
+
+    {/* <Box
       sx={{
         height: 500,
         width: '100%',
@@ -479,7 +439,7 @@ const handleFormSubmit = async (e) => {
         },
       }}
     >
-      <DataGrid
+      {/* <DataGrid
         rows={rows}
         columns={columns}
         editMode="row"
@@ -493,9 +453,8 @@ const handleFormSubmit = async (e) => {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-      />
-    </Box>
-    <Button onClick={addCustomer}>Müşteri Ekle</Button>
+      /> */}
+     
             {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                     class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
         </div>

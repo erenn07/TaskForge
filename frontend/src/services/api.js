@@ -82,19 +82,22 @@ export default{
 
       },
       customer:{
-        async getCustomers(){
+        async getCustomers(userId){
           try {
-            const response = await axios.get("http://localhost:3001/customer/getCustomers", {withCredentials: true});
+            const response = await axios.get("http://localhost:3001/customer/getCustomers",{
+              params: { userId },  
+              withCredentials: true
+            });
 
-              return response.data;
+              return response;
           
           }catch(error){
             alert(error)
           }
         },
-        async addCustomer(payload){
+        async addCustomer(name,surname,email,phone,projectName,userId){
           try {
-            const response = await axios.post("http://localhost:3001/customer/addCustomer",payload ,{withCredentials: true});
+            const response = await axios.post("http://localhost:3001/customer/addCustomer",{name,surname,email,phone,projectName,userId} ,{withCredentials: true});
 
               return response.data;
           
