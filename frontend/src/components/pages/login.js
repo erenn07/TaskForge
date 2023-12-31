@@ -27,13 +27,12 @@ export default function Login() {
             if(response.success){
                 navigate('/dashboard');
                 const userToken = response.token;
-               // const form = await api.user.getUser(userToken)
                 console.log("resp succes ici",);
 
                 localStorage.setItem('userToken',userToken)
+                const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; 
+                localStorage.setItem('tokenExpiration', expirationTime);
                 
-                console.log("Local Storage'daki userToken:", localStorage.getItem('userToken'));
-
 
             }else{
                 if (response.message){

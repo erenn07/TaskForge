@@ -23,8 +23,17 @@ function App(){
     const checkUserToken = async () => {
       try {
         const storedUserToken = localStorage.getItem('userToken');
-        
-      setIsLoggedIn(!!storedUserToken);
+        const expirationTime = localStorage.getItem('tokenExpiration');
+  
+        const currentTime = new Date().getTime();
+  
+        if (storedUserToken && expirationTime && currentTime < expirationTime) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+          localStorage.removeItem('userToken');
+          localStorage.removeItem('tokenExpiration');
+        }
       } catch (error) {
         console.error('Oturum kontrol hatası:', error);
         setIsLoggedIn(false);
