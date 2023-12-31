@@ -36,8 +36,7 @@ const addCustomer= async(req,res)=>{
     const getCustomers=async(req,res)=>{
         try {
 
-          const user=req.user
-          console.log(user)
+         
           const { userId } = req.query;
           const customer = await Customer.find({creatorID:userId});
          // const customers = customer.customers;
@@ -66,7 +65,33 @@ const addCustomer= async(req,res)=>{
         return res.status(500).send('Server error');
       }
     };
+
+    const updateCustomer =async (req,res)=>{
+ const customerId = req.params.id;
+      const { field, updatedValue } = req.body;
     
+      try {
+        const customer = await Customer.findById(customerId);
+        if (!customer) {
+          return res.status(404).json({ success: false, message: 'Müşteri bulunamadı' });
+        }
+    
+        customer[field] = updatedValue;
+        await customer.save();
+    
+        return res.status(200).json({ success: true, message: 'Müşteri başarıyla güncellendi' });
+      } catch (error) {
+        console.error('Müşteri güncellenirken hata oluştu:', error);
+        return res.status(500).json({ success: false, message: 'Müşteri güncellenirken bir hata oluştu' });
+      }
+
+
+
+    }
+    
+
+
+
 
 
 
@@ -81,4 +106,4 @@ const addCustomer= async(req,res)=>{
     };  
     
 
-    export{addCustomer,getCustomers,deleteCustomer}
+    export{addCustomer,getCustomers,deleteCustomer,updateCustomer}

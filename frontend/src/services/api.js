@@ -114,7 +114,22 @@ export default{
           }catch(error){
             alert(error)
           }
+        },
+        async updateCustomer (id, field, updatedValue) {
+          try {
+            const response = await axios.post(
+              `http://localhost:3001/customer/updateCustomer/${id}`,
+              { [field]: updatedValue },
+              { withCredentials: true }
+            );
+        
+            return response.data;
+          } catch (error) {
+            console.error('Müşteri güncellenirken hata oluştu:', error);
+            throw new Error('Müşteri güncellenirken bir hata oluştu.');
+          }
         }
+        
 
 
       },

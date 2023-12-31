@@ -101,6 +101,8 @@ function Customers() {
 const [email, setEmail] = React.useState('');
 const [phone, setPhone] = React.useState('');
 const [projectName, setProjectName] = React.useState('');
+const [gridData, setGridData] = React.useState([]);
+
 const userToken=localStorage.getItem('userToken')
 
 const user=jwtDecode(userToken)
@@ -132,6 +134,35 @@ React.useEffect(() => {
   //     width: 100,
   //     cellClassName: 'actions',
   //   }
+
+
+  const handleRowEditCommit = async (params) => {
+    console.log('Params:', params); 
+
+    const { id, field, updatedValue } = params;
+  
+    console.log('ID:', id);
+    console.log('Field:', field);
+    console.log('Updated Value:', updatedValue);
+  
+    try {
+      await api.customer.updateCustomer(id, field, updatedValue);
+  
+      const updatedRows = rows.map((row) => {
+        if (row.id === id) {
+          return { ...row, [field]: updatedValue };
+        }
+        return row;
+      });
+  
+      setGridData(updatedRows);
+    } catch (error) {
+      console.error('Müşteri güncellenirken hata oluştu:', error);
+    }
+  };
+  
+  
+  
 
 const handleFormSubmit = async (e) => {
   e.preventDefault();
@@ -438,13 +469,19 @@ window.location.reload()
           
 
             <div style={{ height: 500, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={10}
-        rowsPerPageOptions={[10, 20, 50]}
-        checkboxSelection
-      />
+            <DataGrid
+  rows={rows}
+  columns={columns}
+  pageSize={10}
+  rowsPerPageOptions={[10, 20, 50]}
+  checkboxSelection
+  onCellEditStop={(params, event) => {
+    if (params.field !== undefined) {
+
+     handleRowEditCommit(params);
+    }
+  }}/>
+
     </div>
 
 
