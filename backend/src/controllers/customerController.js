@@ -49,6 +49,26 @@ const addCustomer= async(req,res)=>{
             
         }
     }
+    const deleteCustomer = async (req, res) => {
+      try {
+       const {id}=req.query
+    
+        const deletedCustomer = await Customer.findByIdAndDelete(id);     
+    
+        if (!deletedCustomer) {
+          console.log('No data to delete was found');
+          return res.status(404).send('No data to delete was found');
+        }
+    
+         res.status(200).send('customer deleted successfully');
+      } catch (error) {
+        console.error(error);
+        return res.status(500).send('Server error');
+      }
+    };
+    
+
+
 
     const validateEmail = (email) => {
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -61,4 +81,4 @@ const addCustomer= async(req,res)=>{
     };  
     
 
-    export{addCustomer,getCustomers}
+    export{addCustomer,getCustomers,deleteCustomer}

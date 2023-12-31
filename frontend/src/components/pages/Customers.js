@@ -17,6 +17,7 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
+
 import {
   randomCreatedDate,
   randomTraderName,
@@ -142,10 +143,16 @@ const handleFormSubmit = async (e) => {
     setEmail('');
     setPhone('');
     setProjectName('');
+    window.location.reload()
   
 };
 
+const handleDelete = async (id) => {
+const response =await api.customer.deleteCustomer(id)  
+window.location.reload()
 
+
+};
 
     const handleRowEditStop = (params, event) => {
       if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -235,6 +242,23 @@ const handleFormSubmit = async (e) => {
         width: 220,
         editable: true,
       
+    },
+
+    {
+      field: 'actions', 
+      headerName: 'Actions', 
+      width: 120, 
+      sortable: false, 
+      renderCell: (params) => ( 
+        <Button
+          variant="outlined"
+          color="error"
+          startIcon={<DeleteIcon />}
+          onClick={() => handleDelete(params.id)}
+        >
+          Delete
+        </Button>
+      ),
     },
     //   {
     //     field: 'actions',

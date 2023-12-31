@@ -104,7 +104,19 @@ export default{
           }catch(error){
             alert(error)
           }
+        },
+        async deleteCustomer(id){
+          try {
+            const response = await axios.get("http://localhost:3001/customer/deleteCustomers",{params:{id}} ,{withCredentials: true});
+
+              return response.data;
+          
+          }catch(error){
+            alert(error)
+          }
         }
+
+
       },
       project:{
         async addProject(payload){
