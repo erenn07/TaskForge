@@ -106,11 +106,11 @@ const [gridData, setGridData] = React.useState([]);
 const userToken=localStorage.getItem('userToken')
 
 const user=jwtDecode(userToken)
-const userId=user.userId
+const creatorID=user.userId
 React.useEffect(() => {
   async function fetchCustomers() {
     try {
-      const response = await api.customer.getCustomers(userId);
+      const response = await api.customer.getCustomers(creatorID);
       const modifiedRows = response.data.customer.map((customer) => ({
         ...customer,
         id: customer._id, 
@@ -166,15 +166,25 @@ React.useEffect(() => {
 
 const handleFormSubmit = async (e) => {
   e.preventDefault();
-
-    const response = await api.customer.addCustomer(name,surname,email,phone,projectName,userId);
-
+ 
+    console.log("AAA")
+    const response = await api.customer.addCustomer(name,surname,email,phone,projectName,creatorID);
+    console.log("response degeri:", response);
+    const { userId: customerId, email: customerEmail, projectName: customerProjectName } = response;
+    console.log("deniyoz",customerId," ",customerEmail," ",customerProjectName)
+    const projectPayload = {
+      customerId: customerId,
+      customerEmail: customerEmail,
+      customerProjectName: customerProjectName,
+    };
+    const projectRes=await api.project.addProject(projectPayload)
+    console.log("projectresdeger:",projectRes)
     setName('');
     setsurName('')
     setEmail('');
     setPhone('');
     setProjectName('');
-    window.location.reload()
+    //window.location.reload()
   
 };
 
