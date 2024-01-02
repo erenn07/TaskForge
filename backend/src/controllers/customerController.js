@@ -4,9 +4,10 @@ import User from "../models/User.js";
 const addCustomer= async(req,res)=>{
     try {
       
-      const {name, surname,phone,email,projectName,userId} = req.body;
+      const {name, surname,phone,email,projectName,creatorID} = req.body;
 
-      console.log("add customer ici ",userId)
+      console.log("add customer ici ",creatorID)
+
 
       const isEmailValid = validateEmail(email);
       if (!isEmailValid) {
@@ -23,10 +24,19 @@ const addCustomer= async(req,res)=>{
         phone:phone,
         projectName:projectName,
         email:email,
-        creatorID:userId
+        creatorID:creatorID
       })
         await customer.save();
-        res.status(200).json({message:'customer added successfully'})
+
+        const findCustomer = await Customer.findOne({email:email})
+        const userId=findCustomer._id;
+        console.log("musterının idsi",userId)
+        res.status(200).json({
+          message: 'customer added successfully',
+          userId: userId,
+          email: email,
+          projectName: projectName
+        });
       
     } catch (error) {
       
