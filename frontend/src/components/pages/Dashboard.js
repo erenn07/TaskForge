@@ -15,41 +15,11 @@ function Dashboard() {
  
 
 
-    // useEffect(() => {
-    //     const checkUserToken = async () => {
-    //         try {
-    //             const response = await api.user.checkUser();
-    //             if (response && response.data.loggedIn) {
-    //                 setIsLoggedIn(true); 
-    //             } else {
-    //                 setIsLoggedIn(false); 
-    //                 navigate('/'); 
-    //             }
-    //         } catch (error) {
-    //             console.error('Oturum kontrol hatası:', error);
-    //             setIsLoggedIn(false); 
-    //             navigate('/'); 
-    //         }
-    //     };
+    const getUser = async () => {
+        const user = api.user.getUser()
+        console.log("user bu",user)
 
-    //     checkUserToken();
-    // }, [navigate]);
-
-
-    // const logout = async()=>{
-    //     const response= await api.user.logout()
-
-    //     console.log("bu apiden gelen login cevabı:",response)
- 
-    //     if(response){
-           
-    //         navigate('/');
-           
-    //     }else{
-    //         alert("error")
-    //     }
-    // }
-
+    }
    
   return (
     <>
