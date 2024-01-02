@@ -44,7 +44,7 @@ export default function Login() {
                 if (error.response) {
                   if (error.response.status === 404) {
                     alert(error.response.data.message);
-                  } else if (error.response.status===401) { 
+                  } else if (error.response.status===402) { 
                     alert(error.response.data.message);
                   }else{     
                     alert("Server error. Please try again later.");
