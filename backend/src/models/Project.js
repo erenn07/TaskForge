@@ -6,11 +6,11 @@ const ProjectSchema = new mongoose.Schema(
         type:String,
         required:false
     },
-    customer:[{
+    customer:{
         type:String,
         required:false,
         ref:'Customer'
-    }],
+    },
     tasks:[{
         type:String,
         required:false,
