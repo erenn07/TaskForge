@@ -7,7 +7,7 @@ const ProjectSchema = new mongoose.Schema(
         required:false
     },
     customer: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: String,
         ref: 'Customer',
         required: true,
       },

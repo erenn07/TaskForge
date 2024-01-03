@@ -36,16 +36,17 @@ const addCustomer= async(req,res)=>{
       })
 /*         await customer.save();
  */
+        const findCustomer = await Customer.findOne({email:email})
+        const customerId=findCustomer._id.toString();
+        console.log("CustomerID VALUE:",customerId) 
+        
         const project = await Project.create({
           projectName: projectName,
-          customer: customer._id,
+          customer: customerId,
           creatorID:customer.creatorID,
         });
         await project.save();
-        console.log("ID DEGERI:",customer.creatorID)
-        const findCustomer = await Customer.findOne({email:email})
-        const customerId=findCustomer._id;  
-        console.log("musterının idsi",customerId)
+         
         res.status(200).json({
           message: 'customer added successfully',
           userId: customerId,
