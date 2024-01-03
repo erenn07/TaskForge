@@ -12,6 +12,7 @@ import Header from "./componentss/header.js";
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { jwtDecode } from "jwt-decode";
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 
 function Projects() {
   const [rows, setRows] = useState([]);
@@ -207,13 +208,13 @@ function Projects() {
                   startIcon={<DeleteIcon />}
                   onClick={() => onDeleteProject(row.projectId)}
                 >
-                  Delete
+                  SİL
                 </Button> 
                 <Button
                   align="right"
                   variant="outlined"
                   color="primary"
-                  startIcon={<DeleteIcon />}
+                  startIcon={<SearchOutlinedIcon />}
                   onClick={() => handleRowClick(row.projectId)}
                 >
                   İncele

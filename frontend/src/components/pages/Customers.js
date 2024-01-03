@@ -235,7 +235,7 @@ window.location.reload()
 
     {
       field: 'actions', 
-      headerName: 'Actions', 
+      headerName: 'Yönet', 
       width: 120, 
       sortable: false, 
       renderCell: (params) => ( 
@@ -245,7 +245,7 @@ window.location.reload()
           startIcon={<DeleteIcon />}
           onClick={() => handleDelete(params.id)}
         >
-          Delete
+         SİL
         </Button>
       ),
     },
