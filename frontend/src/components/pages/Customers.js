@@ -32,65 +32,6 @@ const randomRole = () => {
   return randomArrayItem(roles);
 };
 
-
-
-// const initialRows = [
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 25,
-//     joinDate: randomCreatedDate(),
-//     role: randomRole(),
-//   },
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 36,
-//     joinDate: randomCreatedDate(),
-//     role: randomRole(),
-//   },
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 19,
-//     role: randomRole(),
-//   },
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 28,
-//     joinDate: randomCreatedDate(),
-//     role: randomRole(),
-//   },
-//   {
-//     id: randomId(),
-//     name: randomTraderName(),
-//     age: 23,
-//     joinDate: randomCreatedDate(),
-//     role: randomRole(),
-//   },
-// ];
-// function EditToolbar(props) {
-//     const { setRows, setRowModesModel } = props;
-  
-//     const handleClick = () => {
-//       const id = randomId();
-//       setRows((oldRows) => [...oldRows, { id, email: '', number: '', isNew: true }]);
-//       setRowModesModel((oldModel) => ({
-//         ...oldModel,
-//         [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-//       }));
-//     };
-//     return (
-//         <GridToolbarContainer>
-//           <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-//             Müşteri Ekle
-//           </Button>
-//         </GridToolbarContainer>
-//       );
-    
-// }
-
 function Customers() {
 
     const [rows, setRows] = React.useState([]);
@@ -106,17 +47,16 @@ const [gridData, setGridData] = React.useState([]);
 const userToken=localStorage.getItem('userToken')
 
 const user=jwtDecode(userToken)
-const userId=user.userId
+const creatorID=user.userId
 React.useEffect(() => {
   async function fetchCustomers() {
     try {
-      const response = await api.customer.getCustomers(userId);
+      const response = await api.customer.getCustomers(creatorID);
       const modifiedRows = response.data.customer.map((customer) => ({
         ...customer,
         id: customer._id, 
       }));
       setRows(modifiedRows);
-      console.log('musteriler : ', response.data);
     } catch (error) {
       console.error('Veriler alınırken hata oluştu:', error);
     }
@@ -126,14 +66,6 @@ React.useEffect(() => {
 }, []); 
 
 
-
-  //   {
-  //     field: 'actions',
-  //     type: 'actions',
-  //     headerName: 'Actions',
-  //     width: 100,
-  //     cellClassName: 'actions',
-  //   }
 
 
   const handleRowEditCommit = async (params) => {
@@ -155,6 +87,7 @@ React.useEffect(() => {
         return row;
       });
   
+      setRows(updatedRows);
       setGridData(updatedRows);
     } catch (error) {
       console.error('Müşteri güncellenirken hata oluştu:', error);
@@ -166,18 +99,41 @@ React.useEffect(() => {
 
 const handleFormSubmit = async (e) => {
   e.preventDefault();
+ try{
+    const response = await api.customer.addCustomer(name,surname,email,phone,projectName,creatorID);
+    const { userId: customerId, email: customerEmail, projectName: customerProjectName } = response;
+    const projectPayload = {
+      customerId: customerId,
+      customerEmail: customerEmail,
+      customerProjectName: customerProjectName,
+    };
+//    const projectRes=await api.project.addProject(projectPayload)
 
-    const response = await api.customer.addCustomer(name,surname,email,phone,projectName,userId);
 
-    
-
-    setName('');
-    setsurName('')
+    /*     const modifiedRows = [...rows, { id: customerId, firstName: name, lastName: surname, email, phone, projectName }];
+ */    setName('');
+    setsurName('');
     setEmail('');
     setPhone('');
     setProjectName('');
-    window.location.reload()
-  
+    window.location.reload();
+  }catch (error) {
+    if (error.response) {
+      if (error.response.status === 400) {
+        alert(error.response.data.message);
+      } else if (error.response.status===401) { 
+        alert(error.response.data.message);}
+      else if (error.response.status===402) { 
+          alert(error.response.data.message);
+      }else{     
+        alert("Server error. Please try again later.");
+      }
+    } else if (error.request) {
+      alert("No response from server. Please try again later.");
+    } else {
+      alert("Request failed. Please check your internet connection and try again.");
+    }
+  }
 };
 
 const handleDelete = async (id) => {

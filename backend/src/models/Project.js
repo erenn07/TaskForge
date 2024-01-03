@@ -6,21 +6,20 @@ const ProjectSchema = new mongoose.Schema(
         type:String,
         required:false
     },
-    customer:[{
-        type:String,
-        required:false,
-        ref:'Customer'
-    }],
+    customer: {
+        type: String,
+        ref: 'Customer',
+        required: true,
+      },
     tasks:[{
         type:String,
         required:false,
         ref:'Task'
     }],
-    creatorID:{
-        type:String,
-        required:false
-    }
-    });
+    creatorID: {
+      type:String,
+      required:false
+    }});
 
 const Project = mongoose.model('Project', ProjectSchema);
 

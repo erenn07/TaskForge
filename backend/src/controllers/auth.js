@@ -8,6 +8,10 @@ const register = async (req, res, next) => {
   const { firstName,lastName, email,phone,password,passwordConfirmation} = req.body;
 
   try {
+
+    if (!firstName || !lastName || !email || !phone || !password || !passwordConfirmation) {
+      return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
     const isEmailValid = validateEmail(email);
     if (!isEmailValid) {
       return res.status(400).json({ success: false, message: 'Geçerli bir email adresi giriniz.' });

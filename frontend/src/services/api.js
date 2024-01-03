@@ -88,27 +88,21 @@ export default{
       },
       customer:{
         async getCustomers(userId){
-          try {
+          
             const response = await axios.get("http://localhost:3001/customer/getCustomers",{
               params: { userId },  
               withCredentials: true
             });
 
               return response;
-          
-          }catch(error){
-            alert(error)
-          }
+        
         },
         async addCustomer(name,surname,email,phone,projectName,userId){
-          try {
+          
             const response = await axios.post("http://localhost:3001/customer/addCustomer",{name,surname,email,phone,projectName,userId} ,{withCredentials: true});
 
               return response.data;
           
-          }catch(error){
-            alert(error)
-          }
         },
         async deleteCustomer(id){
           try {
@@ -138,18 +132,18 @@ export default{
 
 
       },
-      project:{
-        async addProject(payload){
-          try {
-            const response = await axios.post("http://localhost:3001/project/addProject",payload ,{withCredentials: true});
+        project:{
+          async addProject(payload){
+            try {
+              const response = await axios.post("http://localhost:3001/project/addProject",payload,{withCredentials: true});
 
-              return response.data;
-          
-          }catch(error){
-            alert(error)
-          }
-        },
-        async getProjects(){
+                return response.data;
+            
+            }catch(error){
+              alert(error)
+            }
+          },
+        async getProjects(payload){
           try {
             const response = await axios.get("http://localhost:3001/project/getProjects" ,{withCredentials: true});
 
