@@ -1,4 +1,5 @@
-import logo from '../../../src/logo.svg';
+
+import { useState, useEffect } from "react";
 import '../../App.css';
 import Header from './componentss/header.js';
 import * as React from 'react';
@@ -287,6 +288,7 @@ const handleFormSubmit = async (e) => {
         >
          SİL
         </Button>
+       
       ),
     },
   ];
@@ -395,8 +397,188 @@ const handleFormSubmit = async (e) => {
             </li>
 
 
-          </ul>
-          <div id="content-wrapper" class="d-flex flex-column">
+</ul>
+<div id="content-wrapper" class="d-flex flex-column">
+
+
+<div id="content">
+
+   
+    <Header/>
+
+
+    <div class="container-fluid">
+<div className="">
+                <div className="container">
+                    <div className="row justify-content-center">
+                    
+                        <div className="col-xl-10 col-lg-12 col-md-9">
+                            <div className="my-5">
+                                <div className="p-0">
+                                    <div className="row">
+                                        <div className="col-lg-6 d-none d-lg-block musteri1">
+                                        <div className="p-5">
+                                                <div className="text-center">
+                                                    <h1 className="h4 text-gray-900 mb-4">Müşteri Ekle  </h1>
+                                                </div>
+                                                <form className="user" onSubmit={handleFormSubmit}>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={name} 
+                                                            onChange={(e) => setName(e.target.value)}
+                                                            //onBlur={(e) => onBlur("firstName", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputEmail"
+                                                            aria-describedby="emailHelp"
+                                                            placeholder="Müşteri Ad"
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={surname} 
+                                                            onChange={(e) => setsurName(e.target.value)} 
+                                                            // onBlur={(e) => onBlur("lastName", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputPassword"
+                                                            placeholder="Müşteri Soyad"
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="email"
+                                                            value={email} 
+                                                            onChange={(e) => setEmail(e.target.value)}
+                                                            // onBlur={(e) => onBlur("email", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputPassword"
+                                                            placeholder="Müşteri Email"
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={phone} 
+                                                            onChange={(e) => setPhone(e.target.value)}
+                                                            // onBlur={(e) => onBlur("phone", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputPassword"
+                                                            placeholder="Müşteri Telefon"
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={projectName} 
+                                                            onChange={(e) => setProjectName(e.target.value)} 
+                                                            // onBlur={(e) => onBlur("projectName", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputPassword"
+                                                            placeholder="Proje Adı"
+                                                        />
+                                                    </div>
+                                                    
+
+                                                    
+
+                                                   
+                                                    <button type="submit" className="btn btn-primary btn-user btn-block">
+                                                       Ekle
+                                                    </button>
+                                                   
+                                                   
+                                                </form>
+                                             
+                                            </div>
+                                  
+                                        </div>
+                                        <div className="col-lg-6 ">
+                                        <div class="flex align-items-center  mb-4">
+           <h1 class="h3 mb-0 text-gray-800"></h1> 
+
+          
+
+            <div style={{ height: 500, width: 700 }}>
+            <DataGrid
+  rows={rows}
+  columns={columns}
+  pageSize={10}
+  rowsPerPageOptions={[10, 20, 50]}
+  checkboxSelection
+  onCellEditStop={(params, event) => {
+    if (params.field !== undefined) {
+
+     handleRowEditCommit(params);
+    }
+  }}/>
+
+    </div>
+
+
+
+
+     {/* <Box
+      sx={{
+        height: 500,
+        width: '100%',
+        marginRight: 200,
+        '& .actions': {
+          color: 'text.secondary',
+        },
+        '& .textPrimary': {
+          color: 'text.primary',
+        },
+      }}
+    />
+    <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar,
+        }}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+      />  */}
+     
+            {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>  */}
+        </div>
+
+
+    </div>
+  
+
+</div>
+
+
+
+                                         
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <footer class="sticky-footer ">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto ">
+           
+        </div>
+    </div>
+    
+</footer>
+
+
+         
+{/* <div id="content-wrapper" class="d-flex flex-column">
 
 
             <div id="content">
@@ -405,33 +587,33 @@ const handleFormSubmit = async (e) => {
               <Header />
 
 
-              <div class="container-fluid">
-                <form onSubmit={handleFormSubmit}>
-                  <label>
-                    Adı:
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-                  </label>
-                  <label>
-                    Soyadı:
-                    <input type="text" value={surname} onChange={(e) => setsurName(e.target.value)} />
-                  </label>
-                  <label>
-                    E-Posta:
-                    <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-                  </label>
-                  <label>
-                    Numara:
-                    <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
-                  </label>
-                  <label>
-                    Proje Adı:
-                    <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
-                  </label>
-                  <button type="submit">Müşteri Ekle</button>
-                </form>
-
-                <div class="flex align-items-center  mb-4">
-                  {/* <h1 class="h3 mb-0 text-gray-800"></h1> */}
+    <div class="container-fluid">
+    <form onSubmit={handleFormSubmit}>
+      <label>
+        Adı:
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      </label>
+      <label>
+        Soyadı:
+        <input type="text" value={surname} onChange={(e) => setsurName(e.target.value)} />
+      </label>
+      <label>
+        E-Posta:
+        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      <label>
+        Numara:
+        <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+      </label>
+      <label>
+        Proje Adı:
+        <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
+      </label>
+      <button type="submit">Müşteri Ekle</button>
+    </form> */}
+    
+        {/* <div class="flex align-items-center  mb-4"> */}
+            {/* <h1 class="h3 mb-0 text-gray-800"></h1> */}
 
 
                   <Dialog open={open} onClose={handleClose} maxWidth="xl" PaperProps={{
@@ -507,30 +689,57 @@ const handleFormSubmit = async (e) => {
                     </form>
                   </Dialog>
 
-                  <div style={{ height: 500, width: '100%' }}>
+            {/* <div style={{ height: 500, width: '100%' }}>
+            <DataGrid
+  rows={rows}
+  columns={columns}
+  pageSize={10}
+  rowsPerPageOptions={[10, 20, 50]}
+  checkboxSelection
+  onCellEditStop={(params, event) => {
+    if (params.field !== undefined) {
+
+     handleRowEditCommit(params);
+    }
+  }}/>
+
+    </div> */}
 
 
 
 
-
-
-
-                    <DataGrid
-                      rows={rows}
-                      columns={columns}
-                      pageSize={10}
-                      rowsPerPageOptions={[10, 20, 50]}
-                      checkboxSelection
-                    />
-
-
-
-
-
-                  </div>
-
-
-                </div>
+    {/* <Box
+      sx={{
+        height: 500,
+        width: '100%',
+        marginRight: 200,
+        '& .actions': {
+          color: 'text.secondary',
+        },
+        '& .textPrimary': {
+          color: 'text.primary',
+        },
+      }}
+    >
+      {/* <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar,
+        }}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+      /> */}
+     
+            {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
+        {/* </div>
 
 
               </div>
@@ -549,14 +758,17 @@ const handleFormSubmit = async (e) => {
             </footer>
 
 
-          </div>
+</div>*/}
 
-        </div >
+    </div> 
 
 
 
-      </div >
-
+    </div>
+    </div>
+    </div>
+    </div>
+   
     </>
 
   );

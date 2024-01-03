@@ -12,6 +12,8 @@ function Dashboard() {
     const navigate = useNavigate();
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+ 
+
 
     const getUser = async () => {
         const user = api.user.getUser()
@@ -164,7 +166,32 @@ function Dashboard() {
 
     
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">MERHABA BU BİR KARŞILAMA SAYFASIDIR.</h1>
+        <h1 style={{justifyContent:"center",textAlign:"center",position:"absolute",left:"660px",top:"270px"}} class="h3 mb-0 text-gray-800">HOŞ GELDİNİZ 
+        <br/><br/>HAYDİ BAŞLAYALIM
+        </h1>
+
+            {/* <div className="kanban-container">
+      <div className="kanban-column" id="todo-column" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
+        <h2>To Do</h2>
+        {tasks.map((task, index) => (
+          <div
+            key={index}
+            className="kanban-task"
+            draggable
+            onDragStart={(e) => handleDragStart(e, task)}
+          >
+            {task}
+          </div>
+        ))}
+      </div>
+      <div className="kanban-column" id="in-progress-column" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'in-progress')}>
+        <h2>In Progress</h2>
+      </div>
+      <div className="kanban-column" id="done-column" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'done')}>
+        <h2>Done</h2>
+      </div>
+    </div> */}
+  
             {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                     class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
         </div>
