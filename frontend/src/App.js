@@ -57,7 +57,7 @@ function App(){
   <Route path="/register" element={isLoggedIn ? <Dashboard /> : <Register/>} />
   <Route path="/bills" element={isLoggedIn ? <Bills /> : <Navigate to="/" />} />
   <Route path="/businessRegistration" element={isLoggedIn ? <BusinessRegistration /> : <Navigate to="/" />} />
-  {/* <Route path="/projects" element={isLoggedIn ? <Projects /> : <Navigate to="/" />} /> */}
+
   <Route path="/projectDetails" element={isLoggedIn ? <ProjectDetails /> : <Navigate to="/" />} />
   <Route path="/projectManagement" element={isLoggedIn ? <ProjectManagement /> : <Navigate to="/" />} />
   <Route path="/customers" element={isLoggedIn ? <Customers /> : <Navigate to="/" />}
