@@ -16,6 +16,10 @@ const ProjectSchema = new mongoose.Schema(
         required:false,
         ref:'Task'
     }],
+    creatorID:{
+        type:String,
+        required:false
+    }
     });
 
 const Project = mongoose.model('Project', ProjectSchema);

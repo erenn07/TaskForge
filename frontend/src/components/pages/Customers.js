@@ -169,6 +169,8 @@ const handleFormSubmit = async (e) => {
 
     const response = await api.customer.addCustomer(name,surname,email,phone,projectName,userId);
 
+    
+
     setName('');
     setsurName('')
     setEmail('');

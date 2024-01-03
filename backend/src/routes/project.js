@@ -8,8 +8,9 @@ const router = express.Router();
 
 
 router.route("/addProject").post(authenticate,projectController.addProject)
-router.route("/getProject").get(authenticate,projectController.getProject)
-router.route("/getProjectDetails").get(authenticate,projectController.getProjectDetails)
+router.route("/getProjects").get(projectController.getProjects)
+
+router.route("/projectDetails/:id").post(projectController.projectDetails)
 
 
 

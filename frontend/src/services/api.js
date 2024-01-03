@@ -47,6 +47,11 @@ export default{
            });
           return response;
         },
+        async getInfo(payload){
+          const response = await instance.post("http://localhost:3001/user/getInfo",payload,{withCredentials: true});
+          return response.data;
+        },
+        
  
         async logout(){
 
@@ -144,7 +149,7 @@ export default{
             alert(error)
           }
         },
-        async getProjects(payload){
+        async getProjects(){
           try {
             const response = await axios.get("http://localhost:3001/project/getProjects" ,{withCredentials: true});
 
@@ -163,7 +168,11 @@ export default{
           }catch(error){
             alert(error)
           }
-        }
+        },
+        async projectDetails(id){
+          const response = await instance.post(`http://localhost:3001/project/projectDetails/${id}`,{withCredentials: true});
+          return response.data;
+        },
       },
       task:{
         async addTask(payload){

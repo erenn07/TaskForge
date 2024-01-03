@@ -11,6 +11,7 @@ router.get('/profile', authenticate, (req, res) => {
 });
 
 router.route("/getProfile").get(authenticate,userController.getProfile)
+router.route("/getInfo").post(userController.getInfo)
 
 
 
