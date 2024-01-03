@@ -2,11 +2,11 @@ import mongoose from 'mongoose';
 
 const CustomerSchema = new mongoose.Schema(
   {
-    firstName:{
+    firstName: {
       type: String,
       required: true,
     },
-    lastName:{
+    lastName: {
       type: String,
       required: true,
     },
@@ -15,19 +15,19 @@ const CustomerSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
-    phone:{
+    phone: {
       type: String,
       required: true,
       unique: true
     },
-    projectName:{
-        type: String,
-        required: true,
-        
+    projectName: {
+      type: String,
+      required: true,
+
     },
-    creatorID:{
-      type:String,
-      required:false
+    creatorID: {
+      type: String,
+      required: false
     }
   },
 );

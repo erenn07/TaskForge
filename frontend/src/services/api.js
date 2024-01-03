@@ -19,7 +19,7 @@ instance.interceptors.response.use(
   },
   function (error) {
     if (401 === error.response.status && error.response) {
-      
+
       localStorage.clear();
       //window.location.href = "/login";
     } else {
@@ -55,97 +55,78 @@ export default{
  
         async logout(){
 
-          try {
-         
-         localStorage.removeItem('userToken')
-            const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
-            
+      try {
 
-              return response
-          
-         
-         
-            }catch(error){
-            alert(error)
-          
-        }},
+        localStorage.removeItem('userToken')
+        const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
+
+
+        return response
 
 
 
-// async checkUser(){
-  
-//     try {
-//         const response = await axios.get("http://localhost:3001/auth/checkUser", {withCredentials: true});
+      } catch (error) {
+        alert(error)
 
-//                   return response
-              
-//               }catch(error){
-//                 alert(error)
-//               }
-//         }
+      }
+    },
 
 
       },
       customer:{
         async getCustomers(userId){
-          
+          try{
             const response = await axios.get("http://localhost:3001/customer/getCustomers",{
               params: { userId },  
               withCredentials: true
             });
 
               return response;
-        
+          
+          }catch(error){
+            alert(error)
+          }
         },
         async addCustomer(name,surname,email,phone,projectName,userId){
-          
+          try {
             const response = await axios.post("http://localhost:3001/customer/addCustomer",{name,surname,email,phone,projectName,userId} ,{withCredentials: true});
 
               return response.data;
           
+          }catch(error){
+            alert(error)
+          }
         },
         async deleteCustomer(id){
           try {
             const response = await axios.get("http://localhost:3001/customer/deleteCustomers",{params:{id}} ,{withCredentials: true});
 
-              return response.data;
-          
-          }catch(error){
-            alert(error)
-          }
-        },
-        async updateCustomer (id, field, updatedValue) {
-          try {
-            const response = await axios.post(
-              `http://localhost:3001/customer/updateCustomer/${id}`,
-              { [field]: updatedValue },
-              { withCredentials: true }
-            );
-        
-            return response.data;
-          } catch (error) {
-            console.error('Müşteri güncellenirken hata oluştu:', error);
-            throw new Error('Müşteri güncellenirken bir hata oluştu.');
-          }
-        }
-        
+        return response.data;
+
+      } catch (error) {
+        alert(error)
+      }
+    },
+    async updateCustomer(updatedData) {
+      try {
+        const response = await axios.post(
+          `http://localhost:3001/customer/updateCustomer/${updatedData.id}`,
+          updatedData,
+          { withCredentials: true }
+        );
+        return response.data;
+      } catch (error) {
+        throw new Error('Müşteri güncellenirken hata oluştu: ' + error);
+      }
+    }
+
 
 
       },
-        project:{
-          async addProject(payload){
-            try {
-              const response = await axios.post("http://localhost:3001/project/addProject",payload,{withCredentials: true});
-
-                return response.data;
-            
-            }catch(error){
-              alert(error)
-            }
-          },
-        async getProjects(creatorID){
+      project:{
+        async addProject(payload){
           try {
-            const response = await axios.post("http://localhost:3001/project/getProjects" ,{creatorID},{withCredentials: true});
+            const response = await axios.post("http://localhost:3001/project/addProject",payload ,{withCredentials: true});
 
               return response.data;
           
@@ -153,48 +134,50 @@ export default{
             alert(error)
           }
         },
-        async getProjectDetails(payload){
+        async getProjects(payload){
           try {
-            const response = await axios.get("http://localhost:3001/project/getProjectDetails" ,{withCredentials: true});
+            const response = await axios.get("http://localhost:3001/project/getProjects" ,{withCredentials: true});
+
+        return response.data;
+
+      } catch (error) {
+        alert(error)
+      }
+    },
+    async getProjectDetails(payload) {
+      try {
+        const response = await axios.get("http://localhost:3001/project/getProjectDetails", { withCredentials: true });
 
               return response.data;
           
           }catch(error){
             alert(error)
           }
-        },
-        async projectDetails(id){
-          const response = await instance.post(`http://localhost:3001/project/projectDetails/${id}`,{withCredentials: true});
-          return response.data;
-        },
-        async deleteProject(projectId){
-          const response = await axios.post("http://localhost:3001/project/deleteProject",{projectId},{withCredentials: true});
-          return response.data;
-        },
+        }
       },
       task:{
         async addTask(payload){
           try {
             const response = await axios.post("http://localhost:3001/task/addTask" ,payload,{withCredentials: true});
 
-              return response.data;
-          
-          }catch(error){
-            alert(error)
-          }
-        },
-        async getTask(){
-          try {
-            const response = await axios.get("http://localhost:3001/task/getTask" ,{withCredentials: true});
+        return response.data;
 
-              return response.data;
-          
-          }catch(error){
-            alert(error)
-          }
-        }
+      } catch (error) {
+        alert(error)
       }
-  
+    },
+    async getTask() {
+      try {
+        const response = await axios.get("http://localhost:3001/task/getTask", { withCredentials: true });
 
-  
+        return response.data;
+
+      } catch (error) {
+        alert(error)
+      }
+    }
   }
+
+
+
+}
