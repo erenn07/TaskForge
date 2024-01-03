@@ -427,17 +427,21 @@ function Customers() {
 
                   <Dialog open={open} onClose={handleClose} maxWidth="xl" PaperProps={{
                     sx: {
-                      minHeight: "50%",
-                      maxHeight: "50%"
+                      minHeight: "25%",
+                      maxHeight: "25%",maxWidth:"90%"
+
                     }
                   }} >
-                    <form sx={{
+                    <form 
+                    style={{justifyContent:"center",margin:"80px"}}
+                    sx={{
                       display: "flex",
                       flexDirection: "column"
                     }} onSubmit={handleUpdate}>
                       <label>
                         Adı:
                         <input
+                        style={{ marginLeft: "15px" }}
                           type="text"
                           value={editedData.firstName}
                           onChange={(e) =>
@@ -446,9 +450,10 @@ function Customers() {
                         />
                       </label>
 
-                      <label>
+                      <label style={{ marginLeft: "15px" }}>
                         Soyadı:
                         <input
+                        style={{ marginLeft: "15px" }}
                           type="text"
                           value={editedData.lastName}
                           onChange={(e) =>
@@ -456,9 +461,10 @@ function Customers() {
                           }
                         />
                       </label>
-                      <label>
+                      <label style={{ marginLeft: "15px" }}>
                         E-Posta:
                         <input
+                        style={{ marginLeft: "15px" }}
                           type="text"
                           value={editedData.email}
                           onChange={(e) =>
@@ -466,19 +472,21 @@ function Customers() {
                           }
                         />
                       </label>
-                      <label>
+                      <label style={{ marginLeft: "15px" }}>
                         Numara:
                         <input
+                        style={{ marginLeft: "15px" }}
                           type="text"
                           value={editedData.phone}
                           onChange={(e) =>
                             setEditedData({ ...editedData, phone: e.target.value })
                           }
                         />
-                      </label>
-                      <label>
+                      </label >
+                      <label style={{ marginLeft: "15px" }}>
                         Proje Adı:
                         <input
+                        style={{ marginLeft: "15px" }}
                           type="text"
                           value={editedData.projectName}
                           onChange={(e) =>
@@ -486,7 +494,7 @@ function Customers() {
                           }
                         />
                       </label>
-                      <Button type="submit">Değişiklikleri Kaydet</Button>
+                      <Button style={{ marginLeft: "15px" }} type="submit">Değişiklikleri Kaydet</Button>
                     </form>
                   </Dialog>
 
