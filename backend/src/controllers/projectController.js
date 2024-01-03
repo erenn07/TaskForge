@@ -1,7 +1,7 @@
 import Project from "../models/Project.js";
 
 const addProject =async(req,res)=>{
-    try{  
+   /*  try{  
     console.log("addproject controller")
         const {customerId,customerProjectName,customerEmail} = req.body;
         console.log("addproject 2",customerProjectName)
@@ -17,14 +17,14 @@ const addProject =async(req,res)=>{
       const project = await Project.create({
         projectName:customerProjectName,
         customer:customerId,
-        /* tasks:[], */
+        // tasks:[], 
       })
         await project.save();
         res.status(200).json({message:'project added successfully'})
       
     } catch (error) {
       
-    }
+    }*/
     }
 const getProject =async ()=>{
 
