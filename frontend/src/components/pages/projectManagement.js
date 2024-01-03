@@ -11,18 +11,26 @@ import api from "../../services/api.js";
 import Header from "./componentss/header.js";
 import Button from '@mui/material/Button';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import { jwtDecode } from "jwt-decode";
 
 function Projects() {
   const [rows, setRows] = useState([]);
+
   const navigate = useNavigate();
 
   function createData(ProjectName, CustomerName, projectId) {
+
     return { ProjectName, CustomerName, projectId };
   }
 
   const getProject = async () => {
     try {
-      const response = await api.project.getProjects();
+
+      const userToken=localStorage.getItem('userToken')
+      const user=jwtDecode(userToken)
+      const creatorID=user.userId
+      console.log("creator ıd bu:",creatorID)
+      const response = await api.project.getProjects(creatorID);
       const userInfos = await Promise.all(
         response.map(async (item) => {
           const customerInfo = await api.user.getInfo(item.customer);

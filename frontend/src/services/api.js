@@ -143,9 +143,9 @@ export default{
               alert(error)
             }
           },
-        async getProjects(payload){
+        async getProjects(creatorID){
           try {
-            const response = await axios.get("http://localhost:3001/project/getProjects" ,{withCredentials: true});
+            const response = await axios.post("http://localhost:3001/project/getProjects" ,{creatorID},{withCredentials: true});
 
               return response.data;
           

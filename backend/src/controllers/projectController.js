@@ -26,16 +26,49 @@ const addProject =async(req,res)=>{
       
     }*/
     }
-const getProject =async ()=>{
+    const getProjects =async (req,res)=>{
+      try {
+         const {creatorID}=req.body;
+      console.log("meltem",creatorID)
+      const projects = await Project.find({ creatorID: creatorID });
+      res.status(200).json(projects)
+      } catch (error) {
+        
+      }
+     
+      
+  }
+  const projectDetails =async (req,res)=>{
+      try {
+      
+          const {id} = req.body;
+      console.log("bu gelen id:",id)
+          const project = await Project.findById(id);
+          res.status(200).json(project);
+      
+      
+        } catch (error) {
+          res.status(500).json({message:"server hatası."})
+        }
+  }
+  const deleteProject= async(req,res)=>{
+  
+    try {
+      const {projectId}= req.body;
+     console.log("deleteProject projectId",projectId)
+      const project = await Project.findByIdAndDelete(projectId);
+  
+      if(!project){
+       
+        res.status(404).json({succeed:false,message:"Project was not found"})
+      }
+      res.status(200).json({succeed:true,message:"Project has been deleted succesfully" })
+     
+    } catch (error) {
+      
+      
+    }
+  }
+  
 
-}
-
-const getProjectDetails =async ()=>{
-
-}
-
-const validateEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-};
-export{addProject,getProject,getProjectDetails}
+export{addProject,getProjects,projectDetails,deleteProject}
