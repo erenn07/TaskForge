@@ -40,7 +40,7 @@ function Projects() {
 
   const handleRowClick = (projectId) => {
     console.log("Clicked Row, Project ID:", projectId); 
-    navigate('/projectManagement', { state: { projectId } });
+    navigate('/projectDetails', { state: { projectId } });
   };
 
   useEffect(() => {

@@ -7,7 +7,7 @@ import BusinessRegistration from "./components/pages/businessRegistration.js";
 import Login from "./components/pages/login.js";
 import ProjectManagement from "./components/pages/projectManagement.js";
 import Register from "./components/pages/register.js";
-// import Projects from "./components/pages/projects.js";
+import ProjectDetails from "./components/pages/projectDetails.js";
 import { Routes, Route, Navigate } from 'react-router-dom';
 import {useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
@@ -58,7 +58,7 @@ function App(){
   <Route path="/bills" element={isLoggedIn ? <Bills /> : <Navigate to="/" />} />
   <Route path="/businessRegistration" element={isLoggedIn ? <BusinessRegistration /> : <Navigate to="/" />} />
   {/* <Route path="/projects" element={isLoggedIn ? <Projects /> : <Navigate to="/" />} /> */}
-  {/* <Route path="/projectDetails" element={isLoggedIn ? <ProjectDetails /> : <Navigate to="/" />} /> */}
+  <Route path="/projectDetails" element={isLoggedIn ? <ProjectDetails /> : <Navigate to="/" />} />
   <Route path="/projectManagement" element={isLoggedIn ? <ProjectManagement /> : <Navigate to="/" />} />
   <Route path="/customers" element={isLoggedIn ? <Customers /> : <Navigate to="/" />}
   
