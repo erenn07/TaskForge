@@ -11,7 +11,7 @@ router.route("/addProject").post(authenticate,projectController.addProject)
 router.route("/getProjects").get(projectController.getProjects)
 
 router.route("/projectDetails/:id").post(projectController.projectDetails)
-
+router.route("/deleteProject").post(projectController.deleteProject)
 
 
 export default router;

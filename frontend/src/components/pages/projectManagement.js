@@ -9,6 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import api from "../../services/api.js";
 import Header from "./componentss/header.js";
+import Button from '@mui/material/Button';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 
 function Projects() {
   const [rows, setRows] = useState([]);
@@ -42,6 +44,15 @@ function Projects() {
     console.log("Clicked Row, Project ID:", projectId); 
     navigate('/projectDetails', { state: { projectId } });
   };
+
+  const onDeleteProject = async (projectId) => {
+  console.log("ondelete projectID",projectId)
+    await api.project.deleteProject(projectId);
+    window.location.reload()
+  };
+
+
+
 
   useEffect(() => {
     getProject();
@@ -165,6 +176,7 @@ function Projects() {
           <TableRow >
             <TableCell align="left"style={{fontWeight: 'bold'}}>Proje </TableCell>
             <TableCell align="center" style={{fontWeight: 'bold'}}>Müşteri Bilgileri</TableCell>
+            <TableCell align="center" style={{fontWeight: 'bold'}}>Yönet</TableCell>
            
           </TableRow>
         </TableHead>
@@ -173,12 +185,34 @@ function Projects() {
             <TableRow
               key={row.name}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              onClick={() => handleRowClick(row.projectId)}
+             
             >
               <TableCell align="left"scope="row">
                 {row.ProjectName}
               </TableCell>
               <TableCell align="center" >{row.CustomerName}</TableCell>
+              <TableCell align="center" >   
+                <Button
+                    align="right"
+                  variant="outlined"
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  onClick={() => onDeleteProject(row.projectId)}
+                >
+                  Delete
+                </Button> 
+                <Button
+                  align="right"
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<DeleteIcon />}
+                  onClick={() => handleRowClick(row.projectId)}
+                >
+                  İncele
+                </Button>
+              </TableCell>
+
+               
             
             </TableRow>
           ))}

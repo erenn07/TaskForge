@@ -51,4 +51,22 @@ const projectDetails =async (req,res)=>{
         res.status(500).json({message:"server hatası."})
       }
 }
-export{addProject,getProjects,projectDetails}
+const deleteProject= async(req,res)=>{
+
+  try {
+    const {projectId}= req.body;
+   console.log("deleteProject projectId",projectId)
+    const project = await Project.findByIdAndDelete(projectId);
+
+    if(!project){
+     
+      res.status(404).json({succeed:false,message:"Project was not found"})
+    }
+    res.status(200).json({succeed:true,message:"Project has been deleted succesfully" })
+   
+  } catch (error) {
+    
+    
+  }
+}
+export{addProject,getProjects,projectDetails,deleteProject}

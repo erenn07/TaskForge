@@ -173,6 +173,10 @@ export default{
           const response = await instance.post(`http://localhost:3001/project/projectDetails/${id}`,{withCredentials: true});
           return response.data;
         },
+        async deleteProject(projectId){
+          const response = await axios.post("http://localhost:3001/project/deleteProject",{projectId},{withCredentials: true});
+          return response.data;
+        },
       },
       task:{
         async addTask(payload){
