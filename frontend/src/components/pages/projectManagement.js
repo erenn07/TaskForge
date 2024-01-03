@@ -1,10 +1,13 @@
 import logo from '../../../src/logo.svg';
 import '../../App.css';
-import {useNavigate} from "react-router-dom";
+import {useNavigate,useLocation} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import Header from './componentss/header';
 
 function ProjectManagement() {
+    const location = useLocation();
+    const projectId = location.state?.projectId;
+  
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [tasks, setTasks] = useState([
         'Task 1',
