@@ -166,7 +166,9 @@ function Dashboard() {
 
     
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">MERHABA BU BİR KARŞILAMA SAYFASIDIR.</h1>
+        <h1 style={{justifyContent:"center",textAlign:"center",position:"absolute",left:"660px",top:"270px"}} class="h3 mb-0 text-gray-800">HOŞ GELDİNİZ 
+        <br/><br/>HAYDİ BAŞLAYALIM
+        </h1>
 
             {/* <div className="kanban-container">
       <div className="kanban-column" id="todo-column" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
