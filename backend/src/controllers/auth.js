@@ -59,19 +59,19 @@ const login = async (req, res, next) => {
       return res.status(401).json({ message: 'Incorrect password' });
     }else{
 
-      const token = jwt.sign({ userId: user._id }, process.env.SECRET_KEY, {
+      const token = jwt.sign({ userId: user._id,firstName:user.firstName,lastName:user.lastName }, process.env.SECRET_KEY, {
       expiresIn: '1d'
+
     });
 
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
-      sameSite: 'none',
-      secure: true
-    });
+    // res.cookie('jwt', token, {
+    //   httpOnly: true,
+    //   maxAge: 1000 * 60 * 60 * 24,
+    //   sameSite: 'none',
+    //   secure: true
+    // });
 
 
-    // console.log("mesaj",req.user)
     // console.log("mesaj222",req.user.email)
     res.status(200).json({ success:true,token:token });
     }
@@ -85,6 +85,8 @@ const login = async (req, res, next) => {
 const logout = (req, res) => {
   try {
     res.clearCookie('jwt'); 
+
+
     res.status(200).json({
       succeded: true,
       message: 'User logged out successfully',
@@ -110,20 +112,19 @@ const validatePhone = (phone) => {
 
 
 
-const checkUser = (req, res) => {
-    try {
+// const checkUser = (req, res) => {
+//     try {
 
-
-        if (req.cookies.jwt) {
-            res.json({ loggedIn: true  });
-        } else {
-            res.json({ loggedIn: false });
-        }
-    } catch (error) {
-        console.error('Hata:', error);
-        res.status(500).json({ error: 'Sunucu hatası' });
-    }
-};
+//         if (req.cookies.jwt) {
+//             res.json({ loggedIn: true  });
+//         } else {
+//             res.json({ loggedIn: false });
+//         }
+//     } catch (error) {
+//         console.error('Hata:', error);
+//         res.status(500).json({ error: 'Sunucu hatası' });
+//     }
+// };
   
 
-export { register, login ,checkUser,logout};
+export { register, login ,logout};

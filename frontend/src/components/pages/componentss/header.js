@@ -2,8 +2,15 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../services/api';
 import "../../../App.css"
+import { jwtDecode } from "jwt-decode";
 
 function Header() {
+
+    const userToken=localStorage.getItem('userToken')
+
+    const user=jwtDecode(userToken)
+    const fullName=user.firstName +" "+user.lastName
+
   const navigate = useNavigate();
   const handleLogout = async () => {
     try {
@@ -195,9 +202,9 @@ return (
     <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="mr-2 d-none d-lg-inline text-gray-600 small">Müslüm Gürses</span>
-            <img class="img-profile rounded-circle"
-                src="./assets/img/Müslüm.jpeg"/>
+            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{fullName}</span>
+            <img class="img-profile rounded-circle "
+                src="./assets/img/icon.png"/>
         </a>
      
         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

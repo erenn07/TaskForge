@@ -17,12 +17,6 @@ const navigate = useNavigate();
 
       });
     
-    
-    
-    
-    
-
-
       const RegisterData= async ()=>{
 
         console.log("bu form",form)

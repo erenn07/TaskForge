@@ -1,101 +1,216 @@
-import logo from '../../../src/logo.svg';
+
+import { useState, useEffect } from "react";
 import '../../App.css';
-import Header from './componentss/header';
+import Header from './componentss/header.js';
 import * as React from 'react';
-import Box from '@mui/material/Box';
+//import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
+//import AddIcon from '@mui/icons-material/Add';
+//import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
+//import SaveIcon from '@mui/icons-material/Save';
+//import CancelIcon from '@mui/icons-material/Close';
+import api from '../../services/api';
 import {
   GridRowModes,
   DataGrid,
-  GridToolbarContainer,
-  GridActionsCellItem,
+  //GridToolbarContainer,
+  //GridActionsCellItem,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
+
 import {
-  randomCreatedDate,
-  randomTraderName,
-  randomId,
+  //randomCreatedDate,
+  //randomTraderName,
+  //randomId,
   randomArrayItem,
 } from '@mui/x-data-grid-generator';
+import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
+
 const roles = ['Market', 'Finance', 'Development'];
 const randomRole = () => {
   return randomArrayItem(roles);
 };
 
-const initialRows = [
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 25,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 19,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 28,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 23,
-    joinDate: randomCreatedDate(),
-    role: randomRole(),
-  },
-];
-function EditToolbar(props) {
-    const { setRows, setRowModesModel } = props;
+
+
+// const initialRows = [
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 25,
+//     joinDate: randomCreatedDate(),
+//     role: randomRole(),
+//   },
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 36,
+//     joinDate: randomCreatedDate(),
+//     role: randomRole(),
+//   },
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 19,
+//     role: randomRole(),
+//   },
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 28,
+//     joinDate: randomCreatedDate(),
+//     role: randomRole(),
+//   },
+//   {
+//     id: randomId(),
+//     name: randomTraderName(),
+//     age: 23,
+//     joinDate: randomCreatedDate(),
+//     role: randomRole(),
+//   },
+// ];
+// function EditToolbar(props) {
+//     const { setRows, setRowModesModel } = props;
   
-    const handleClick = () => {
-      const id = randomId();
-      setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
-      setRowModesModel((oldModel) => ({
-        ...oldModel,
-        [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-      }));
-    };
-    return (
-        <GridToolbarContainer>
-          <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-            Müşteri Ekle
-          </Button>
-        </GridToolbarContainer>
-      );
+//     const handleClick = () => {
+//       const id = randomId();
+//       setRows((oldRows) => [...oldRows, { id, email: '', number: '', isNew: true }]);
+//       setRowModesModel((oldModel) => ({
+//         ...oldModel,
+//         [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+//       }));
+//     };
+//     return (
+//         <GridToolbarContainer>
+//           <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+//             Müşteri Ekle
+//           </Button>
+//         </GridToolbarContainer>
+//       );
     
-}
+// }
 
 function Customers() {
 
-    const [rows, setRows] = React.useState(initialRows);
+    const [rows, setRows] = React.useState([]);
     const [rowModesModel, setRowModesModel] = React.useState({});
+    const [name, setName] = React.useState('');
+    const [surname, setsurName] = React.useState('');
+
+const [email, setEmail] = React.useState('');
+const [phone, setPhone] = React.useState('');
+const [projectName, setProjectName] = React.useState('');
+const [gridData, setGridData] = React.useState([]);
+
+// const customerData = props.customer;
+// const [form, setForm] = useState(customerData);
+const userToken=localStorage.getItem('userToken')
+
+const user=jwtDecode(userToken)
+const userId=user.userId
+React.useEffect(() => {
+  async function fetchCustomers() {
+    try {
+      const response = await api.customer.getCustomers(userId);
+      const modifiedRows = response.data.customer.map((customer) => ({
+        ...customer,
+        id: customer._id, 
+      }));
+      setRows(modifiedRows);
+      console.log('musteriler : ', response.data);
+    } catch (error) {
+      console.error('Veriler alınırken hata oluştu:', error);
+    }
+  }
+
+  fetchCustomers(); 
+}, []); 
+
+
+
+  //   {
+  //     field: 'actions',
+  //     type: 'actions',
+  //     headerName: 'Actions',
+  //     width: 100,
+  //     cellClassName: 'actions',
+  //   }
+
+
+  const handleRowEditCommit = async (params) => {
+    console.log('Params:', params); 
+
+    const { id, field, updatedValue } = params;
   
+    console.log('ID:', id);
+    console.log('Field:', field);
+    console.log('Updated Value:', updatedValue);
+  
+    try {
+      await api.customer.updateCustomer(id, field, updatedValue);
+  
+      const updatedRows = rows.map((row) => {
+        if (row.id === id) {
+          return { ...row, [field]: updatedValue };
+        }
+        return row;
+      });
+  
+      setGridData(updatedRows);
+    } catch (error) {
+      console.error('Müşteri güncellenirken hata oluştu:', error);
+    }
+  };
+
+  
+  
+
+const handleFormSubmit = async (e) => {
+  e.preventDefault();
+
+    const response = await api.customer.addCustomer(name,surname,email,phone,projectName,userId);
+
+    setName('');
+    setsurName('')
+    setEmail('');
+    setPhone('');
+    setProjectName('');
+    window.location.reload()
+  
+};
+
+const handleDelete = async (id) => {
+const response =await api.customer.deleteCustomer(id)  
+window.location.reload()
+
+
+};
+
     const handleRowEditStop = (params, event) => {
       if (params.reason === GridRowEditStopReasons.rowFocusOut) {
         event.defaultMuiPrevented = true;
       }
     };
   
+
+    const handleNameChange = (event) => {
+      setName(event.target.value);
+    };
+    
+    const handleEmailChange = (event) => {
+      setEmail(event.target.value);
+    };
+    
+   
+    
+    const handleProjectNameChange = (event) => {
+      setProjectName(event.target.value);
+    };
+    
+
+
     const handleEditClick = (id) => () => {
       setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
     };
@@ -130,31 +245,56 @@ function Customers() {
       setRowModesModel(newRowModesModel);
     };
   
+
+    
+
     const columns = [
-      { field: 'name', headerName: 'Name', width: 180, editable: true },
+      //{ field: '_id', headerName: 'ID', width: 100 },
+
+      { field: 'firstName', headerName: 'Adı', width: 100, editable: true },
+      { field: 'lastName', headerName: 'Soyadı', width: 100, editable: true },
+
       {
-        field: 'age',
-        headerName: 'Age',
-        type: 'number',
-        width: 80,
+        field: 'email',
+        headerName: 'E-Posta',
+        type: 'String',
+        width: 160,
         align: 'left',
         headerAlign: 'left',
         editable: true,
       },
       {
-        field: 'joinDate',
-        headerName: 'Join date',
-        type: 'date',
-        width: 180,
+        field: 'phone',
+        headerName: 'Numara',
+        type: 'String',
+        width: 120,
         editable: true,
       },
       {
-        field: 'role',
-        headerName: 'Department',
+        field: 'projectName',
+        headerName: 'Proje Adı',
         width: 220,
         editable: true,
-        type: 'singleSelect',
-        valueOptions: ['Market', 'Finance', 'Development'],
+      
+    },
+
+    {
+      field: 'actions', 
+      headerName: 'Actions', 
+      width: 120, 
+      sortable: false, 
+
+      renderCell: (params) => ( 
+        <Button
+          variant="outlined"
+          color="error"
+          startIcon={<DeleteIcon />}
+          onClick={() => handleDelete(params.id)}
+        >
+          Delete
+        </Button>
+       
+      ),
     },
     //   {
     //     field: 'actions',
@@ -164,6 +304,23 @@ function Customers() {
     //     cellClassName: 'actions',
     //   }
     ]
+    // const onChange = async (prop, value) => {
+    //   setForm({
+    //     ...form,
+    //     [prop]: value,
+    //   });
+    //   console.log("form :",form)
+    // };
+
+    // const onBlur = async (prop, value) => {
+    //   try {
+        
+    //     const res = await api.customer.updateCustomer("customer", form);
+       
+    //   } catch (error) {
+    //     console.log("onblur hatası:",error.message)
+    //   } 
+    // };
       
   return (
     <>
@@ -289,6 +446,7 @@ function Customers() {
     <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
     <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
 </div> */}
+   
 
 
 
@@ -303,14 +461,117 @@ function Customers() {
 
 
     <div class="container-fluid">
+<div className="">
+                <div className="container">
+                    <div className="row justify-content-center">
+                    
+                        <div className="col-xl-10 col-lg-12 col-md-9">
+                            <div className="my-5">
+                                <div className="p-0">
+                                    <div className="row">
+                                        <div className="col-lg-6 d-none d-lg-block musteri1">
+                                        <div className="p-5">
+                                                <div className="text-center">
+                                                    <h1 className="h4 text-gray-900 mb-4">Müşteri Ekle  </h1>
+                                                </div>
+                                                <form className="user" onSubmit={handleFormSubmit}>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={name} 
+                                                            onChange={(e) => setName(e.target.value)}
+                                                            //onBlur={(e) => onBlur("firstName", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputEmail"
+                                                            aria-describedby="emailHelp"
+                                                            placeholder="Müşteri Ad"
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={surname} 
+                                                            onChange={(e) => setsurName(e.target.value)} 
+                                                            // onBlur={(e) => onBlur("lastName", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputPassword"
+                                                            placeholder="Müşteri Soyad"
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="email"
+                                                            value={email} 
+                                                            onChange={(e) => setEmail(e.target.value)}
+                                                            // onBlur={(e) => onBlur("email", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputPassword"
+                                                            placeholder="Müşteri Email"
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={phone} 
+                                                            onChange={(e) => setPhone(e.target.value)}
+                                                            // onBlur={(e) => onBlur("phone", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputPassword"
+                                                            placeholder="Müşteri Telefon"
+                                                        />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <input
+                                                            type="text"
+                                                            value={projectName} 
+                                                            onChange={(e) => setProjectName(e.target.value)} 
+                                                            // onBlur={(e) => onBlur("projectName", e.target.value)}
+                                                            className="form-control form-control-user"
+                                                            id="exampleInputPassword"
+                                                            placeholder="Proje Adı"
+                                                        />
+                                                    </div>
+                                                    
 
-    
-        <div class="flex align-items-center  mb-4">
-            {/* <h1 class="h3 mb-0 text-gray-800"></h1> */}
+                                                    
+
+                                                   
+                                                    <button type="submit" className="btn btn-primary btn-user btn-block">
+                                                       Ekle
+                                                    </button>
+                                                   
+                                                   
+                                                </form>
+                                             
+                                            </div>
+                                  
+                                        </div>
+                                        <div className="col-lg-6 ">
+                                        <div class="flex align-items-center  mb-4">
+           <h1 class="h3 mb-0 text-gray-800"></h1> 
 
           
 
-    <Box
+            <div style={{ height: 500, width: 700 }}>
+            <DataGrid
+  rows={rows}
+  columns={columns}
+  pageSize={10}
+  rowsPerPageOptions={[10, 20, 50]}
+  checkboxSelection
+  onCellEditStop={(params, event) => {
+    if (params.field !== undefined) {
+
+     handleRowEditCommit(params);
+    }
+  }}/>
+
+    </div>
+
+
+
+
+     {/* <Box
       sx={{
         height: 500,
         width: '100%',
@@ -322,8 +583,8 @@ function Customers() {
           color: 'text.primary',
         },
       }}
-    >
-      <DataGrid
+    />
+    <DataGrid
         rows={rows}
         columns={columns}
         editMode="row"
@@ -337,12 +598,129 @@ function Customers() {
         slotProps={{
           toolbar: { setRows, setRowModesModel },
         }}
-      />
-    </Box>
+      />  */}
+     
+            {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>  */}
+        </div>
 
+
+    </div>
+  
+
+</div>
+
+
+
+                                         
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <footer class="sticky-footer ">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto ">
+           
+        </div>
+    </div>
+    
+</footer>
+
+
+         
+{/* <div id="content-wrapper" class="d-flex flex-column">
+
+
+<div id="content">
+
+   
+    <Header/>
+
+
+    <div class="container-fluid">
+    <form onSubmit={handleFormSubmit}>
+      <label>
+        Adı:
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      </label>
+      <label>
+        Soyadı:
+        <input type="text" value={surname} onChange={(e) => setsurName(e.target.value)} />
+      </label>
+      <label>
+        E-Posta:
+        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+      </label>
+      <label>
+        Numara:
+        <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+      </label>
+      <label>
+        Proje Adı:
+        <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
+      </label>
+      <button type="submit">Müşteri Ekle</button>
+    </form> */}
+    
+        {/* <div class="flex align-items-center  mb-4"> */}
+            {/* <h1 class="h3 mb-0 text-gray-800"></h1> */}
+
+          
+
+            {/* <div style={{ height: 500, width: '100%' }}>
+            <DataGrid
+  rows={rows}
+  columns={columns}
+  pageSize={10}
+  rowsPerPageOptions={[10, 20, 50]}
+  checkboxSelection
+  onCellEditStop={(params, event) => {
+    if (params.field !== undefined) {
+
+     handleRowEditCommit(params);
+    }
+  }}/>
+
+    </div> */}
+
+
+
+
+    {/* <Box
+      sx={{
+        height: 500,
+        width: '100%',
+        marginRight: 200,
+        '& .actions': {
+          color: 'text.secondary',
+        },
+        '& .textPrimary': {
+          color: 'text.primary',
+        },
+      }}
+    >
+      {/* <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode="row"
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar,
+        }}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+      /> */}
+     
             {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                     class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
-        </div>
+        {/* </div>
 
 
     </div>
@@ -361,12 +739,15 @@ function Customers() {
 </footer>
 
 
-</div>
+</div>*/}
+
+    </div> 
+
+
 
     </div>
-
-
-
+    </div>
+    </div>
     </div>
    
     </>

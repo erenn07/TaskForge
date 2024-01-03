@@ -17,29 +17,39 @@ import api from "./services/api.js";
 function App(){
   const navigate = useNavigate();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(null);
 
   useEffect(() => {
     const checkUserToken = async () => {
-        try {
-            const response = await api.user.checkUser();
-
-            if (response && response.data.loggedIn) {
-                setIsLoggedIn(true); 
-            } else {
-                setIsLoggedIn(false); 
-            }
-        } catch (error) {
-            console.error('Oturum kontrol hatası:', error);
-            setIsLoggedIn(false); 
+      try {
+        const storedUserToken = localStorage.getItem('userToken');
+        const expirationTime = localStorage.getItem('tokenExpiration');
+  
+        const currentTime = new Date().getTime();
+  
+        if (storedUserToken && expirationTime && currentTime < expirationTime) {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+          localStorage.removeItem('userToken');
+          localStorage.removeItem('tokenExpiration');
         }
+      } catch (error) {
+        console.error('Oturum kontrol hatası:', error);
+        setIsLoggedIn(false);
+      }
     };
-
+  
     checkUserToken();
-}, [navigate]);
-    return(
+  }, [navigate]);
+
+  if (isLoggedIn === null) {
+    return <div>Yükleniyor...</div>;
+  }
+
+ 
+   return(
        
-     
         <Routes>
   <Route path="/" element={isLoggedIn ? <Navigate to="/dashboard" /> : <Login />} />
   <Route path="/dashboard" element={isLoggedIn ? <Dashboard /> : <Navigate to="/" />} />

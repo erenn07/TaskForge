@@ -52,36 +52,53 @@ export default{
         async logout(){
 
           try {
+         
+         localStorage.removeItem('userToken')
             const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
             
 
               return response
           
-          }catch(error){
+         
+         
+            }catch(error){
             alert(error)
           
         }},
 
 
 
-async checkUser(){
+// async checkUser(){
   
-    try {
-        const response = await axios.get("http://localhost:3001/auth/checkUser", {withCredentials: true});
+//     try {
+//         const response = await axios.get("http://localhost:3001/auth/checkUser", {withCredentials: true});
 
-                  return response
+//                   return response
               
-              }catch(error){
-                alert(error)
-              }
-        }
+//               }catch(error){
+//                 alert(error)
+//               }
+//         }
 
 
       },
       customer:{
-        async getCustomers(){
+        async getCustomers(userId){
           try {
-            const response = await axios.get("http://localhost:3001/customer/getCustomers", {withCredentials: true});
+            const response = await axios.get("http://localhost:3001/customer/getCustomers",{
+              params: { userId },  
+              withCredentials: true
+            });
+
+              return response;
+          
+          }catch(error){
+            alert(error)
+          }
+        },
+        async addCustomer(name,surname,email,phone,projectName,userId){
+          try {
+            const response = await axios.post("http://localhost:3001/customer/addCustomer",{name,surname,email,phone,projectName,userId} ,{withCredentials: true});
 
               return response.data;
           
@@ -89,16 +106,33 @@ async checkUser(){
             alert(error)
           }
         },
-        async addCustomer(payload){
+        async deleteCustomer(id){
           try {
-            const response = await axios.post("http://localhost:3001/customer/addCustomer",payload ,{withCredentials: true});
+            const response = await axios.get("http://localhost:3001/customer/deleteCustomers",{params:{id}} ,{withCredentials: true});
 
               return response.data;
           
           }catch(error){
             alert(error)
           }
+        },
+        async updateCustomer (id, field, updatedValue) {
+          try {
+            const response = await axios.post(
+              `http://localhost:3001/customer/updateCustomer/${id}`,
+              { [field]: updatedValue },
+              { withCredentials: true }
+            );
+        
+            return response.data;
+          } catch (error) {
+            console.error('Müşteri güncellenirken hata oluştu:', error);
+            throw new Error('Müşteri güncellenirken bir hata oluştu.');
+          }
         }
+        
+
+
       },
       project:{
         async addProject(payload){

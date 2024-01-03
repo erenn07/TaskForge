@@ -23,12 +23,17 @@ export default function Login() {
     
             console.log("bu apiden gelen login cevabı:",response)
     
-            console.log(response)
+            console.log(response,"resppp")
             if(response.success){
                 navigate('/dashboard');
                 const userToken = response.token;
-                const form = await api.user.getUser(userToken)
-                console.log("bu form",form);
+                console.log("resp succes ici",);
+
+                localStorage.setItem('userToken',userToken)
+                const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; 
+                localStorage.setItem('tokenExpiration', expirationTime);
+                
+
             }else{
                 if (response.message){
                   alert(response.message);  
