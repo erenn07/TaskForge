@@ -2,6 +2,7 @@ import { useState } from "react";
 // import TrashIcon from "../icons/TrashIcon";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { green, red } from "@mui/material/colors";
 
 function TaskForm({ task, deleteTask, updateTask }) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
@@ -90,16 +91,17 @@ function TaskForm({ task, deleteTask, updateTask }) {
         setMouseIsOver(false);
       }}
     >
-      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
+      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap "style={{color:"#f2f2f2"}}>
         {task.content}
       </p>
 
       {mouseIsOver && (
-        <button
+        <button 
+       
           onClick={() => {
             deleteTask(task.id);
           }}
-          className="stroke-white absolute right-4 top-1/2 -translate-y-1/2 bg-columnBackgroundColor p-2 rounded opacity-60 hover:opacity-100"
+          className="stroke-white absolute right-4 top-1/2 -translate-y-1/2 bg-columnBackgroundColor p-2 rounded opacity-60 hover:opacity-100" 
         >
           SİL
           {/* <TrashIcon /> */}

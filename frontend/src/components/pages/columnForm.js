@@ -1,5 +1,5 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
-// import TrashIcon from "../icons/TrashIcon";
+import TrashIcon from "../icons/TrashIcon";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 // import PlusIcon from "../icons/PlusIcon";
@@ -149,17 +149,18 @@ function ColumnForm({
             setMouseIsOver(false);
           }}
           className="
-
+         silBtn
         stroke-gray-500
         hover:stroke-white
         hover:bg-columnBackgroundColor
         rounded
-        px-1
-        py-2
+        
         "
+        // px-1
+        // py-2
         >
-          {/* <TrashIcon /> */}
-          SİL
+          <TrashIcon />
+        
         </button>
     
       </div>

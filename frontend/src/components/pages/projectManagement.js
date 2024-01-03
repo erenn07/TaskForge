@@ -23,15 +23,15 @@ import TaskForm from "./taskForm";
 const defaultCols = [
   {
     id: "todo",
-    title: "Todo",
+    title: "YAPILACAK",
   },
   {
     id: "doing",
-    title: "Work in progress",
+    title: "İŞLEMDE",
   },
   {
     id: "done",
-    title: "Done",
+    title: "TAMAMLANDI",
   },
 ];
 
@@ -172,7 +172,7 @@ function ProjectManagement()  {
   gap: "4rem",}}>
           <div className="flex gap-4 "style={{ justifyContent:"center",display: "flex",
   flexDirection: "row",
-  gap: "4rem",height:"16rem"}}  >
+  gap: "6rem",height:"16rem"}}  >
             <SortableContext items={columnsId}>
               {columns.map((col) => (
                 <ColumnForm
@@ -194,6 +194,7 @@ function ProjectManagement()  {
               createNewColumn();
             }}
             className="
+
       h-[30000px]
       w-[350px]
       min-w-[350px]
@@ -208,9 +209,10 @@ function ProjectManagement()  {
       flex
       gap-2
       "
+      style={{color:"#f2f2f2"}}
           >
             {/* <PlusIcon /> */}
-            Add Column
+         Kolon Ekle
           </button>
         </div>
 
