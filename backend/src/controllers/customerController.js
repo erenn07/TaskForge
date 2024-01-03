@@ -1,21 +1,29 @@
 import Customer from "../models/Customer.js";
 import User from "../models/User.js";
+import Project from "../models/Project.js";
 
 const addCustomer= async(req,res)=>{
     try {
       
-      const {name, surname,phone,email,projectName,creatorID} = req.body;
-
-      console.log("add customer ici ",creatorID)
-
+      const {name, surname,phone,email,projectName,userId} = req.body;
 
       const isEmailValid = validateEmail(email);
       if (!isEmailValid) {
-        return res.status(400).json({ success: false, message: 'Geçerli bir email adresi giriniz.' });
+        return res.status(402).json({ success: false, message: 'Geçerli bir email adresi giriniz.' });
       }
 
       if (!validatePhone(phone)) {
         return res.status(400).json({ success: false, message: 'Telefon numarası sadece sayı içermelidir ve 10 haneli olmalıdır.' });
+      }
+
+      const existingUser = await Customer.findOne({ email });
+      if (existingUser) {
+        return res.status(401).json({ success: false, message: 'Bu email adresi zaten kullanımda. Lütfen başka bir email kullanın.' });
+      }
+
+      const existingNumber = await Customer.findOne({ phone });
+      if (existingNumber) {
+        return res.status(400).json({ success: false, message: 'Bu telefon numarası zaten kullanımda. Lütfen başka bir telefon numarası kullanın.' });
       }
 
       const customer = await Customer.create({
@@ -24,22 +32,30 @@ const addCustomer= async(req,res)=>{
         phone:phone,
         projectName:projectName,
         email:email,
-        creatorID:creatorID
+        creatorID:userId,
       })
-        await customer.save();
-
+/*         await customer.save();
+ */
+        const project = await Project.create({
+          projectName: projectName,
+          customer: customer._id,
+          creatorID:customer.creatorID,
+        });
+        await project.save();
+        console.log("ID DEGERI:",customer.creatorID)
         const findCustomer = await Customer.findOne({email:email})
-        const userId=findCustomer._id;
-        console.log("musterının idsi",userId)
+        const customerId=findCustomer._id;  
+        console.log("musterının idsi",customerId)
         res.status(200).json({
           message: 'customer added successfully',
-          userId: userId,
+          userId: customerId,
           email: email,
           projectName: projectName
         });
       
     } catch (error) {
-      
+      console.error('Müşteri eklenirken hata:', error);
+      res.status(500).json({ success: false, message: 'İç Sunucu Hatası' });
     }
     }
 
@@ -48,8 +64,8 @@ const addCustomer= async(req,res)=>{
 
          
           const { userId } = req.query;
+          console.log("duzenlenmisuserIDdegeri:",userId)
           const customer = await Customer.find({creatorID:userId});
-         // const customers = customer.customers;
           console.log("musteriler",customer)
 
           res.status(200).json({customer})
@@ -58,6 +74,9 @@ const addCustomer= async(req,res)=>{
             
         }
     }
+
+    
+
     const deleteCustomer = async (req, res) => {
       try {
        const {id}=req.query
