@@ -6,6 +6,10 @@ const TaskSchema = new mongoose.Schema(
         type:String,
 
     },
+    description:{
+        type:String,
+        required:false
+    },
     point:{
         type:Number,
         min:0,
@@ -14,11 +18,11 @@ const TaskSchema = new mongoose.Schema(
     status:{
         type:String
     },  
-    projects:[{
+    projects:{
         type:String,
         required:false,
         ref:'Project'
-    }],
+    },
     });
 
 const Task = mongoose.model('Task', TaskSchema);
