@@ -15,6 +15,7 @@ function ColumnForm({
   updateTask,
 }) {
   const [editMode, setEditMode] = useState(false);
+  const [mouseIsOver, setMouseIsOver] = useState(false);
 
   const tasksIds = useMemo(() => {
     return tasks.map((task) => task.id);
@@ -37,6 +38,7 @@ function ColumnForm({
   });
 
   const style = {
+    
     transition,
     transform: CSS.Transform.toString(transform),
   };
@@ -83,6 +85,7 @@ function ColumnForm({
         onClick={() => {
           setEditMode(true);
         }}
+        style={{height:"20%"}}
         className="
       bg-mainBackgroundColor
       text-md
@@ -99,21 +102,23 @@ function ColumnForm({
       justify-between
       "
       >
-        <div className="flex gap-2">
-          <div
+        <div className="flex gap-2"
+        style={{ textAlign:"center",color:"#f2f2f2",textTransform: 'uppercase'}}>
+          {/* <div
+          style={{backgroundColor:"green"}}
             className="
         flex
         justify-center
         items-center
-        bg-columnBackgroundColor
+        
         px-2
         py-1
         text-sm
         rounded-full
         "
           >
-            0
-          </div>
+            
+          </div> */}
           {!editMode && column.title}
           {editMode && (
             <input
@@ -131,11 +136,20 @@ function ColumnForm({
             />
           )}
         </div>
+       
         <button
           onClick={() => {
             deleteColumn(column.id);
           }}
+          style={{ width:"50px"}}
+          onMouseEnter={() => {
+            setMouseIsOver(true);
+          }}
+          onMouseLeave={() => {
+            setMouseIsOver(false);
+          }}
           className="
+
         stroke-gray-500
         hover:stroke-white
         hover:bg-columnBackgroundColor
@@ -145,11 +159,14 @@ function ColumnForm({
         "
         >
           {/* <TrashIcon /> */}
+          SİL
         </button>
+    
       </div>
 
       {/* Column task container */}
-      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
+      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto"
+      >
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
             <TaskForm
@@ -163,13 +180,16 @@ function ColumnForm({
       </div>
       {/* Column footer */}
       <button
+      style={{backgroundColor:"#f2f2f2",borderRadius:"8px"}}
+      
         className="flex gap-2 items-center border-columnBackgroundColor border-2 rounded-md p-4 border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-rose-500 active:bg-black"
         onClick={() => {
           createTask(column.id);
         }}
       >
         {/* <PlusIcon /> */}
-        Add task
+        TASK EKLE
+        
       </button>
     </div>
   );

@@ -36,72 +36,7 @@ const defaultCols = [
 ];
 
 const defaultTasks = [
-//   {
-//     id: "1",
-//     columnId: "todo",
-//     content: "List admin APIs for dashboard",
-//   },
-//   {
-//     id: "2",
-//     columnId: "todo",
-//     content:""
-      
-//   },
-//   {
-//     id: "3",
-//     columnId: "doing",
-//     content: "",
-//   },
-//   {
-//     id: "4",
-//     columnId: "doing",
-//     content: "",
-//   },
-//   {
-//     id: "5",
-//     columnId: "done",
-//     content: "",
-//   },
-//   {
-//     id: "6",
-//     columnId: "done",
-//     content: "",
-//   },
-//   {
-//     id: "7",
-//     columnId: "done",
-//     content: "",
-//   },
-//   {
-//     id: "8",
-//     columnId: "todo",
-//     content: "",
-//   },
-//   {
-//     id: "9",
-//     columnId: "todo",
-//     content: "",
-//   },
-//   {
-//     id: "10",
-//     columnId: "todo",
-//     content: "",
-//   },
-//   {
-//     id: "11",
-//     columnId: "todo",
-//     content: "",
-//   },
-//   {
-//     id: "12",
-//     columnId: "doing",
-//     content: "",
-//   },
-//   {
-//     id: "13",
-//     columnId: "doing",
-//     content: "",
-//   },
+
  ];
 
 function ProjectManagement()  {
@@ -230,13 +165,19 @@ function ProjectManagement()  {
         onDragStart={onDragStart}
         onDragEnd={onDragEnd}
         onDragOver={onDragOver}
+        
       >
-        <div className="m-auto flex gap-4 ">
-          <div className="flex gap-4">
+        <div className="m-auto flex gap-4 flex-row"style={{ justifyContent:"center",display: "flex",
+  flexDirection: "row",
+  gap: "4rem",}}>
+          <div className="flex gap-4 "style={{ justifyContent:"center",display: "flex",
+  flexDirection: "row",
+  gap: "4rem",height:"16rem"}}  >
             <SortableContext items={columnsId}>
               {columns.map((col) => (
                 <ColumnForm
                   key={col.id}
+                  backgroundColor="orange"
                   column={col}
                   deleteColumn={deleteColumn}
                   updateColumn={updateColumn}
@@ -277,6 +218,7 @@ function ProjectManagement()  {
           <DragOverlay>
             {activeColumn && (
               <ColumnForm
+              
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
