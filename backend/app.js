@@ -5,6 +5,7 @@ import authRoutes from './src/routes/auth.js';
 import userRoutes from './src/routes/user.js';
 import customerRoutes from './src/routes/customer.js';
 import projectRoutes from './src/routes/project.js';
+import taskRoutes from './src/routes/task.js';
 import cookieParser from 'cookie-parser';
 
 
@@ -33,6 +34,7 @@ connectDB()
 app.use("/auth",authRoutes)
 app.use("/user",userRoutes)
 app.use("/customer",customerRoutes)
+app.use("/task",taskRoutes)
 app.use("/project",projectRoutes)
 
 

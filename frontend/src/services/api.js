@@ -3,7 +3,6 @@ import axios from "axios";
 
 const instance = axios.create({
   baseURL: "http://localhost:3001/",
-  baseURL: "http://localhost:3001/",
 });
 
 instance.interceptors.request.use((config) => {
@@ -162,9 +161,9 @@ export default{
       },
      
       task:{
-        async addTask(payload){
+        async addTask(newTask){
           try {
-            const response = await axios.post("http://localhost:3001/task/addTask" ,payload,{withCredentials: true});
+            const response = await axios.post("http://localhost:3001/task/addTask" ,{newTask},{withCredentials: true});
 
         return response.data;
 
@@ -175,6 +174,26 @@ export default{
     async getTask() {
       try {
         const response = await axios.get("http://localhost:3001/task/getTask", { withCredentials: true });
+
+        return response.data;
+
+      } catch (error) {
+        alert(error)
+      }
+    },
+    async updateTask(newTasks){
+      try {
+        const response = await axios.post("http://localhost:3001/task/updateTask",{newTasks}, { withCredentials: true });
+
+        return response.data;
+
+      } catch (error) {
+        alert(error)
+      }
+    },
+    async deleteTask(id){
+      try {
+        const response = await axios.post("http://localhost:3001/task/deleteTask",{id}, { withCredentials: true });
 
         return response.data;
 

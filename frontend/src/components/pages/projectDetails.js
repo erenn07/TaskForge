@@ -3,75 +3,111 @@ import '../../App.css';
 import {useNavigate,useLocation} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import Header from './componentss/header';
+import api from ".././../services/api.js"
+import { useMemo } from "react";
+import { Column, Id, Task } from "./types";
+import ColumnForm from "./columnForm";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragOverlay,
+  DragStartEvent,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import { createPortal } from "react-dom";
+import TaskForm from "./taskForm";
+
+const defaultCols = [
+  {
+    id: "todo",
+    title: "YAPILACAK",
+  },
+  {
+    id: "doing",
+    title: "İŞLEMDE",
+  },
+  {
+    id: "done",
+    title: "TAMAMLANDI",
+  },
+];
+
+const defaultTasks = [
+
+ ];
+
+
+
+function generateId() {
+  
+  return Math.floor(Math.random() * 10001);
+}
 
 function ProjectManagement() {
     const location = useLocation();
     const projectId = location.state?.projectId;
   
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [tasks, setTasks] = useState([
-        'Task 1',
-        'Task 2',
-        'Task 3',
-        // ... diğer task'ler
-      ]);
+
+    const [columns, setColumns] = useState(defaultCols);
+  const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
+
+  const [tasks, setTasks] = useState(defaultTasks);
+
+  const [activeColumn, setActiveColumn] = useState(null);
+    const[taskData,setTaskData]=useState(null) 
+  const [activeTask, setActiveTask] = useState(null);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    })
+  );
+
+  const  createTask= async (columnId)=>{
+    const newTask = {
+      id: generateId(),
+      columnId,
+      content: `Task ${tasks.length + 1}`,
+      projectId
+
+    };
+
+        api.task.addTask(newTask);
+    setTasks([...tasks, newTask]);
+  }
     
-      useEffect(() => {
-        tasks.forEach(task => {
-          const taskElement = document.createElement('div');
-          taskElement.textContent = task;
-          taskElement.className = 'kanban-task';
-          taskElement.setAttribute('draggable', 'true');
+  const  updateTask=async (id, content)=>{
+    const newTasks = tasks.map((task) => {
+      if (task.id !== id) return task;
+      return { ...task, content };
+    });
+
     
-          const randomColumnId = ['todo-column', 'in-progress-column', 'done-column'][Math.floor(Math.random() * 3)];
-          const column = document.getElementById(randomColumnId);
-          column.appendChild(taskElement);
-        });
+    setTasks(newTasks);
+
+  api.task.updateTask(newTasks);
+ 
     
-        const draggables = document.querySelectorAll('.kanban-task');
-        draggables.forEach(draggable => {
-          draggable.addEventListener('dragstart', () => {
-            draggable.classList.add('dragging');
-          });
+  }
+
+  const  deleteTask=async(id)=> {
+    const newTasks = tasks.filter((task) => task.id !== id);
     
-          draggable.addEventListener('dragend', () => {
-            draggable.classList.remove('dragging');
-          });
-        });
+     api.task.deleteTask(id);
+    setTasks(newTasks);
     
-        const containers = document.querySelectorAll('.kanban-column');
-        containers.forEach(container => {
-          container.addEventListener('dragover', e => {
-            e.preventDefault();
-            const afterElement = getDragAfterElement(container, e.clientY);
-            const draggable = document.querySelector('.dragging');
-            if (afterElement == null) {
-              container.appendChild(draggable);
-            } else {
-              container.insertBefore(draggable, afterElement);
-            }
-          });
-        });
-      }, [tasks]);
-    
-      const getDragAfterElement = (container, y) => {
-        const draggableElements = [...container.querySelectorAll('.kanban-task:not(.dragging)')];
-    
-        return draggableElements.reduce((closest, child) => {
-          const box = child.getBoundingClientRect();
-          const offset = y - box.top - box.height / 2;
-          if (offset < 0 && offset > closest.offset) {
-            return { offset: offset, element: child };
-          } else {
-            return closest;
-          }
-        }, { offset: Number.NEGATIVE_INFINITY }).element;
-      };
-    
+  }
+
 
   return (
-    <>
-    <div id="page-top"> 
+   <>
+   <div id="page-top"> 
     <div id="wrapper">
 
 
@@ -109,13 +145,7 @@ function ProjectManagement() {
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Müşteriler</span>
                 </a>
-                {/* <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div> */}
+             
             </li>
 
            
@@ -125,24 +155,9 @@ function ProjectManagement() {
                     <i class="fas fa-fw fa-wrench"></i>
                     <span>Proje Yönetimi</span>
                 </a>
-                {/* <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div> */}
+               
             </li>
 
-            {/* <hr class="sidebar-divider"/> */}
-
-
-{/* <div class="sidebar-heading">
-    Addons
-</div> */}
 
 
 <li class="nav-item">
@@ -151,18 +166,7 @@ function ProjectManagement() {
         <i class="fas fa-fw fa-folder"></i>
         <span>İş Kaydı</span>
     </a>
-    {/* <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="/login">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item" href="blank.html">Blank Page</a>
-        </div>
-    </div> */}
+   
 </li>
 
 
@@ -173,26 +177,7 @@ function ProjectManagement() {
 </li>
 
 
-{/* <li class="nav-item">
-    <a class="nav-link" href="tables.html">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Tables</span></a>
-</li> */}
 
-
-{/* <hr class="sidebar-divider d-none d-md-block"/> */}
-
-{/* <button class="rounded-circle border-0" id="sidebarToggle" style={{ backgroundColor: 'your-color' }} aria-label="Toggle Sidebar"></button> */}
-
-
-
-
-
-{/* <div class="sidebar-card d-none d-lg-flex">
-    <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="..."/>
-    <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-    <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-</div> */}
 
 
 
@@ -207,418 +192,248 @@ function ProjectManagement() {
 
 
     <div class="container-fluid">
+  
+      <div className="align-items-center mb-4">
 
     
-        <div class="align-items-center  mb-4">
-           
+    <div
+      className="
+        m-auto
+        flex
+        min-h-screen
+        w-full
+        items-center
+        overflow-x-auto
+        overflow-y-hidden
+        px-[40px]
+    "
+    >
+      <DndContext
+        sensors={sensors}
+        onDragStart={onDragStart}
+        onDragEnd={onDragEnd}
+        onDragOver={onDragOver}
+        
+      >
+        <div className="m-auto flex gap-4 flex-row"style={{ justifyContent:"center",display: "flex",
+  flexDirection: "row",
+  gap: "4rem",}}>
+          <div className="flex gap-4 "style={{ justifyContent:"center",display: "flex",
+  flexDirection: "row",
+  gap: "6rem",height:"16rem"}}  >
+            <SortableContext items={columnsId}>
+              {columns.map((col) => (
+                <ColumnForm
+                  key={col.id}
+                  column={col}
+                  deleteColumn={deleteColumn}
+                  updateColumn={updateColumn}
+                  createTask={createTask}
+                  deleteTask={deleteTask}
+                  updateTask={updateTask}
+                  tasks={tasks.filter((task) => task.columnId === col.id)}
+                />
+              ))}
+            </SortableContext>
+          </div>
+          <button
+            onClick={() => {
+              createNewColumn();
+            }}
+            className="
 
-            <div className="kanban-container">
-      <div className="kanban-column" id="todo-column">
-        <h2>To Do</h2>
-      </div>
-      <div className="kanban-column" id="in-progress-column">
-        <h2>In Progress</h2>
-      </div>
-      <div className="kanban-column" id="done-column">
-        <h2>Done</h2>
-      </div>
-    </div>
-  
-            {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
+      h-[30000px]
+      w-[350px]
+      min-w-[350px]
+      cursor-pointer
+      rounded-lg
+      bg-mainBackgroundColor
+      border-2
+      border-columnBackgroundColor
+      p-4
+      ring-rose-500
+      hover:ring-2
+      flex
+      gap-2
+      "
+      style={{color:"#f2f2f2"}}
+          >
+            {/* <PlusIcon /> */}
+         Kolon Ekle
+          </button>
         </div>
 
-{/*      
-        <div class="row">
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Earnings (Monthly)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Earnings (Annual)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                </div>
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                    </div>
-                                    <div class="col">
-                                    <div class="progress progress-sm mr-2">
-    <div
-        class="progress-bar bg-info"
-        role="progressbar"
-        style={{ width: '50%' }}
-        aria-valuenow={50}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Pending Requests</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-comments fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    
-
-        <div class="row">
-
-          
-            <div class="col-xl-8 col-lg-7">
-                <div class="card shadow mb-4">
-                    
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                   
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="myAreaChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            
-            <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
-                  
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                  
-                    <div class="card-body">
-                        <div class="chart-pie pt-4 pb-2">
-                            <canvas id="myPieChart"></canvas>
-                        </div>
-                        <div class="mt-4 text-center small">
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-primary"></i> Direct
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-success"></i> Social
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-info"></i> Referral
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-   
-        <div class="row">
-
-         
-            <div class="col-lg-6 mb-4">
-
-               
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                    </div>
-                    <div class="card-body">
-                        <h4 class="small font-weight-bold">Server Migration <span
-                                class="float-right">20%</span></h4>
-                        <div class="progress mb-4">
-    <div
-        class="progress-bar bg-danger"
-        role="progressbar"
-        style={{ width: '20%' }}
-        aria-valuenow={20}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Sales Tracking <span
-                                class="float-right">40%</span></h4>
-                       <div class="progress mb-4">
-    <div
-        class="progress-bar bg-warning"
-        role="progressbar"
-        style={{ width: '40%' }}
-        aria-valuenow={40}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Customer Database <span
-                                class="float-right">60%</span></h4>
-                      <div class="progress mb-4">
-    <div
-        class="progress-bar"
-        role="progressbar"
-        style={{ width: "60%" }}
-        aria-valuenow={60}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Payout Details <span
-                                class="float-right">80%</span></h4>
-                       <div class="progress mb-4">
-    <div
-        class="progress-bar bg-info"
-        role="progressbar"
-        style={{ width: '80%' }}
-        aria-valuenow={80}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Account Setup <span
-                                class="float-right">Complete!</span></h4>
-                     <div class="progress">
-    <div
-        class="progress-bar bg-success"
-        role="progressbar"
-        style={{ width: '100%' }}
-        aria-valuenow={100}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                    </div>
-                </div>
-
+        {createPortal(
+          <DragOverlay>
+            {activeColumn && (
+              <ColumnForm
               
-                <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-primary text-white shadow">
-                            <div class="card-body">
-                                Primary
-                                <div class="text-white-50 small">#4e73df</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-success text-white shadow">
-                            <div class="card-body">
-                                Success
-                                <div class="text-white-50 small">#1cc88a</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-info text-white shadow">
-                            <div class="card-body">
-                                Info
-                                <div class="text-white-50 small">#36b9cc</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-warning text-white shadow">
-                            <div class="card-body">
-                                Warning
-                                <div class="text-white-50 small">#f6c23e</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-danger text-white shadow">
-                            <div class="card-body">
-                                Danger
-                                <div class="text-white-50 small">#e74a3b</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-secondary text-white shadow">
-                            <div class="card-body">
-                                Secondary
-                                <div class="text-white-50 small">#858796</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-light text-black shadow">
-                            <div class="card-body">
-                                Light
-                                <div class="text-black-50 small">#f8f9fc</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-dark text-white shadow">
-                            <div class="card-body">
-                                Dark
-                                <div class="text-white-50 small">#5a5c69</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                column={activeColumn}
+                deleteColumn={deleteColumn}
+                updateColumn={updateColumn}
+                createTask={createTask}
+                deleteTask={deleteTask}
+                updateTask={updateTask}
+                tasks={tasks.filter(
+                  (task) => task.columnId === activeColumn.id
+                )}
+              />
+            )}
+            {activeTask && (
+              <TaskForm
+                task={activeTask}
+                deleteTask={deleteTask}
+                updateTask={updateTask}
+              />
+            )}
+          </DragOverlay>,
+          document.body
+        )}
+      </DndContext>
+    </div>
+    </div>
+    </div>
+    </div>
 
-            </div>
 
-            <div class="col-lg-6 mb-4">
 
-              
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                    </div>
-                    <div class="card-body">
-                    <div class="text-center">
-    <img
-        class="img-fluid px-3 px-sm-4 mt-3 mb-4"
-        style={{ width: '25rem' }}
-        src="img/undraw_posting_photo.svg"
-        alt="..."
-    />
 </div>
 
-                        <p>Add some quality, svg illustrations to your project courtesy of <a
-                                target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                            constantly updated collection of beautiful svg images that you can use
-                            completely free and without attribution!</p>
-                        <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                            unDraw &rarr;</a>
-                    </div>
-                </div>
-
-                
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                    </div>
-                    <div class="card-body">
-                        <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                            CSS bloat and poor page performance. Custom CSS classes are used to create
-                            custom components and custom utility classes.</p>
-                        <p class="mb-0">Before working with this theme, you should become familiar with the
-                            Bootstrap framework, especially the utility classes.</p>
-                    </div>
-                </div>
-
-            </div>
-        </div> */}
-
-    </div>
-  
 
 </div>
 
 
 
 <footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2021</span>
-        </div>
+<div class="container my-auto">
+    <div class="copyright text-center my-auto">
+        <span>Copyright &copy; Your Website 2021</span>
     </div>
+</div>
 </footer>
 
 
 </div>
 
-    </div>
 
-
-
-    </div>
-   
-    </>
+   </>
    
   );
-}
+
+
+
+  
+
+ 
+  
+
+  function createNewColumn() {
+    const columnToAdd = {
+      id: generateId(),
+      title: `Column ${columns.length + 1}`,
+    };
+
+    setColumns([...columns, columnToAdd]);
+  }
+
+  function deleteColumn(id) {
+    const filteredColumns = columns.filter((col) => col.id !== id);
+    setColumns(filteredColumns);
+
+    const newTasks = tasks.filter((t) => t.columnId !== id);
+    setTasks(newTasks);
+  }
+
+  function updateColumn(id, title) {
+    const newColumns = columns.map((col) => {
+      if (col.id !== id) return col;
+      return { ...col, title };
+    });
+
+    setColumns(newColumns);
+  }
+
+  function onDragStart(event) {
+    if (event.active.data.current?.type === "Column") {
+      setActiveColumn(event.active.data.current.column);
+      return;
+    }
+
+    if (event.active.data.current?.type === "Task") {
+      setActiveTask(event.active.data.current.task);
+      return;
+    }
+  }
+
+  function onDragEnd(event) {
+    setActiveColumn(null);
+    setActiveTask(null);
+
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeId = active.id;
+    const overId = over.id;
+
+    if (activeId === overId) return;
+
+    const isActiveAColumn = active.data.current?.type === "Column";
+    if (!isActiveAColumn) return;
+
+    console.log("DRAG END");
+
+    setColumns((columns) => {
+      const activeColumnIndex = columns.findIndex((col) => col.id === activeId);
+
+      const overColumnIndex = columns.findIndex((col) => col.id === overId);
+
+      return arrayMove(columns, activeColumnIndex, overColumnIndex);
+    });
+  }
+
+  function onDragOver(event) {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeId = active.id;
+    const overId = over.id;
+
+    if (activeId === overId) return;
+
+    const isActiveATask = active.data.current?.type === "Task";
+    const isOverATask = over.data.current?.type === "Task";
+
+    if (!isActiveATask) return;
+
+  
+    if (isActiveATask && isOverATask) {
+      setTasks((tasks) => {
+        const activeIndex = tasks.findIndex((t) => t.id === activeId);
+        const overIndex = tasks.findIndex((t) => t.id === overId);
+
+        if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
+        
+          tasks[activeIndex].columnId = tasks[overIndex].columnId;
+          return arrayMove(tasks, activeIndex, overIndex - 1);
+        }
+
+        return arrayMove(tasks, activeIndex, overIndex);
+      });
+    }
+
+    const isOverAColumn = over.data.current?.type === "Column";
+
+  
+    if (isActiveATask && isOverAColumn) {
+      setTasks((tasks) => {
+        const activeIndex = tasks.findIndex((t) => t.id === activeId);
+
+        tasks[activeIndex].columnId = overId;
+        console.log("DROPPING TASK OVER COLUMN", { activeIndex });
+        return arrayMove(tasks, activeIndex, activeIndex);
+      });
+    }
+  }
+  }
 
 export default ProjectManagement;
