@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const instance = axios.create({
-  baseURL: "http://localhost:3001/",
+  baseURL: "http://161.35.30.110/",
 });
 
 instance.interceptors.request.use((config) => {
@@ -31,15 +31,15 @@ instance.interceptors.response.use(
 export default{
     user:{
         async login(email,password){
-            const response = await instance.post("http://localhost:3001/auth/login",{email,password},{ withCredentials: true });
+            const response = await instance.post("http://161.35.30.110/auth/login",{email,password},{ withCredentials: true });
             return response.data;
         },
         async register(payload){
-            const response = await instance.post("http://localhost:3001/auth/register",payload,{ withCredentials: true });
+            const response = await instance.post("http://161.35.30.110/auth/register",payload,{ withCredentials: true });
             return response.data;
         },
         async getUser(token){
-          const response = await instance.get("http://localhost:3001/user/getProfile",{ 
+          const response = await instance.get("http://161.35.30.110/user/getProfile",{ 
             withCredentials: true,
             headers:{
               Authorization:`Bearer ${token}`,
@@ -48,7 +48,7 @@ export default{
           return response;
         },
         async getInfo(payload){
-          const response = await instance.post("http://localhost:3001/user/getInfo",payload,{withCredentials: true});
+          const response = await instance.post("http://161.35.30.110/user/getInfo",payload,{withCredentials: true});
           return response.data;
         },
         
@@ -58,7 +58,7 @@ export default{
       try {
 
         localStorage.removeItem('userToken')
-        const response = await axios.get("http://localhost:3001/auth/logout", { withCredentials: true });
+        const response = await axios.get("http://161.35.30.110/auth/logout", { withCredentials: true });
 
 
         return response
@@ -76,7 +76,7 @@ export default{
       customer:{
         async getCustomers(userId){
           try{
-            const response = await axios.get("http://localhost:3001/customer/getCustomers",{
+            const response = await axios.get("http://161.35.30.110/customer/getCustomers",{
               params: { userId },  
               withCredentials: true
             });
@@ -89,7 +89,7 @@ export default{
         },
         async addCustomer(name,surname,email,phone,projectName,userId){
           try {
-            const response = await axios.post("http://localhost:3001/customer/addCustomer",{name,surname,email,phone,projectName,userId} ,{withCredentials: true});
+            const response = await axios.post("http://161.35.30.110/customer/addCustomer",{name,surname,email,phone,projectName,userId} ,{withCredentials: true});
 
               return response.data;
           
@@ -99,7 +99,7 @@ export default{
         },
         async deleteCustomer(id){
           try {
-            const response = await axios.get("http://localhost:3001/customer/deleteCustomers",{params:{id}} ,{withCredentials: true});
+            const response = await axios.get("http://161.35.30.110/customer/deleteCustomers",{params:{id}} ,{withCredentials: true});
 
         return response.data;
 
@@ -110,7 +110,7 @@ export default{
     async updateCustomer(updatedData) {
       try {
         const response = await axios.post(
-          `http://localhost:3001/customer/updateCustomer/${updatedData.id}`,
+          `http://161.35.30.110/customer/updateCustomer/${updatedData.id}`,
           updatedData,
           { withCredentials: true }
         );
@@ -126,7 +126,7 @@ export default{
       project:{
         async addProject(payload){
           try {
-            const response = await axios.post("http://localhost:3001/project/addProject",payload ,{withCredentials: true});
+            const response = await axios.post("http://161.35.30.110/project/addProject",payload ,{withCredentials: true});
 
               return response.data;
           
@@ -136,7 +136,7 @@ export default{
         },
         async getProjects(creatorID){
           try {
-            const response = await axios.post("http://localhost:3001/project/getProjects" ,{creatorID},{withCredentials: true});
+            const response = await axios.post("http://161.35.30.110/project/getProjects" ,{creatorID},{withCredentials: true});
 
         return response.data;
 
@@ -146,7 +146,7 @@ export default{
     },
     async getProjectDetails(payload) {
       try {
-        const response = await axios.get("http://localhost:3001/project/getProjectDetails", { withCredentials: true });
+        const response = await axios.get("http://161.35.30.110/project/getProjectDetails", { withCredentials: true });
 
               return response.data;
           
@@ -155,7 +155,7 @@ export default{
           }
         }, 
         async deleteProject(projectId){
-          const response = await axios.post("http://localhost:3001/project/deleteProject",{projectId},{withCredentials: true});
+          const response = await axios.post("http://161.35.30.110/project/deleteProject",{projectId},{withCredentials: true});
           return response.data;
         }
       },
@@ -163,7 +163,7 @@ export default{
       task:{
         async addTask(newTask){
           try {
-            const response = await axios.post("http://localhost:3001/task/addTask" ,{newTask},{withCredentials: true});
+            const response = await axios.post("http://161.35.30.110/task/addTask" ,{newTask},{withCredentials: true});
 
         return response.data;
 
@@ -173,7 +173,7 @@ export default{
     },
     async getTask(projectId) {
       try {
-        const response = await axios.post("http://localhost:3001/task/getTask",{projectId}, { withCredentials: true });
+        const response = await axios.post("http://161.35.30.110/task/getTask",{projectId}, { withCredentials: true });
 
         return response.data;
 
@@ -183,7 +183,7 @@ export default{
     },
     async updateTask(newTasks){
       try {
-        const response = await axios.post("http://localhost:3001/task/updateTask",{newTasks}, { withCredentials: true });
+        const response = await axios.post("http://161.35.30.110/task/updateTask",{newTasks}, { withCredentials: true });
 
         return response.data;
 
@@ -193,7 +193,7 @@ export default{
     },
     async deleteTask(id){
       try {
-        const response = await axios.post("http://localhost:3001/task/deleteTask",{id}, { withCredentials: true });
+        const response = await axios.post("http://161.35.30.110/task/deleteTask",{id}, { withCredentials: true });
 
         return response.data;
 

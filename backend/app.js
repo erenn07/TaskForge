@@ -16,7 +16,7 @@ const port = 3001
 
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "http://161.35.30.110");
   res.header("Access-Control-Allow-Methods", "GET, POST ,PUT,DELETE,PATCH");
   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, x-access-token");
   res.header("Access-Control-Allow-Credentials", "true");
