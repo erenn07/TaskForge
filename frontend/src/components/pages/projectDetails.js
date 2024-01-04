@@ -61,6 +61,16 @@ function ProjectManagement() {
     const[taskData,setTaskData]=useState(null) 
   const [activeTask, setActiveTask] = useState(null);
 
+
+  const getTask=async()=>{
+    console.log("get task front:",projectId)
+    const response = await api.task.getTask(projectId);
+    console.log("gelen cevap da bu:",response)
+    
+    setTasks(response);
+    
+  }
+
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -91,7 +101,7 @@ function ProjectManagement() {
     
     setTasks(newTasks);
 
-  api.task.updateTask(newTasks);
+   api.task.updateTask(newTasks);
  
     
   }
@@ -103,6 +113,60 @@ function ProjectManagement() {
     setTasks(newTasks);
     
   }
+
+  const  onDragOver=async(event)=> {
+    const { active, over } = event;
+    if (!over) return;
+
+    const activeId = active.id;
+    const overId = over.id;
+
+    if (activeId === overId) return;
+
+    const isActiveATask = active.data.current?.type === "Task";
+    const isOverATask = over.data.current?.type === "Task";
+
+    if (!isActiveATask) return;
+
+  
+    if (isActiveATask && isOverATask) {
+      setTasks((tasks) => {
+        const activeIndex = tasks.findIndex((t) => t.id === activeId);
+        const overIndex = tasks.findIndex((t) => t.id === overId);
+
+        if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
+        
+          tasks[activeIndex].columnId = tasks[overIndex].columnId;
+          return arrayMove(tasks, activeIndex, overIndex - 1);
+        }
+
+        return arrayMove(tasks, activeIndex, overIndex);
+      });
+    }
+
+    const isOverAColumn = over.data.current?.type === "Column";
+
+  
+    if (isActiveATask && isOverAColumn) {
+      setTasks((tasks) => {
+        const activeIndex = tasks.findIndex((t) => t.id === activeId);
+
+        tasks[activeIndex].columnId = overId;
+         api.task.updateTask(tasks);
+        console.log("DROPPING TASK OVER COLUMN", { activeIndex });
+        return arrayMove(tasks, activeIndex, activeIndex);
+      });
+    }
+  }
+
+
+  useEffect(()=>{
+    getTask();
+  },[projectId])
+
+  useEffect(()=>{
+    getTask();
+  },[])
 
 
   return (
@@ -391,49 +455,7 @@ function ProjectManagement() {
     });
   }
 
-  function onDragOver(event) {
-    const { active, over } = event;
-    if (!over) return;
-
-    const activeId = active.id;
-    const overId = over.id;
-
-    if (activeId === overId) return;
-
-    const isActiveATask = active.data.current?.type === "Task";
-    const isOverATask = over.data.current?.type === "Task";
-
-    if (!isActiveATask) return;
-
-  
-    if (isActiveATask && isOverATask) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId);
-        const overIndex = tasks.findIndex((t) => t.id === overId);
-
-        if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
-        
-          tasks[activeIndex].columnId = tasks[overIndex].columnId;
-          return arrayMove(tasks, activeIndex, overIndex - 1);
-        }
-
-        return arrayMove(tasks, activeIndex, overIndex);
-      });
-    }
-
-    const isOverAColumn = over.data.current?.type === "Column";
-
-  
-    if (isActiveATask && isOverAColumn) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId);
-
-        tasks[activeIndex].columnId = overId;
-        console.log("DROPPING TASK OVER COLUMN", { activeIndex });
-        return arrayMove(tasks, activeIndex, activeIndex);
-      });
-    }
-  }
+ 
   }
 
 export default ProjectManagement;

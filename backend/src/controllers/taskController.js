@@ -23,33 +23,52 @@ const addTask= async(req,res)=>{
 const updateTask= async(req,res)=>{
     try {
       
-        const {newTasks}= req.body;
-        // const updatedTask= await Task.findByIdAndUpdate(newTasks.taskId,{
-        //     taskName:newTasks.content,
-        //     status:newTasks.columnId
-        // })
-        // res.status(200).json({succeed:true,message:"task güncelleme başarılı"})
+       const {newTasks}= req.body;
+      
+        const updatedTask =await Task.updateOne({taskId:newTasks[0].id},{
+            $set: {
+
+                taskName:newTasks[0].content,
+                status:newTasks[0].columnId,
+                project:newTasks[0].projectId
+           
+            }
+        }) 
+
+        if (!updatedTask) {
+            return res.status(404).json({ succeed: false, message: "Güncellenmiş görev bulunamadı" });
+        }
+
+        res.status(200).json({succeed:true,message:"task güncelleme başarılı"})
     } catch (error) {
-        // res.status(500).json({succeed:false,message:"server error" + error.message})
+        res.status(500).json({succeed:false,message:"server error" + error.message})
     }
 }
 
 const getTask= async(req,res)=>{
     const{projectId}= req.body;
-    const tasks= await Task.find({projects:projectId})
+    const tasks= await Task.find({project:projectId})
     if(!tasks){
         res.status(400).json({succeed:false,message:"tasklar bulunamadı"})
     }
 
     res.status(200).json(tasks)
 }
-const deleteTask= async(req,res)=>{
+const deleteTask = async (req, res) => {
     try {
-        const {id}= req.body;
-    console.log("idddddddd",id)
-        const deletedTask= await Task.findByIdAndDelete(id)
+        const { id } = req.body;
+
+        const deletedTask = await Task.deleteOne({ taskId: id });
+
+        if (deletedTask.deletedCount > 0) {
+            return res.status(200).json({ succeed: true, message: "Task deletion successful." });
+        } else {
+            console.log('No data to delete was found');
+            return res.status(404).send('No data to delete was found');
+        }
     } catch (error) {
-        res.status(500).json({succeed:false,message:"task silinemedi"})
+        console.error('Error deleting task:', error.message);
+        return res.status(500).json({ succeed: false, message: "Task deletion failed" });
     }
 }
 export{addTask,getTask,updateTask,deleteTask}

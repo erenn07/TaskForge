@@ -4,14 +4,15 @@ const TaskSchema = new mongoose.Schema(
   {
     taskName:{
         type:String,
-
+        reuqired:false
     },
     taskId:{
         type:String,
         required:false
     },
     status:{
-        type:String
+        type:String,
+        required:false
     },  
     project:{
         type:String,

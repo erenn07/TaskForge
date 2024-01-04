@@ -171,9 +171,9 @@ export default{
         alert(error)
       }
     },
-    async getTask() {
+    async getTask(projectId) {
       try {
-        const response = await axios.get("http://localhost:3001/task/getTask", { withCredentials: true });
+        const response = await axios.post("http://localhost:3001/task/getTask",{projectId}, { withCredentials: true });
 
         return response.data;
 

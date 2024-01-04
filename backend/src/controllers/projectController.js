@@ -56,7 +56,7 @@ const addProject =async(req,res)=>{
     try {
       const {projectId}= req.body;
      console.log("deleteProject projectId",projectId)
-      const project = await Project.findByIdAndDelete({taskId:projectId });
+      const project = await Project.findByIdAndDelete(projectId);
   
       if(!project){
        

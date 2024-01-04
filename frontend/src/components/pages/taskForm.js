@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { green, red } from "@mui/material/colors";
+import api from "../../services/api.js"
 
 function TaskForm({ task, deleteTask, updateTask }) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
@@ -47,6 +48,17 @@ function TaskForm({ task, deleteTask, updateTask }) {
     );
   }
 
+  const handleEnterKey = (e) => {
+    if (e && e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      const newTaskContent = e.target.value;
+      api.task.updateTask({ content: newTaskContent, projectId: task.projectId });
+
+   
+      updateTask(task.id, newTaskContent);
+    }
+  };
+
   if (editMode) {
     return (
       <div
@@ -68,13 +80,19 @@ function TaskForm({ task, deleteTask, updateTask }) {
           onKeyDown={(e) => {
             if (e.key === "Enter" && e.shiftKey) {
               toggleEditMode();
+            } else if (e.key === "Enter" && !e.shiftKey) {
+              handleEnterKey();
             }
+            // ...
           }}
           onChange={(e) => updateTask(task.id, e.target.value)}
         />
       </div>
     );
   }
+
+
+
 
   return (
     <div
