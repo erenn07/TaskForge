@@ -16,24 +16,46 @@ export default function Login() {
        
           }, []);
 
-    const LoginData = async(e)=>{
-        e.preventDefault();
-        const response= await api.user.login(email,password)
+          const LoginData = async(e)=>{
+            e.preventDefault();
+            try{
+            const response= await api.user.login(email,password)
+    
+            console.log("bu apiden gelen login cevabı:",response)
+    
+            console.log(response,"resppp")
+            if(response.success){
+                navigate('/dashboard');
+                const userToken = response.token;
+                console.log("resp succes ici",);
 
-        console.log("bu apiden gelen login cevabı:",response)
- 
-        if(response.success){
-           
-            navigate('/dashboard');
-            const userToken = response.token;
-            const form = await api.user.getUser(userToken);
-            console.log("bu form",form);
-            console.log('işlem başarılı')
-        }else if (!response.success){
-            window.location.reload();
-         
-        }
-    }
+                localStorage.setItem('userToken',userToken)
+                const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; 
+                localStorage.setItem('tokenExpiration', expirationTime);
+                
+
+            }else{
+                if (response.message){
+                  alert(response.message);  
+                }else{
+                alert("Unexpected response from server")
+            }}
+        }catch (error) {
+                if (error.response) {
+                  if (error.response.status === 404) {
+                    alert(error.response.data.message);
+                  } else if (error.response.status===402) { 
+                    alert(error.response.data.message);
+                  }else{     
+                    alert("Server error. Please try again later.");
+                  }
+                } else if (error.request) {
+                  alert("No response from server. Please try again later.");
+                } else {
+                  alert("Request failed. Please check your internet connection and try again.");
+                }
+              }
+            };
 
 
 
