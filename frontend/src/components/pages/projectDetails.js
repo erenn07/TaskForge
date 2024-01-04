@@ -91,6 +91,21 @@ function ProjectManagement() {
         api.task.addTask(newTask);
     setTasks([...tasks, newTask]);
   }
+  const  getExistTask= async (columnId)=>{
+    console.log("get task front:", projectId);
+    const response = await api.task.getTask(projectId);
+    console.log("gelen cevap da bu:", response);
+  
+    const newTasks = response.map((item) => ({
+     id: generateId(),
+      columnId: item.status,
+      content: item.taskName,
+      
+    }));
+  
+    setTasks(newTasks);
+
+  }
     
   const  updateTask=async (id, content)=>{
     const newTasks = tasks.map((task) => {
@@ -165,7 +180,8 @@ function ProjectManagement() {
   },[projectId])
 
   useEffect(()=>{
-    getTask();
+    getExistTask();
+    setActiveTask(tasks);
   },[])
 
 
@@ -300,7 +316,7 @@ function ProjectManagement() {
               ))}
             </SortableContext>
           </div>
-          <button
+          {/* <button
             onClick={() => {
               createNewColumn();
             }}
@@ -322,9 +338,8 @@ function ProjectManagement() {
       "
       style={{color:"#f2f2f2"}}
           >
-            {/* <PlusIcon /> */}
-         Kolon Ekle
-          </button>
+ü         Kolon Ekle
+          </button> */}
         </div>
 
         {createPortal(
@@ -393,7 +408,7 @@ function ProjectManagement() {
 
   function createNewColumn() {
     const columnToAdd = {
-      id: generateId(),
+      id: `Column ${columns.length + 1}`,
       title: `Column ${columns.length + 1}`,
     };
 

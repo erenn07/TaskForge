@@ -26,6 +26,7 @@ function TaskForm({ task, deleteTask, updateTask }) {
   });
 
   const style = {
+    
     transition,
     transform: CSS.Transform.toString(transform),
   };

@@ -116,7 +116,7 @@ React.useEffect(() => {
 
 const handleFormSubmit = async (e) => {
   e.preventDefault();
- 
+ try{
     const response = await api.customer.addCustomer(name,surname,email,phone,projectName,creatorID);
     const { userId: customerId, email: customerEmail, projectName: customerProjectName } = response;
     const projectPayload = {
@@ -133,7 +133,24 @@ const handleFormSubmit = async (e) => {
     setEmail('');
     setPhone('');
     setProjectName('');
-    window.location.reload()
+    window.location.reload();
+  }catch (error) {
+    if (error.response) {
+      if (error.response.status === 400) {
+        alert(error.response.data.message);
+      } else if (error.response.status===401) { 
+        alert(error.response.data.message);}
+      else if (error.response.status===402) { 
+          alert(error.response.data.message);
+      }else{
+        alert("Server error. Please try again later.");
+      }
+    } else if (error.request) {
+      alert("No response from server. Please try again later.");
+    } else {
+      alert("Request failed. Please check your internet connection and try again.");
+    }
+  }
 
   };
 
