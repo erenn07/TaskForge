@@ -63,11 +63,11 @@ function ProjectManagement() {
 
 
   const getTask=async()=>{
-    console.log("get task front:",projectId)
-    const response = await api.task.getTask(projectId);
-    console.log("gelen cevap da bu:",response)
+    //console.log("get task front:",projectId)
+    //const response = await api.task.getTask(projectId);
+    //console.log("gelen cevap da bu:",response)
     
-    setTasks(response);
+    //setTasks(response);
     
   }
 
@@ -107,19 +107,32 @@ function ProjectManagement() {
 
   }
     
-  const  updateTask=async (id, content)=>{
-    const newTasks = tasks.map((task) => {
-      if (task.id !== id) return task;
-      return { ...task, content };
+  const updateTask = async (id, content) => {
+    const taskToUpdate = tasks.find((task) => task.id === id);
+    console.log(projectId+"update taskkkkkk")
+    if (!taskToUpdate) {
+      console.error('Güncellenecek görev bulunamadı.');
+      return;
+    }
+  
+    const updatedTask = {
+      projectId,
+      oldContent: taskToUpdate.content, 
+      content
+    };
+  
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, ...updatedTask };
+      }
+      return task;
     });
-
-    
-    setTasks(newTasks);
-
-   api.task.updateTask(newTasks);
- 
-    
-  }
+  
+    setTasks(updatedTasks);
+  
+    await api.task.updateTask(updatedTask);
+  };
+  
 
   const  deleteTask=async(id)=> {
     const newTasks = tasks.filter((task) => task.id !== id);
@@ -302,19 +315,20 @@ function ProjectManagement() {
   flexDirection: "row",
   gap: "6rem",height:"16rem"}}  >
             <SortableContext items={columnsId}>
-              {columns.map((col) => (
-                <ColumnForm
-                  key={col.id}
-                  column={col}
-                  deleteColumn={deleteColumn}
-                  updateColumn={updateColumn}
-                  createTask={createTask}
-                  deleteTask={deleteTask}
-                  updateTask={updateTask}
-                  tasks={tasks.filter((task) => task.columnId === col.id)}
-                />
-              ))}
-            </SortableContext>
+  {columns.map((col) => (
+    <ColumnForm
+      key={col.id}
+      column={col}
+      deleteColumn={deleteColumn}
+      updateColumn={updateColumn}
+      createTask={createTask}
+      deleteTask={deleteTask}
+      updateTask={(taskId, content) => updateTask(taskId, content, col.id, projectId)}
+      tasks={tasks.filter((task) => task.columnId === col.id)}
+    />
+  ))}
+</SortableContext>
+
           </div>
           {/* <button
             onClick={() => {

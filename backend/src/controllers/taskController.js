@@ -20,30 +20,27 @@ const addTask= async(req,res)=>{
         res.status(500).json({succeed:false,message:"server error" + error.message})
     }
 }
-const updateTask= async(req,res)=>{
+const updateTask = async (req, res) => {
     try {
-      
-       const {newTasks}= req.body;
-      
-        const updatedTask =await Task.updateOne({taskId:newTasks[0].id},{
-            $set: {
+        const { newTasks } = req.body;
 
-                taskName:newTasks[0].content,
-                status:newTasks[0].columnId,
-                project:newTasks[0].projectId
-           
-            }
-        }) 
+        const updatedTask = await Task.findOneAndUpdate(
+            { project: newTasks.projectId, taskName: newTasks.oldContent },
+            { taskName: newTasks.content },
+            { new: true }
+        );
 
         if (!updatedTask) {
             return res.status(404).json({ succeed: false, message: "Güncellenmiş görev bulunamadı" });
         }
 
-        res.status(200).json({succeed:true,message:"task güncelleme başarılı"})
+        res.status(200).json({ succeed: true, message: "Görev güncelleme başarılı", updatedTask });
     } catch (error) {
-        res.status(500).json({succeed:false,message:"server error" + error.message})
+        console.error("Hata:", error);
+        res.status(500).json({ succeed: false, message: "Sunucu hatası", error });
     }
-}
+};
+
 
 const getTask= async(req,res)=>{
     const{projectId}= req.body;
