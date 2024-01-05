@@ -190,6 +190,15 @@ export default{
       } catch (error) {
         alert(error)
       }
+    }, async updateStatus(taskName,status,projectId){
+      try {
+        const response = await axios.post("http://localhost:3001/task/updatestatus",{taskName,status,projectId}, { withCredentials: true });
+
+        return response.data;
+
+      } catch (error) {
+        alert(error)
+      }
     },
     async deleteTask(id){
       try {

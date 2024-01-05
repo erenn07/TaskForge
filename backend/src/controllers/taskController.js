@@ -40,6 +40,28 @@ const updateTask = async (req, res) => {
         res.status(500).json({ succeed: false, message: "Sunucu hatası", error });
     }
 };
+const taskStatusUpdate = async (req, res) => {
+    try {
+        const { taskName,status,projectId } = req.body;
+
+        const updatedTask = await Task.findOneAndUpdate(
+            { project:projectId,taskName :taskName},
+            { status:status},
+            { new: true }
+        );
+
+        if (!updatedTask) {
+            return res.status(404).json({ succeed: false, message: "Güncellenmiş görev bulunamadı" });
+        }
+
+        res.status(200).json({ succeed: true, message: "Görev güncelleme başarılı", updatedTask });
+    } catch (error) {
+        console.error("Hata:", error);
+        res.status(500).json({ succeed: false, message: "Sunucu hatası", error });
+    }
+};
+
+
 
 
 const getTask= async(req,res)=>{
@@ -68,4 +90,4 @@ const deleteTask = async (req, res) => {
         return res.status(500).json({ succeed: false, message: "Task deletion failed" });
     }
 }
-export{addTask,getTask,updateTask,deleteTask}
+export{addTask,getTask,updateTask,deleteTask,taskStatusUpdate}

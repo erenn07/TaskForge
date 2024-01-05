@@ -106,10 +106,9 @@ function ProjectManagement() {
     setTasks(newTasks);
 
   }
-    
-  const updateTask = async (id, content) => {
+  const updateStatus = async (id, content, columnId) => {
     const taskToUpdate = tasks.find((task) => task.id === id);
-    console.log(projectId+"update taskkkkkk")
+    console.log(projectId + "update taskkkkkk");
     if (!taskToUpdate) {
       console.error('Güncellenecek görev bulunamadı.');
       return;
@@ -117,10 +116,11 @@ function ProjectManagement() {
   
     const updatedTask = {
       projectId,
-      oldContent: taskToUpdate.content, 
-      content
+      content, 
+      status: columnId, 
     };
-  
+    console.log("Güncellenen Task: ", updatedTask); 
+
     const updatedTasks = tasks.map((task) => {
       if (task.id === id) {
         return { ...task, ...updatedTask };
@@ -132,6 +132,37 @@ function ProjectManagement() {
   
     await api.task.updateTask(updatedTask);
   };
+
+    
+  const updateTask = async (id, content, columnId) => {
+    const taskToUpdate = tasks.find((task) => task.id === id);
+    console.log(projectId + "update taskkkkkk");
+    if (!taskToUpdate) {
+      console.error('Güncellenecek görev bulunamadı.');
+      return;
+    }
+  
+    const updatedTask = {
+      projectId,
+      oldContent: taskToUpdate.content,
+      content,
+      columnId, 
+      status: columnId, 
+    };
+    console.log("Güncellenen Task: ", updatedTask); 
+
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, ...updatedTask };
+      }
+      return task;
+    });
+  
+    setTasks(updatedTasks);
+  
+    await api.task.updateTask(updatedTask);
+  };
+
   
 
   const  deleteTask=async(id)=> {
@@ -142,50 +173,42 @@ function ProjectManagement() {
     
   }
 
-  const  onDragOver=async(event)=> {
+  const onDragOver = async (event) => {
     const { active, over } = event;
     if (!over) return;
-
+  
     const activeId = active.id;
     const overId = over.id;
-
-    if (activeId === overId) return;
-
-    const isActiveATask = active.data.current?.type === "Task";
-    const isOverATask = over.data.current?.type === "Task";
-
-    if (!isActiveATask) return;
-
   
-    if (isActiveATask && isOverATask) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId);
-        const overIndex = tasks.findIndex((t) => t.id === overId);
-
-        if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
-        
-          tasks[activeIndex].columnId = tasks[overIndex].columnId;
-          return arrayMove(tasks, activeIndex, overIndex - 1);
-        }
-
-        return arrayMove(tasks, activeIndex, overIndex);
-      });
-    }
-
+    if (activeId === overId) return;
+  
+    const isActiveATask = active.data.current?.type === "Task";
     const isOverAColumn = over.data.current?.type === "Column";
-
   
     if (isActiveATask && isOverAColumn) {
+      let taskName = ""; 
+  
       setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId);
-
-        tasks[activeIndex].columnId = overId;
-         api.task.updateTask(tasks);
-        console.log("DROPPING TASK OVER COLUMN", { activeIndex });
-        return arrayMove(tasks, activeIndex, activeIndex);
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === activeId) {
+            taskName = task.content; 
+            return { ...task, columnId: overId };
+          }
+          return task;
+        });
+  
+        const activeTask = updatedTasks.find((task) => task.id === activeId);
+        let status = activeTask.columnId;
+        console.log(status,"staa")
+        console.log("Görevin yeni statusu:", activeTask.columnId);
+  
+        api.task.updateStatus(taskName, status, projectId);
+        return updatedTasks;
       });
     }
-  }
+  };
+  
+  
 
 
   useEffect(()=>{
