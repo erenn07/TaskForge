@@ -75,19 +75,22 @@ const getTask= async(req,res)=>{
 }
 const deleteTask = async (req, res) => {
     try {
-        const { id } = req.body;
-
-        const deletedTask = await Task.deleteOne({ taskId: id });
-
-        if (deletedTask.deletedCount > 0) {
-            return res.status(200).json({ succeed: true, message: "Task deletion successful." });
-        } else {
-            console.log('No data to delete was found');
-            return res.status(404).send('No data to delete was found');
-        }
+      const { deletedTask } = req.body;
+  
+      const taskToDelete = await Task.findOne({
+        project: deletedTask.projectId,
+        taskName: deletedTask.content
+      });
+  
+      if (!taskToDelete) {
+        return res.status(404).json({ succeed: false, message: "Silinecek görev bulunamadı" });
+      }
+      await Task.findByIdAndDelete(taskToDelete._id);
+      return res.status(200).json({ succeed: true, message: "Görev başarıyla silindi" });
     } catch (error) {
-        console.error('Error deleting task:', error.message);
-        return res.status(500).json({ succeed: false, message: "Task deletion failed" });
+      console.error("Hata:", error);
+      return res.status(500).json({ succeed: false, message: "Sunucu hatası", error });
     }
-}
+  };
+  
 export{addTask,getTask,updateTask,deleteTask,taskStatusUpdate}

@@ -200,9 +200,9 @@ export default{
         alert(error)
       }
     },
-    async deleteTask(id){
+    async deleteTask(deletedTask){
       try {
-        const response = await axios.post("http://localhost:3001/task/deleteTask",{id}, { withCredentials: true });
+        const response = await axios.post("http://localhost:3001/task/deleteTask",{deletedTask}, { withCredentials: true });
 
         return response.data;
 

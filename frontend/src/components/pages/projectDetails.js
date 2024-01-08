@@ -106,6 +106,8 @@ function ProjectManagement() {
     setTasks(newTasks);
 
   }
+
+
   const updateStatus = async (id, content, columnId) => {
     const taskToUpdate = tasks.find((task) => task.id === id);
     console.log(projectId + "update taskkkkkk");
@@ -133,6 +135,60 @@ function ProjectManagement() {
     await api.task.updateTask(updatedTask);
   };
 
+  //delete
+  const deleteTask = async (id, content) => {
+    try {
+      const taskToDelete = tasks.find((task) => task.id === id);
+  
+      if (!taskToDelete) {
+        console.error('Silinecek görev bulunamadı.');
+        return;
+      }
+  
+      const deletedTask = {
+        projectId,
+        content:taskToDelete.content
+      };
+  
+      console.log("Silinecek Görev: ", deletedTask);
+  
+      const updatedTasks = tasks.filter((task) => task.id !== id);
+      setTasks(updatedTasks);
+  
+      await api.task.deleteTask(deletedTask); 
+  
+    } catch (error) {
+      console.error("Görev silme hatası:", error);
+    }
+  };
+  
+  // const deleteeTask = async (id) => {
+  //   const taskToDelete = tasks.find((task) => task.id === id);
+    
+  //   if (!taskToDelete) {
+  //     console.error('Silinecek görev bulunamadı.');
+  //     return;
+  //   }
+  
+  //   const deletedTask = {
+  //     projectId,
+  //     content: taskToDelete.content,
+  //     columnId: taskToDelete.columnId,
+  //     status: taskToDelete.columnId, 
+  //   };
+  //   console.log("Silinen Task: ", deletedTask); 
+  
+  //   const updatedTasks = tasks.filter((task) => task.id !== id);
+  
+  //   setTasks(updatedTasks);
+  
+  //   await api.task.deleteTask(deletedTask);
+  // };
+  
+
+
+
+
     
   const updateTask = async (id, content, columnId) => {
     const taskToUpdate = tasks.find((task) => task.id === id);
@@ -149,6 +205,7 @@ function ProjectManagement() {
       columnId, 
       status: columnId, 
     };
+
     console.log("Güncellenen Task: ", updatedTask); 
 
     const updatedTasks = tasks.map((task) => {
@@ -165,13 +222,13 @@ function ProjectManagement() {
 
   
 
-  const  deleteTask=async(id)=> {
-    const newTasks = tasks.filter((task) => task.id !== id);
+  // const  deleteTask=async(id)=> {
+  //   const newTasks = tasks.filter((task) => task.id !== id);
     
-     api.task.deleteTask(id);
-    setTasks(newTasks);
+  //    api.task.deleteTask(id);
+  //   setTasks(newTasks);
     
-  }
+  // }
 
   const onDragOver = async (event) => {
     const { active, over } = event;
@@ -345,8 +402,8 @@ function ProjectManagement() {
       deleteColumn={deleteColumn}
       updateColumn={updateColumn}
       createTask={createTask}
-      deleteTask={deleteTask}
-      updateTask={(taskId, content) => updateTask(taskId, content, col.id, projectId)}
+      deleteTask={(taskId, content) => deleteTask(taskId, content, col.id)}
+      updateTask={(taskId, content) => updateTask(taskId, content, col.id )}
       tasks={tasks.filter((task) => task.columnId === col.id)}
     />
   ))}
@@ -436,13 +493,6 @@ function ProjectManagement() {
    
   );
 
-
-
-  
-
- 
-  
-
   function createNewColumn() {
     const columnToAdd = {
       id: `Column ${columns.length + 1}`,
@@ -455,6 +505,8 @@ function ProjectManagement() {
   function deleteColumn(id) {
     const filteredColumns = columns.filter((col) => col.id !== id);
     setColumns(filteredColumns);
+
+
 
     const newTasks = tasks.filter((t) => t.columnId !== id);
     setTasks(newTasks);
