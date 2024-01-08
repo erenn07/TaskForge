@@ -47,8 +47,8 @@ export default{
            });
           return response;
         },
-        async getInfo(payload){
-          const response = await instance.post("http://localhost:3001/user/getInfo",payload,{withCredentials: true});
+        async getInfo(id){
+          const response = await instance.get("http://localhost:3001/user/getInfo",{params:{id}},{withCredentials: true});
           return response.data;
         },
         

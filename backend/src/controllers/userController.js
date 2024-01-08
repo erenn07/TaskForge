@@ -14,10 +14,8 @@ const getProfile = async(req,res)=>{
 }
 const getInfo = async(req,res)=>{
   try {
-    const {Id}= req.body;
-    console.log("ıd bu:",Id)
-      const user= await Customer.findOne(Id);
-      
+    const {id}= req.query;
+      const user= await Customer.findById(id);      
       res.status(200).json(user);
     } catch (error) {
       throw error;

@@ -35,6 +35,7 @@ function Projects() {
       const userInfos = await Promise.all(
         response.map(async (item) => {
           const customerInfo = await api.user.getInfo(item.customer);
+          console.log(item.customer)
           return { projectName: item.projectName, customerInfo, projectId: item._id };
         })
       );
