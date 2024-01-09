@@ -70,6 +70,14 @@ function ProjectManagement() {
     //setTasks(response);
     
   }
+  const getColumn=async()=>{
+    console.log("get task front:",projectId)
+    const response = await api.column.getColumn(projectId);
+    console.log("gelen cevap da bu:",response)
+    
+    setColumns(response);
+    
+  }
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -187,15 +195,66 @@ function ProjectManagement() {
     }
   }
 
+  function createNewColumn() {
+    const columnToAdd = {
+      id: `Column ${columns.length + 1}`,
+      title: `Column ${columns.length + 1}`,
+    };
+
+    api.column.addColumn(columnToAdd);
+    setColumns([...columns, columnToAdd]);
+  }
+
+  const  getExistColumn= async ()=>{
+    console.log("get column front:", projectId);
+    const response = await api.task.getColumn(projectId);
+    console.log("gelen cevap da bu:", response);
+  
+    const newColumns = response.map((item) => ({
+     id: generateId(),
+      columnId: item.status,
+      title: item.columnName,
+      
+    }));
+  
+    setColumns(newColumns);
+
+  }
+
+  function deleteColumn(id) {
+    const filteredColumns = columns.filter((col) => col.id !== id);
+    api.column.deleteColumn(id);
+    setColumns(filteredColumns);
+
+    const newTasks = tasks.filter((t) => t.columnId !== id);
+    setTasks(newTasks);
+  }
+
+  function updateColumn(id, title) {
+    const newColumns = columns.map((col) => {
+      if (col.id !== id) return col;
+      return { ...col, title };
+    });
+
+    setColumns(newColumns);
+    api.column.updateColumn(newColumns) 
+   }
+
 
   useEffect(()=>{
     getTask();
+  
   },[projectId])
 
   useEffect(()=>{
     getExistTask();
     setActiveTask(tasks);
+   
   },[])
+
+  
+
+
 
 
   return (
@@ -330,7 +389,7 @@ function ProjectManagement() {
 </SortableContext>
 
           </div>
-          {/* <button
+          <button
             onClick={() => {
               createNewColumn();
             }}
@@ -352,8 +411,8 @@ function ProjectManagement() {
       "
       style={{color:"#f2f2f2"}}
           >
-ü         Kolon Ekle
-          </button> */}
+        Kolon Ekle
+          </button> 
         </div>
 
         {createPortal(
@@ -364,6 +423,7 @@ function ProjectManagement() {
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
+                columns={columns.filter((column)=>column.id=== activeColumn.id)}
                 createTask={createTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
@@ -420,31 +480,6 @@ function ProjectManagement() {
  
   
 
-  function createNewColumn() {
-    const columnToAdd = {
-      id: `Column ${columns.length + 1}`,
-      title: `Column ${columns.length + 1}`,
-    };
-
-    setColumns([...columns, columnToAdd]);
-  }
-
-  function deleteColumn(id) {
-    const filteredColumns = columns.filter((col) => col.id !== id);
-    setColumns(filteredColumns);
-
-    const newTasks = tasks.filter((t) => t.columnId !== id);
-    setTasks(newTasks);
-  }
-
-  function updateColumn(id, title) {
-    const newColumns = columns.map((col) => {
-      if (col.id !== id) return col;
-      return { ...col, title };
-    });
-
-    setColumns(newColumns);
-  }
 
   function onDragStart(event) {
     if (event.active.data.current?.type === "Column") {
