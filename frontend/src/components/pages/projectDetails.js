@@ -266,7 +266,7 @@ function ProjectManagement() {
         const activeTask = updatedTasks.find((task) => task.id === activeId);
         let status = activeTask.columnId;
         console.log(status,"staa")
-        console.log("Görevin yeni statusu:", activeTask.columnId);
+          console.log("Görevin yeni statusu:", activeTask.columnId);
   
         api.task.updateStatus(taskName, status, projectId);
         return updatedTasks;
@@ -289,25 +289,39 @@ function ProjectManagement() {
     const response = await api.column.getColumn(projectId);
     console.log("gelen cevap da bu:", response);
   
+
     const newColumns = response.map((item) => ({
      id: generateId(),
-      columnId: item.status,
-      title: item.columnName,
+     columnId: item.status,
+     title: item.columnName,
       
     }));
   
     setColumns([...defaultCols, ...newColumns]);
 
   }
-  function deleteColumn(id) {
-    const filteredColumns = columns.filter((col) => col.id !== id);
-    api.column.deleteColumn(id);
-    setColumns(filteredColumns);
-
-    const newTasks = tasks.filter((t) => t.columnId !== id);
-    setTasks(newTasks);
-  }
-
+  const deleteColumn = async (id, columnName) => {
+    try {
+      const columnToDelete = columns.find((col) => col.id === id);
+  
+      if (!columnToDelete) {
+        console.error('Silinecek sütun bulunamadı.');
+        return;
+      }
+  
+      console.log(columnToDelete.title, "cooolllll")
+      await api.column.deleteColumn({ projectId, columnName: columnToDelete.title });
+      const filteredColumns = columns.filter((col) => col.id !== id);
+      setColumns(filteredColumns);
+  
+      const newTasks = tasks.filter((task) => task.columnId !== id);
+      setTasks(newTasks);
+    } catch (error) {
+      console.error("Sütun silme hatası:", error);
+    }
+  };
+  
+  
   function updateColumn(id, title) {
     const newColumns = columns.map((col) => {
       if (col.id !== id) return col;
@@ -322,7 +336,7 @@ function ProjectManagement() {
 
 
   useEffect(()=>{
-    getTask();
+    getTask()
     getExistColumn()
   },[projectId])
 

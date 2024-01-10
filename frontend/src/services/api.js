@@ -241,9 +241,9 @@ async updateColumn(newColumn){
     alert(error)
   }
 },  
- async deleteColumn(id){
+ async deleteColumn(project){
   try {
-    const response = await axios.post("http://localhost:3001/column/deleteColumn",{id}, { withCredentials: true });
+    const response = await axios.post("http://localhost:3001/column/deleteColumn",{project}, { withCredentials: true });
 
     return response.data;
 

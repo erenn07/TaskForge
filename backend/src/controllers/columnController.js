@@ -49,23 +49,30 @@ const getColumn = async(req,res)=>{
 
 const DeleteColumn= async (req,res)=>{
     try {
-        const {id} =req.body;
-        const DeleteColumn = await Column.deleteOne({columnId:id});
+        const {project} =req.body;
 
-        if (DeleteColumn.deletedCount>0) {
-            return res.status(200).json({succeed:true,message:"Kolon başarıyla silindi."});
+console.log(project.projectId,"backeddd")
+console.log(project.columnName,"bcc")
 
-        }else{
-            console.log('Silinecek Kolon yok');
-            return res.status(404).send("Silinecek Kolon yok");
-        }
+        const columnToDelete = await Column.findOne({
+            project: project.projectId,
+            columnName: project.columnName
+          });
+       // const DeleteColumn = await Column.deleteOne({columnId:id});
 
+       if (!columnToDelete) {
+        return res.status(404).json({ succeed: false, message: "Silinecek kolon bulunamadı" });
+      }
+
+
+      await Column.findByIdAndDelete(columnToDelete._id);
+      return res.status(200).json({ succeed: true, message: "Kolon başarıyla silindi" });
     } catch (error) {
-        console.error("Kolon silme sırasında hata oluştu",error.message);
-        return res.status(500).json({succeed:false,message:"Kolon silme sırasında hata oluştu"})
-
+      console.error("Hata:", error);
+      return res.status(500).json({ succeed: false, message: "Sunucu hatası", error });
     }
-}
+  };
+  
 
 
 export{addColumn,updateColumn,getColumn,DeleteColumn}
