@@ -7,7 +7,7 @@ import customerRoutes from './src/routes/customer.js';
 import projectRoutes from './src/routes/project.js';
 import taskRoutes from './src/routes/task.js';
 import cookieParser from 'cookie-parser';
-
+import columnRoutes from './src/routes/column.js';
 
 dotenv.config()
 
@@ -36,7 +36,7 @@ app.use("/user",userRoutes)
 app.use("/customer",customerRoutes)
 app.use("/task",taskRoutes)
 app.use("/project",projectRoutes)
-
+app.use("/column",columnRoutes)
 
 
 app.listen(port, () => {

@@ -210,8 +210,47 @@ export default{
         alert(error)
       }
     }
+  },column:{
+    async addColumn(newColumn){
+      try {
+        const response = await axios.post("http://localhost:3001/column/addColumn" ,{newColumn},{withCredentials: true});
+
+    return response.data;
+
+  } catch (error) {
+    alert(error)
   }
+},
+async getColumn(projectId) {
+  try {
+    const response = await axios.post("http://localhost:3001/column/getColumn",{projectId}, { withCredentials: true });
 
+    return response.data;
 
+  } catch (error) {
+    alert(error)
+  }
+},
+async updateColumn(newColumn){
+  try {
+    const response = await axios.post("http://localhost:3001/column/updateColumn",{newColumn}, { withCredentials: true });
 
+    return response.data;
+
+  } catch (error) {
+    alert(error)
+  }
+},  
+ async deleteColumn(id){
+  try {
+    const response = await axios.post("http://localhost:3001/column/deleteColumn",{id}, { withCredentials: true });
+
+    return response.data;
+
+  } catch (error) {
+    alert(error)
+  }
 }
+},
+
+  }
