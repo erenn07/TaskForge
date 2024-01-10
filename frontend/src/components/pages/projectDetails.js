@@ -197,17 +197,18 @@ function ProjectManagement() {
 
   function createNewColumn() {
     const columnToAdd = {
-      id: `Column ${columns.length + 1}`,
+      id: generateId(),
       title: `Column ${columns.length + 1}`,
+      columnName:`Column ${columns.length + 1}`,
     };
 
     api.column.addColumn(columnToAdd);
     setColumns([...columns, columnToAdd]);
   }
 
-  const  getExistColumn= async ()=>{
+  const  getExistColumn = async ()=>{
     console.log("get column front:", projectId);
-    const response = await api.task.getColumn(projectId);
+    const response = await api.column.getColumn(projectId);
     console.log("gelen cevap da bu:", response);
   
     const newColumns = response.map((item) => ({
@@ -235,21 +236,22 @@ function ProjectManagement() {
       if (col.id !== id) return col;
       return { ...col, title };
     });
-
-    setColumns(newColumns);
     api.column.updateColumn(newColumns) 
+    setColumns(newColumns);
+  
    }
 
 
   useEffect(()=>{
     getTask();
-  
+ 
   },[projectId])
 
   useEffect(()=>{
     getExistTask();
     setActiveTask(tasks);
-   
+  
+    
   },[])
 
   
@@ -423,7 +425,7 @@ function ProjectManagement() {
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
-                columns={columns.filter((column)=>column.id=== activeColumn.id)}
+                // columns={columns.filter((column)=>column.id=== activeColumn.id)}
                 createTask={createTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}

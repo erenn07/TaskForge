@@ -21,6 +21,8 @@ const addColumn= async(req,res)=>{
 }
 const updateColumn=async(req,res)=>{
     try {
+        const {newColumn} =req.body;
+        
         const updateColumn = await Column.findByIdAndUpdate(
             {project:newColumn.projectId,columnName:newColumn.oldColumn},
             {columnName:newColumn.columnName},
