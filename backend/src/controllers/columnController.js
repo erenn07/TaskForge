@@ -1,28 +1,25 @@
-import Column  from "../models/Column.js";
-
-
+import Column from "../models/Column.js"
 const addColumn= async(req,res)=>{
     try {
         const {newColumn}=req.body;
 
         const column =Column.create({
             columnId:newColumn.id,
-            columnName:newColumn.columnName,
+            columnName:newColumn.title,
             project:newColumn.projectId
 
         })
         res.status(200).json({succeed:true,message:"Kolon ekleme başarılı"});
 
-        
+
     } catch (error) {
         res.status(500).json({succeed:false,message:"sever error"+ error.message})
-        
+
     }
 }
 const updateColumn=async(req,res)=>{
     try {
         const {newColumn} =req.body;
-        
         const updateColumn = await Column.findByIdAndUpdate(
             {project:newColumn.projectId,columnName:newColumn.oldColumn},
             {columnName:newColumn.columnName},
@@ -30,14 +27,14 @@ const updateColumn=async(req,res)=>{
         );
         if (!updateColumn) {
             return res.status(404).json({succeed:false,message:"güncellenmiş kolon bulunanmadı"});
-       
+
         }
         res.status(200).json({succeed:true,message:"Kolon güncelleme başarılı",updateColumn})
-        
+
     } catch (error) {
         console.error("hata: ",error);
         res.status(500).json({succeed:false,message:"sunucu hatası",error});
-        
+
     }
 };
 const getColumn = async(req,res)=>{
@@ -62,11 +59,11 @@ const DeleteColumn= async (req,res)=>{
             console.log('Silinecek Kolon yok');
             return res.status(404).send("Silinecek Kolon yok");
         }
-        
+
     } catch (error) {
         console.error("Kolon silme sırasında hata oluştu",error.message);
         return res.status(500).json({succeed:false,message:"Kolon silme sırasında hata oluştu"})
-        
+
     }
 }
 

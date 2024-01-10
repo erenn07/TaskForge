@@ -210,8 +210,7 @@ export default{
         alert(error)
       }
     }
-  },
-  column:{
+  },column:{
     async addColumn(newColumn){
       try {
         const response = await axios.post("http://localhost:3001/column/addColumn" ,{newColumn},{withCredentials: true});
@@ -255,7 +254,3 @@ async updateColumn(newColumn){
 },
 
   }
-
-
-
-
