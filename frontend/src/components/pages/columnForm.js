@@ -130,18 +130,18 @@ function ColumnForm({
            autoFocus
            onBlur={() => {
              setEditMode(false);
-             updateColumn(column.id, newTitle, column.columnId); 
+             updateColumn(column.id, newTitle, column.columnId); // Bu kısım eklendi
            }}
            onKeyDown={(e) => {
              if (e.key !== "Enter") return;
              setEditMode(false);
-             updateColumn(column.id, newTitle, column.columnId); 
+             updateColumn(column.id, newTitle, column.columnId); // Bu kısım eklendi
            }}
          />
        )}
      </div>
     
-     <button
+       <button
           onClick={() => {
             deleteColumn(column.id);
           }}
