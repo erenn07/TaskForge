@@ -296,7 +296,7 @@ function ProjectManagement() {
       
     }));
   
-    setColumns(newColumns);
+    setColumns([...defaultCols, ...newColumns]);
 
   }
   function deleteColumn(id) {
@@ -323,7 +323,7 @@ function ProjectManagement() {
 
   useEffect(()=>{
     getTask();
-   
+    getExistColumn()
   },[projectId])
 
   useEffect(()=>{
