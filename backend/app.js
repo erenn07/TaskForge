@@ -8,7 +8,7 @@ import projectRoutes from './src/routes/project.js';
 import taskRoutes from './src/routes/task.js';
 import columnRoutes from './src/routes/column.js';
 import cookieParser from 'cookie-parser';
-import columnRoutes from './src/routes/column.js';
+
 
 dotenv.config()
 
