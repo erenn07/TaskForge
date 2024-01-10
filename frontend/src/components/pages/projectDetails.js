@@ -309,16 +309,44 @@ function ProjectManagement() {
     setTasks(newTasks);
   }
 
-  function updateColumn(id, title) {
-    const newColumns = columns.map((col) => {
-      if (col.id !== id) return col;
-      return { ...col, title };
-    });
-    api.column.updateColumn(newColumns) 
-    setColumns(newColumns);
+  // function updateColumn(id, title) {
+  //   const newColumns = columns.map((col) => {
+  //     if (col.id !== id) return col;
+  //     return { ...col, title };
+  //   });
+  //   api.column.updateColumn(newColumns) 
+  //   setColumns(newColumns);
   
-   }
+  //  }
+  const updateColumn = async (id, title, columnId) => {
+    const columnToUpdate = columns.find((column) => column.id === id);
+    console.log(projectId + "update taskkkkkk");
+    if (!columnToUpdate) {
+      console.error('Güncellenecek görev bulunamadı.');
+      return;
+    }
+  
+    const updatedColumn = {
+      projectId,
+      oldTitle:columnToUpdate.title,
+      title,
+      columnId, 
+      
+    };
 
+    console.log("Güncellenen Task: ", updatedColumn); 
+
+    const updatedColumns = columns.map((column) => {
+      if (column.id === id) {
+        return { ...column, ...updatedColumn };
+      }
+      return column;
+    });
+  
+    setColumns(updatedColumns);
+  
+    await api.column.updateColumn(updatedColumn);
+  };
 
   useEffect(()=>{
     getTask();
@@ -503,7 +531,7 @@ function ProjectManagement() {
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
-                // columns={columns.filter((column)=>column.id=== activeColumn.id)}
+                //columns={columns.filter((column)=>column.id=== activeColumn.id)}
                 createTask={createTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}

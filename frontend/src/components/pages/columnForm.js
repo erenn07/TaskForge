@@ -16,6 +16,7 @@ function ColumnForm({
 }) {
   const [editMode, setEditMode] = useState(false);
   const [mouseIsOver, setMouseIsOver] = useState(false);
+  const [newTitle, setNewTitle] = useState(column.title);
 
   const tasksIds = useMemo(() => {
     return tasks.map((task) => task.id);
@@ -34,6 +35,7 @@ function ColumnForm({
       type: "Column",
       column,
     },
+    title:column.columnName,
     disabled: editMode,
   });
 
@@ -103,41 +105,43 @@ function ColumnForm({
       "
       >
         <div className="flex gap-2"
-        style={{ textAlign:"center",color:"#f2f2f2",textTransform: 'uppercase'}}>
-          {/* <div
-          style={{backgroundColor:"green"}}
-            className="
-        flex
-        justify-center
-        items-center
-        
-        px-2
-        py-1
-        text-sm
-        rounded-full
-        "
-          >
-            
-          </div> */}
-          {!editMode && column.title}
-          {editMode && (
-            <input
-              className="bg-black focus:border-rose-500 border rounded outline-none px-2"
-              value={column.title}
-              onChange={(e) => updateColumn(column.id, e.target.value)}
-              autoFocus
-              onBlur={() => {
-                setEditMode(false);
-              }}
-              onKeyDown={(e) => {
-                if (e.key !== "Enter") return;
-                setEditMode(false);
-              }}
-            />
-          )}
-        </div>
-       
-        <button
+       style={{ textAlign:"center",color:"#f2f2f2",textTransform: 'uppercase'}}>
+       {/* <div
+       style={{backgroundColor:"green"}}
+         className="
+     flex
+     justify-center
+     items-center
+     
+     px-2
+     py-1
+     text-sm
+     rounded-full
+     "
+       >
+         
+       </div> */}
+       {!editMode && column.title}
+       {editMode && (
+         <input
+           className="bg-black focus:border-rose-500 border rounded outline-none px-2"
+           value={newTitle}
+           onChange={(e) => setNewTitle(e.target.value)}
+           autoFocus
+           onBlur={() => {
+             setEditMode(false);
+             updateColumn(column.id, newTitle, column.columnId); 
+           }}
+           onKeyDown={(e) => {
+             if (e.key !== "Enter") return;
+             setEditMode(false);
+             updateColumn(column.id, newTitle, column.columnId); 
+           }}
+         />
+       )}
+     </div>
+    
+     <button
           onClick={() => {
             deleteColumn(column.id);
           }}
