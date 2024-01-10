@@ -296,7 +296,7 @@ function ProjectManagement() {
       
     }));
   
-    setColumns(newColumns);
+    setColumns([...defaultCols, ...newColumns]);
 
   }
 
@@ -322,7 +322,7 @@ function ProjectManagement() {
 
   useEffect(()=>{
     getTask();
-   
+    getExistColumn()
   },[projectId])
 
   useEffect(()=>{
