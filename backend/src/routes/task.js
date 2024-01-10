@@ -8,5 +8,6 @@ router.route("/addTask").post(taskController.addTask)
 router.route("/getTask").post(taskController.getTask)
 router.route("/updateTask").post(taskController.updateTask)
 router.route("/deleteTask").post(taskController.deleteTask)
+router.route("/updatestatus").post(taskController.taskStatusUpdate)
 
 export default router;

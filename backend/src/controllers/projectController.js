@@ -1,3 +1,4 @@
+import Customer from "../models/Customer.js";
 import Project from "../models/Project.js";
 
 const addProject =async(req,res)=>{
@@ -29,7 +30,7 @@ const addProject =async(req,res)=>{
     const getProjects =async (req,res)=>{
       try {
          const {creatorID}=req.body;
-      console.log("meltem",creatorID)
+      //console.log("meltem",creatorID)
       const projects = await Project.find({ creatorID: creatorID });
       res.status(200).json(projects)
       } catch (error) {

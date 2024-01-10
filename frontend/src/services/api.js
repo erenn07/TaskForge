@@ -47,8 +47,8 @@ export default{
            });
           return response;
         },
-        async getInfo(payload){
-          const response = await instance.post("http://localhost:3001/user/getInfo",payload,{withCredentials: true});
+        async getInfo(id){
+          const response = await instance.get("http://localhost:3001/user/getInfo",{params:{id}},{withCredentials: true});
           return response.data;
         },
         
@@ -190,10 +190,19 @@ export default{
       } catch (error) {
         alert(error)
       }
-    },
-    async deleteTask(id){
+    }, async updateStatus(taskName,status,projectId){
       try {
-        const response = await axios.post("http://localhost:3001/task/deleteTask",{id}, { withCredentials: true });
+        const response = await axios.post("http://localhost:3001/task/updatestatus",{taskName,status,projectId}, { withCredentials: true });
+
+        return response.data;
+
+      } catch (error) {
+        alert(error)
+      }
+    },
+    async deleteTask(deletedTask){
+      try {
+        const response = await axios.post("http://localhost:3001/task/deleteTask",{deletedTask}, { withCredentials: true });
 
         return response.data;
 

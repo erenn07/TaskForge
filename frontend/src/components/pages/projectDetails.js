@@ -114,10 +114,11 @@ function ProjectManagement() {
     setTasks(newTasks);
 
   }
-    
-  const updateTask = async (id, content) => {
+
+
+  const updateStatus = async (id, content, columnId) => {
     const taskToUpdate = tasks.find((task) => task.id === id);
-    console.log(projectId+"update taskkkkkk")
+    console.log(projectId + "update taskkkkkk");
     if (!taskToUpdate) {
       console.error('Güncellenecek görev bulunamadı.');
       return;
@@ -125,10 +126,11 @@ function ProjectManagement() {
   
     const updatedTask = {
       projectId,
-      oldContent: taskToUpdate.content, 
-      content
+      content, 
+      status: columnId, 
     };
-  
+    console.log("Güncellenen Task: ", updatedTask); 
+
     const updatedTasks = tasks.map((task) => {
       if (task.id === id) {
         return { ...task, ...updatedTask };
@@ -140,60 +142,138 @@ function ProjectManagement() {
   
     await api.task.updateTask(updatedTask);
   };
+
+  //delete
+  const deleteTask = async (id, content) => {
+    try {
+      const taskToDelete = tasks.find((task) => task.id === id);
+  
+      if (!taskToDelete) {
+        console.error('Silinecek görev bulunamadı.');
+        return;
+      }
+  
+      const deletedTask = {
+        projectId,
+        content:taskToDelete.content
+      };
+  
+      console.log("Silinecek Görev: ", deletedTask);
+  
+      const updatedTasks = tasks.filter((task) => task.id !== id);
+      setTasks(updatedTasks);
+  
+      await api.task.deleteTask(deletedTask); 
+  
+    } catch (error) {
+      console.error("Görev silme hatası:", error);
+    }
+  };
+  
+  // const deleteeTask = async (id) => {
+  //   const taskToDelete = tasks.find((task) => task.id === id);
+    
+  //   if (!taskToDelete) {
+  //     console.error('Silinecek görev bulunamadı.');
+  //     return;
+  //   }
+  
+  //   const deletedTask = {
+  //     projectId,
+  //     content: taskToDelete.content,
+  //     columnId: taskToDelete.columnId,
+  //     status: taskToDelete.columnId, 
+  //   };
+  //   console.log("Silinen Task: ", deletedTask); 
+  
+  //   const updatedTasks = tasks.filter((task) => task.id !== id);
+  
+  //   setTasks(updatedTasks);
+  
+  //   await api.task.deleteTask(deletedTask);
+  // };
   
 
-  const  deleteTask=async(id)=> {
-    const newTasks = tasks.filter((task) => task.id !== id);
-    
-     api.task.deleteTask(id);
-    setTasks(newTasks);
-    
-  }
 
-  const  onDragOver=async(event)=> {
+
+
+    
+  const updateTask = async (id, content, columnId) => {
+    const taskToUpdate = tasks.find((task) => task.id === id);
+    console.log(projectId + "update taskkkkkk");
+    if (!taskToUpdate) {
+      console.error('Güncellenecek görev bulunamadı.');
+      return;
+    }
+  
+    const updatedTask = {
+      projectId,
+      oldContent: taskToUpdate.content,
+      content,
+      columnId, 
+      status: columnId, 
+    };
+
+    console.log("Güncellenen Task: ", updatedTask); 
+
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, ...updatedTask };
+      }
+      return task;
+    });
+  
+    setTasks(updatedTasks);
+  
+    await api.task.updateTask(updatedTask);
+  };
+
+  
+
+  // const  deleteTask=async(id)=> {
+  //   const newTasks = tasks.filter((task) => task.id !== id);
+    
+  //    api.task.deleteTask(id);
+  //   setTasks(newTasks);
+    
+  // }
+
+  const onDragOver = async (event) => {
     const { active, over } = event;
     if (!over) return;
-
+  
     const activeId = active.id;
     const overId = over.id;
-
-    if (activeId === overId) return;
-
-    const isActiveATask = active.data.current?.type === "Task";
-    const isOverATask = over.data.current?.type === "Task";
-
-    if (!isActiveATask) return;
-
   
-    if (isActiveATask && isOverATask) {
-      setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId);
-        const overIndex = tasks.findIndex((t) => t.id === overId);
-
-        if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
-        
-          tasks[activeIndex].columnId = tasks[overIndex].columnId;
-          return arrayMove(tasks, activeIndex, overIndex - 1);
-        }
-
-        return arrayMove(tasks, activeIndex, overIndex);
-      });
-    }
-
+    if (activeId === overId) return;
+  
+    const isActiveATask = active.data.current?.type === "Task";
     const isOverAColumn = over.data.current?.type === "Column";
-
   
     if (isActiveATask && isOverAColumn) {
+      let taskName = ""; 
+  
       setTasks((tasks) => {
-        const activeIndex = tasks.findIndex((t) => t.id === activeId);
-
-        tasks[activeIndex].columnId = overId;
-         api.task.updateTask(tasks);
-        console.log("DROPPING TASK OVER COLUMN", { activeIndex });
-        return arrayMove(tasks, activeIndex, activeIndex);
+        const updatedTasks = tasks.map((task) => {
+          if (task.id === activeId) {
+            taskName = task.content; 
+            return { ...task, columnId: overId };
+          }
+          return task;
+        });
+  
+        const activeTask = updatedTasks.find((task) => task.id === activeId);
+        let status = activeTask.columnId;
+        console.log(status,"staa")
+        console.log("Görevin yeni statusu:", activeTask.columnId);
+  
+        api.task.updateStatus(taskName, status, projectId);
+        return updatedTasks;
       });
     }
-  }
+  };
+  
+  
 
   function createNewColumn() {
     const columnToAdd = {
@@ -383,8 +463,8 @@ function ProjectManagement() {
       deleteColumn={deleteColumn}
       updateColumn={updateColumn}
       createTask={createTask}
-      deleteTask={deleteTask}
-      updateTask={(taskId, content) => updateTask(taskId, content, col.id, projectId)}
+      deleteTask={(taskId, content) => deleteTask(taskId, content, col.id)}
+      updateTask={(taskId, content) => updateTask(taskId, content, col.id )}
       tasks={tasks.filter((task) => task.columnId === col.id)}
     />
   ))}
@@ -475,13 +555,33 @@ function ProjectManagement() {
    
   );
 
+  function createNewColumn() {
+    const columnToAdd = {
+      id: `Column ${columns.length + 1}`,
+      title: `Column ${columns.length + 1}`,
+    };
+
+    setColumns([...columns, columnToAdd]);
+  }
+
+  function deleteColumn(id) {
+    const filteredColumns = columns.filter((col) => col.id !== id);
+    setColumns(filteredColumns);
 
 
-  
 
- 
-  
+    const newTasks = tasks.filter((t) => t.columnId !== id);
+    setTasks(newTasks);
+  }
 
+  function updateColumn(id, title) {
+    const newColumns = columns.map((col) => {
+      if (col.id !== id) return col;
+      return { ...col, title };
+    });
+
+    setColumns(newColumns);
+  }
 
   function onDragStart(event) {
     if (event.active.data.current?.type === "Column") {
