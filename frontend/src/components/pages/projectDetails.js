@@ -281,6 +281,7 @@ function ProjectManagement() {
     };
 
     api.column.addColumn(columnToAdd);
+ 
     setColumns([...columns, columnToAdd]);
   }
 
@@ -293,12 +294,40 @@ function ProjectManagement() {
      id: generateId(),
       columnId: item.status,
       title: item.columnName,
-      
+     
     }));
+   
   
     setColumns([...defaultCols, ...newColumns]);
 
   }
+
+  const updateColumnName = async (id,columnName,projectId)=>{
+    const columnToUpdate= columns.find((column)=> column.id ===id);
+    console.log(projectId + "update column")
+    if (!columnToUpdate) {
+      console.error('Güncellenecek kolon bulunamadı.');
+      return;
+    }
+  
+    const updatedColumn = {
+      projectId,
+      columnName, 
+      
+    };
+    console.log("Güncellenen column: ", updatedColumn); 
+
+    const updatedcolumns = columns.map((column) => {
+      if (column.id === id) {
+        return { ...column, ...updatedColumn };
+      }
+      return column;
+    });
+  
+    setColumns(updatedcolumns);
+  
+    await api.column.updateColumnName(updatedColumn);
+  };
 
   function deleteColumn(id) {
     const filteredColumns = columns.filter((col) => col.id !== id);
@@ -337,14 +366,15 @@ function ProjectManagement() {
     console.log("Güncellenen Task: ", updatedColumn); 
 
     const updatedColumns = columns.map((column) => {
+    
       if (column.id === id) {
-        return { ...column, ...updatedColumn };
+        return { ...column,...title ,...updatedColumn };
       }
       return column;
     });
   
     setColumns(updatedColumns);
-  
+   
     await api.column.updateColumn(updatedColumn);
   };
 
@@ -488,6 +518,7 @@ function ProjectManagement() {
       column={col}
       deleteColumn={deleteColumn}
       updateColumn={updateColumn}
+      updateColumnName={updateColumnName}
       createTask={createTask}
       deleteTask={(taskId, content) => deleteTask(taskId, content, col.id)}
       updateTask={(taskId, content) => updateTask(taskId, content, col.id )}

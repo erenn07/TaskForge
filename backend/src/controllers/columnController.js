@@ -21,8 +21,8 @@ const updateColumn=async(req,res)=>{
     try {
         const {newColumn} =req.body;
         const updateColumn = await Column.findByIdAndUpdate(
-            {project:newColumn.projectId,columnName:newColumn.oldColumn},
-            {columnName:newColumn.columnName},
+            {project:newColumn.projectId,title:newColumn.oldtitle},
+            {oldtitle:newColumn.title},
             {new:true}
         );
         if (!updateColumn) {
@@ -34,6 +34,25 @@ const updateColumn=async(req,res)=>{
     } catch (error) {
         console.error("hata: ",error);
         res.status(500).json({succeed:false,message:"sunucu hatası",error});
+
+    }
+};
+
+const UpdateColumnName = async (req,res)=>{
+    try{
+        const {columnName,projectId}=req.body;
+
+        const updateColumn =await Column.findByIdAndUpdate(
+            {project:projectId,columnName:columnName},
+             {new:true}
+        );
+        if(!updateColumn){
+            return res.status(404).json({succeed:false,message:"güncellenmiş kolon ismi bulunamadı"});
+        }
+        res.status(200).json({succeed:true,message:"kolon güncelleme başarılı",updateColumn});
+    }catch(error){
+        console.error("hata:",error);
+        res.status(500).json({succeed:false,message:"Sunucu hatası",error})
 
     }
 };
@@ -68,4 +87,4 @@ const DeleteColumn= async (req,res)=>{
 }
 
 
-export{addColumn,updateColumn,getColumn,DeleteColumn}
+export{addColumn,updateColumn,getColumn,DeleteColumn,UpdateColumnName}

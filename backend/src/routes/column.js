@@ -17,6 +17,7 @@ router.route("/addColumn").post(columnController.addColumn)
 router.route("/getColumn").post(columnController.getColumn)
 
 router.route("/updateColumn").post(columnController.updateColumn)
+router.route("/updateColumnName").post(columnController.UpdateColumnName)
 
 router.route("/deleteColumn").post(columnController.DeleteColumn)
 

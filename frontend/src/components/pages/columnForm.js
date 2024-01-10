@@ -130,12 +130,12 @@ function ColumnForm({
            autoFocus
            onBlur={() => {
              setEditMode(false);
-             updateColumn(column.id, newTitle, column.columnId); // Bu kısım eklendi
+             updateColumn(column.id, newTitle, column.columnId); 
            }}
            onKeyDown={(e) => {
              if (e.key !== "Enter") return;
              setEditMode(false);
-             updateColumn(column.id, newTitle, column.columnId); // Bu kısım eklendi
+             updateColumn(column.id, newTitle, column.columnId);
            }}
          />
        )}

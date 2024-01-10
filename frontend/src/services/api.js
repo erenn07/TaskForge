@@ -241,6 +241,16 @@ async updateColumn(newColumn){
     alert(error)
   }
 },  
+async updateColumnName(title,projectId){
+  try {
+    const response = await axios.post("http://localhost:3001/column/updateColumnName",{title,projectId}, { withCredentials: true });
+
+    return response.data;
+
+  } catch (error) {
+    alert(error)
+  }
+},
  async deleteColumn(id){
   try {
     const response = await axios.post("http://localhost:3001/column/deleteColumn",{id}, { withCredentials: true });
