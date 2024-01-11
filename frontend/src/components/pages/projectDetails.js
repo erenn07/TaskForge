@@ -277,11 +277,11 @@ function ProjectManagement() {
     const columnToAdd = {
       id: generateId(),
       title: `Column ${columns.length + 1}`,
-      columnName:`Column ${columns.length + 1}`,
+     columnName:`Column ${columns.length + 1}`,
     };
 
     api.column.addColumn(columnToAdd);
- 
+
     setColumns([...columns, columnToAdd]);
   }
 
@@ -548,7 +548,7 @@ function ProjectManagement() {
       flex
       gap-2
       "
-      style={{color:"#f2f2f2"}}
+      style={{color:"#f2f2f2",height:"500px", width:"600px"}}
           >
         Kolon Ekle
           </button> 

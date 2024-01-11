@@ -4,6 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 // import PlusIcon from "../icons/PlusIcon";
 import TaskForm from "./taskForm";
+import { Hidden } from "@mui/material";
 
 function ColumnForm({
   column,
@@ -35,7 +36,7 @@ function ColumnForm({
       type: "Column",
       column,
     },
-    title:column.columnName,
+    
     disabled: editMode,
   });
 
@@ -171,6 +172,7 @@ function ColumnForm({
 
       {/* Column task container */}
       <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto"
+      style={{ display: "flex", flexGrow:"1", flexDirection:"column",gap: "1rem", padding: "2rem",overflowX:"Hidden",overflowY: "auto"}}
       >
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (

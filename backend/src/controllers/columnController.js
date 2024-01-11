@@ -22,8 +22,9 @@ const updateColumn=async(req,res)=>{
         const {newColumn} =req.body;
         const updateColumn = await Column.findByIdAndUpdate(
             {project:newColumn.projectId,title:newColumn.oldtitle},
-            {oldtitle:newColumn.title},
-            {new:true}
+            {oldtitle:newColumn.columnName},
+           
+           
         );
         if (!updateColumn) {
             return res.status(404).json({succeed:false,message:"güncellenmiş kolon bulunanmadı"});
@@ -39,22 +40,41 @@ const updateColumn=async(req,res)=>{
 };
 
 const UpdateColumnName = async (req,res)=>{
-    try{
-        const {columnName,projectId}=req.body;
-
-        const updateColumn =await Column.findByIdAndUpdate(
-            {project:projectId,columnName:columnName},
-             {new:true}
+    try {
+        const { columnId, newTitle } = req.body;
+    
+        // Veritabanında güncellenmek istenen kolonu bulun
+        const updatedColumn = await Column.findByIdAndUpdate(
+          columnId,
+          { title: newTitle },
+          { new: true } // Güncellenmiş belgeyi dönmek için
         );
-        if(!updateColumn){
-            return res.status(404).json({succeed:false,message:"güncellenmiş kolon ismi bulunamadı"});
+    
+        if (!updatedColumn) {
+          return res.status(404).json({ error: 'Kolon bulunamadı.' });
         }
-        res.status(200).json({succeed:true,message:"kolon güncelleme başarılı",updateColumn});
-    }catch(error){
-        console.error("hata:",error);
-        res.status(500).json({succeed:false,message:"Sunucu hatası",error})
+    
+        res.json(updatedColumn);
+      } catch (error) {
+        console.error('Kolon güncelleme hatası:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      }
+    // try{
+    //     const {title,projectId}=req.body;
 
-    }
+    //     const updateColumn =await Column.findByIdAndUpdate(
+    //         {project:projectId,title:title},
+    //          {new:true}
+    //     );
+    //     if(!updateColumn){
+    //         return res.status(404).json({succeed:false,message:"güncellenmiş kolon ismi bulunamadı"});
+    //     }
+    //     res.status(200).json({succeed:true,message:"kolon güncelleme başarılı",updateColumn});
+    // }catch(error){
+    //     console.error("hata:",error);
+    //     res.status(500).json({succeed:false,message:"burada hata Sunucu hatası",error})
+
+    // }
 };
 const getColumn = async(req,res)=>{
     const{projectId}=req.body;
