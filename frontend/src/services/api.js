@@ -1,3 +1,5 @@
+
+
 import axios from "axios";
 
 
@@ -48,7 +50,7 @@ export default{
           return response;
         },
         async getInfo(id){
-          const response = await instance.get("http://localhost:3001/user/getInfo",{params:{id}},{withCredentials: true});
+          const response = await instance.post("http://localhost:3001/user/getInfo",{params:{id}},{withCredentials: true});
           return response.data;
         },
         
@@ -241,19 +243,9 @@ async updateColumn(newColumn){
     alert(error)
   }
 },  
-async updateColumnName(title,projectId){
+ async deleteColumn(project){
   try {
-    const response = await axios.post("http://localhost:3001/column/updateColumnName",{title,projectId}, { withCredentials: true });
-
-    return response.data;
-
-  } catch (error) {
-    alert(error)
-  }
-},
- async deleteColumn(id){
-  try {
-    const response = await axios.post("http://localhost:3001/column/deleteColumn",{id}, { withCredentials: true });
+    const response = await axios.post("http://localhost:3001/column/deleteColumn",{project}, { withCredentials: true });
 
     return response.data;
 

@@ -1,10 +1,11 @@
+
+
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "../icons/TrashIcon";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 // import PlusIcon from "../icons/PlusIcon";
 import TaskForm from "./taskForm";
-import { Hidden } from "@mui/material";
 
 function ColumnForm({
   column,
@@ -15,9 +16,8 @@ function ColumnForm({
   deleteTask,
   updateTask,
 }) {
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(true);
   const [mouseIsOver, setMouseIsOver] = useState(false);
-  const [newTitle, setNewTitle] = useState(column.title);
 
   const tasksIds = useMemo(() => {
     return tasks.map((task) => task.id);
@@ -36,7 +36,6 @@ function ColumnForm({
       type: "Column",
       column,
     },
-    
     disabled: editMode,
   });
 
@@ -44,6 +43,16 @@ function ColumnForm({
     
     transition,
     transform: CSS.Transform.toString(transform),
+    backgroundColor:"#E0E0E0",
+    // opacity: "0.4",
+    borderWidth: "2px",
+    borderColor: "pink",
+    width:"250px",
+    height: "800px",
+    maxHeight: "500px",
+    borderRadius:"15px",
+    display:"flex",
+    flexDirection: "column"
   };
 
   if (isDragging) {
@@ -63,7 +72,10 @@ function ColumnForm({
       flex
       flex-col
       "
-      ></div>
+      
+      >
+      
+      </div>
     );
   }
 
@@ -88,7 +100,24 @@ function ColumnForm({
         onClick={() => {
           setEditMode(true);
         }}
-        style={{height:"20%"}}
+        style={{
+          backgroundColor: "#161C22",
+          fontSize: "1.25rem",
+          height: "60px",
+          cursor: "grab",
+          borderRadius: "0.375rem",
+          // border-bottom-left-radius: "0",
+          // border-bottom-right-radius: 0
+
+          padding: "0.75rem",
+          fontWeight: "bold",
+          borderColor: "#2ecc71",
+          borderWidth: "0.25rem" ,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+ 
+        }}
         className="
       bg-mainBackgroundColor
       text-md
@@ -106,43 +135,41 @@ function ColumnForm({
       "
       >
         <div className="flex gap-2"
-       style={{ textAlign:"center",color:"#f2f2f2",textTransform: 'uppercase'}}>
-       {/* <div
-       style={{backgroundColor:"green"}}
-         className="
-     flex
-     justify-center
-     items-center
-     
-     px-2
-     py-1
-     text-sm
-     rounded-full
-     "
-       >
-         
-       </div> */}
-       {!editMode && column.title}
-       {editMode && (
-         <input
-           className="bg-black focus:border-rose-500 border rounded outline-none px-2"
-           value={newTitle}
-           onChange={(e) => setNewTitle(e.target.value)}
-           autoFocus
-           onBlur={() => {
-             setEditMode(false);
-             updateColumn(column.id, newTitle, column.columnId); 
-           }}
-           onKeyDown={(e) => {
-             if (e.key !== "Enter") return;
-             setEditMode(false);
-             updateColumn(column.id, newTitle, column.columnId);
-           }}
-         />
-       )}
-     </div>
-    
-       <button
+        style={{ textAlign:"center",color:"#f2f2f2",textTransform: 'uppercase'}}>
+          {/* <div
+          style={{backgroundColor:"green"}}
+            className="
+        flex
+        justify-center
+        items-center
+        
+        px-2
+        py-1
+        text-sm
+        rounded-full
+        "
+          >
+            
+          </div> */}
+          {!editMode && column.title}
+          {editMode && (
+            <input
+              className="bg-black focus:border-rose-500 border rounded outline-none px-2"
+              value={column.title}
+              onChange={(e) => updateColumn(column.id, e.target.value)}
+              autoFocus
+              onBlur={() => {
+                setEditMode(true);
+              }}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter") return;
+                setEditMode(false);
+              }}
+            />
+          )}
+        </div>
+       
+        <button
           onClick={() => {
             deleteColumn(column.id);
           }}
@@ -171,8 +198,8 @@ function ColumnForm({
       </div>
 
       {/* Column task container */}
-      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto"
-      style={{ display: "flex", flexGrow:"1", flexDirection:"column",gap: "1rem", padding: "2rem",overflowX:"Hidden",overflowY: "auto"}}
+      <div className=""
+      style={{display:"flex",  flexDirection: "column",flexGrow: 1,gap: "1rem", padding: "0.5rem",overflowX: "hidden",  overflowY: "auto"}}
       >
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
@@ -231,3 +258,4 @@ export default ColumnForm;
 // };
 
 // export default ColumnForm;
+

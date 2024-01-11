@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate  } from 'react-router-dom';
 import Table from '@mui/material/Table';
@@ -41,7 +42,7 @@ function Projects() {
       );
 
       const newRows = userInfos.map(({ projectName, customerInfo, projectId }) =>
-        createData(projectName, `${customerInfo.firstName} ${customerInfo.lastName}`, projectId)
+        createData(projectName, customerInfo, projectId)
       );
 
       setRows(newRows);

@@ -1,3 +1,4 @@
+
 import express from 'express';
 import { authenticate } from '../middlewares/auth.js';
 import * as userController from "../controllers/userController.js"
@@ -11,8 +12,9 @@ router.get('/profile', authenticate, (req, res) => {
 });
 
 router.route("/getProfile").get(authenticate,userController.getProfile)
-router.route("/getInfo").get(userController.getInfo)
+router.route("/getInfo").post(userController.getInfo)
 
 
 
 export default router;
+
