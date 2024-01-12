@@ -4,14 +4,14 @@ import api from "../../services/api.js"
 import {useNavigate} from "react-router-dom";
 import React, { useState, useEffect } from 'react';
 import Header from './componentss/header.js';
-
-
-
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 function Dashboard() {
     const navigate = useNavigate();
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [date, setDate] = useState(new Date());
  
 
 
@@ -20,7 +20,9 @@ function Dashboard() {
         console.log("user bu",user)
 
     }
-   
+     const onChange = (newDate) => {
+    setDate(newDate);
+     }
   return (
     <>
     <div id="page-top"> 
@@ -166,9 +168,17 @@ function Dashboard() {
 
     
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 style={{justifyContent:"center",textAlign:"center",position:"absolute",left:"660px",top:"270px"}} class="h3 mb-0 text-gray-800">HOŞ GELDİNİZ 
+        <div >
+            <h1>HOŞ GELDİNİZ</h1>
+      
+      {/* Takvim bileşenini ekleyin ve onChange prop'unu kullanarak tarih seçimini izleyin */}
+
+      <Calendar onChange={onChange} value={date} />
+      {/* Diğer içerikleri ekleyin */}
+    </div>
+        {/* <h1 style={{justifyContent:"center",textAlign:"center",position:"absolute",left:"660px",top:"270px"}} class="h3 mb-0 text-gray-800">HOŞ GELDİNİZ 
         <br/><br/>HAYDİ BAŞLAYALIM
-        </h1>
+        </h1> */}
 
             {/* <div className="kanban-container">
       <div className="kanban-column" id="todo-column" onDragOver={handleDragOver} onDrop={(e) => handleDrop(e, 'todo')}>
