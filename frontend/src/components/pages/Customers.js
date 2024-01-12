@@ -49,6 +49,7 @@ function Customers() {
   const [newInputValue, setNewInputValue] = React.useState('');
   const [updatedValue, setUpdatedValue] = React.useState('');
   const [open, setOpen] = React.useState(false);
+  const [open1, setOpen1] = React.useState(false);
 
   const [editedData, setEditedData] = React.useState({
     id: '',
@@ -335,460 +336,619 @@ const handleFormSubmit = async (e) => {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleClickOpen = () => {
+    setOpen1(true);
+  };
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
+  var buttonElement = document.querySelector('.MuiDataGrid-menuIconButton');
 
-  return (
-    <>
-      <div id="page-top">
-        <div id="wrapper">
-
-
-          <ul class="navbar-nav bg-gradient-primary1 sidebar sidebar-dark accordion" id="accordionSidebar">
-
-
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="Dashboard">
-              <div class="sidebar-brand-icon ">
-                <img src="./assets/img/logo.png"  ></img>
-                {/* <i class="fas fa-laugh-wink"></i> */}
-              </div>
-              <div class="sidebar-brand-text mx-3"></div>
-            </a>
-
-            <hr class="sidebar-divider my-0" />
+  // Eğer button elementi bulunduysa, kaldır
+  if (buttonElement) {
+      buttonElement.parentNode.removeChild(buttonElement);
+  }
+  var footerContainer = document.querySelector('.MuiDataGrid-footerContainer');
 
 
-            <li class="nav-item active">
-              <a class="nav-link" href="index.html">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span></a>
-            </li>
+if (footerContainer) {
+    footerContainer.parentNode.removeChild(footerContainer);
+}
+var elementsToRemove = document.querySelectorAll('.MuiDataGrid-sortIcon, .MuiDataGrid-footerContainer, .MuiDataGrid-iconButtonContainer');
 
+elementsToRemove.forEach(function(element) {
+    if (element) {
+        element.parentNode.removeChild(element);
+    }
+});
 
-            <hr class="sidebar-divider" />
+var sortButtonElement = document.querySelector('.MuiDataGrid-sortIcon');
 
+// Eğer button elementi bulunduysa, üstteki container'ı kaldır
+if (sortButtonElement) {
+    var iconButtonContainer = sortButtonElement.closest('.MuiDataGrid-iconButtonContainer');
+    if (iconButtonContainer) {
+        iconButtonContainer.parentNode.removeChild(iconButtonContainer);
+    }
+}
+const removeElementsByClass = (className) => {
+  const elementsToRemove = document.querySelectorAll(className);
 
-            <div class="sidebar-heading">
+  elementsToRemove.forEach((element) => {
+      if (element) {
+          element.parentNode.removeChild(element);
+      }
+  });
+};
 
+// Belirli sınıflara sahip öğeleri kaldırmak için sınıfları belirtin
+const classesToRemove = ['.MuiTablePagination-selectLabel', '.css-pdct74-MuiTablePagination-selectLabel','.MuiTablePagination-input', '.css-16c50h-MuiInputBase-root-MuiTablePagination-select',
+'.MuiTablePagination-root', '.MuiToolbar-root', '.MuiTablePagination-spacer', '.MuiTablePagination-displayedRows', '.MuiTablePagination-actions'];
+
+removeElementsByClass(classesToRemove.join(', '));
+
+document.addEventListener("DOMContentLoaded", function () {
+  // Belirtilen sınıflara sahip öğeleri seç
+  var sortButtonContainer = document.querySelector('.MuiDataGrid-iconButtonContainer');
+  var menuButton = document.querySelector('.MuiDataGrid-menuIconButton');
+
+  // Eğer öğeler bulunursa kaldır
+  if (sortButtonContainer) {
+    sortButtonContainer.parentNode.removeChild(sortButtonContainer);
+  }
+
+  if (menuButton) {
+    menuButton.parentNode.removeChild(menuButton);
+  }
+});
+document.addEventListener("DOMContentLoaded", function () {
+  // Belirtilen sınıfa sahip öğeyi seç
+  var unwantedButton = document.querySelector('.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeSmall.MuiDataGrid-menuIconButton.css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root');
+
+  // Eğer öğe bulunursa kaldır
+  if (unwantedButton) {
+    unwantedButton.parentNode.removeChild(unwantedButton);
+  }
+});
+return (
+  <>
+    <div id="page-top">
+      <div id="wrapper">
+        <ul
+          class="navbar-nav bg-gradient-primary1 sidebar sidebar-dark accordion"
+          id="accordionSidebar"
+        >
+          <a
+            class="sidebar-brand d-flex align-items-center justify-content-center"
+            href="Dashboard"
+          >
+            <div class="sidebar-brand-icon ">
+              <img src="./assets/img/logo.png"></img>
+              {/* <i class="fas fa-laugh-wink"></i> */}
             </div>
+            <div class="sidebar-brand-text mx-3"></div>
+          </a>
 
-            <li class="nav-item">
-              <a class="nav-link " href="/customers" data-target="#collapseTwo"
-                aria-expanded="true" aria-controls="collapseTwo">
-                <i class="fas fa-fw fa-cog"></i>
-                <span>Müşteriler</span>
-              </a>
+          <hr class="sidebar-divider my-0" />
 
-            </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="index.html">
+              <i class="fas fa-fw fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
 
+          <hr class="sidebar-divider" />
 
-            <li class="nav-item">
-              <a class="nav-link " href="projectManagement" data-target="#collapseUtilities"
-                aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span>Proje Yönetimi</span>
-              </a>
+          <div class="sidebar-heading"></div>
 
-            </li>
+          <li class="nav-item">
+            <a
+              class="nav-link "
+              href="/customers"
+              data-target="#collapseTwo"
+              aria-expanded="true"
+              aria-controls="collapseTwo"
+            >
+              <i class="fas fa-fw fa-cog"></i>
+              <span>Müşteriler</span>
+            </a>
+          </li>
 
-            {/* <hr class="sidebar-divider"/> */}
+          <li class="nav-item">
+            <a
+              class="nav-link "
+              href="projectManagement"
+              data-target="#collapseUtilities"
+              aria-expanded="true"
+              aria-controls="collapseUtilities"
+            >
+              <i class="fas fa-fw fa-wrench"></i>
+              <span>Proje Yönetimi</span>
+            </a>
+          </li>
 
+          {/* <hr class="sidebar-divider"/> */}
 
-            {/* <div class="sidebar-heading">
-    Addons
+          {/* <div class="sidebar-heading">
+  Addons
 </div> */}
 
+          <li class="nav-item">
+            <a
+              class="nav-link "
+              href="/businessRegistration"
+              data-target="#collapsePages"
+              aria-expanded="true"
+              aria-controls="collapsePages"
+            >
+              <i class="fas fa-fw fa-folder"></i>
+              <span>İş Kaydı</span>
+            </a>
+          </li>
 
-            <li class="nav-item">
-              <a class="nav-link " href="/businessRegistration" data-target="#collapsePages"
-                aria-expanded="true" aria-controls="collapsePages">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>İş Kaydı</span>
-              </a>
+          <li class="nav-item">
+            <a class="nav-link" href="/bills">
+              <i class="fas fa-fw fa-chart-area"></i>
+              <span>Faturalar</span>
+            </a>
+          </li>
+        </ul>
+        <div id="content-wrapper" class="d-flex flex-column">
+          <div id="content">
+            <Header />
 
-            </li>
-
-
-            <li class="nav-item">
-              <a class="nav-link" href="/bills">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Faturalar</span></a>
-            </li>
-
-
-</ul>
-<div id="content-wrapper" class="d-flex flex-column">
-
-
-<div id="content">
-
-   
-    <Header/>
-
-
-    <div class="container-fluid">
-<div className="">
+            <div class="container-fluid">
+              <div className="">
                 <div className="container">
-                    <div className="row justify-content-center">
-                    
-                        <div className="col-xl-10 col-lg-12 col-md-9">
-                            <div className="my-5">
-                                <div className="p-0">
-                                    <div className="row">
-                                        <div className="col-lg-6 d-none d-lg-block musteri1">
-                                        <div className="p-5">
-                                                <div className="text-center">
-                                                    <h1 className="h4 text-gray-900 mb-4">Müşteri Ekle  </h1>
-                                                </div>
-                                                <form className="user" onSubmit={handleFormSubmit}>
-                                                    <div className="form-group">
-                                                        <input
-                                                            type="text"
-                                                            value={name} 
-                                                            onChange={(e) => setName(e.target.value)}
-                                                            //onBlur={(e) => onBlur("firstName", e.target.value)}
-                                                            className="form-control form-control-user"
-                                                            id="exampleInputEmail"
-                                                            aria-describedby="emailHelp"
-                                                            placeholder="Müşteri Ad"
-                                                        />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <input
-                                                            type="text"
-                                                            value={surname} 
-                                                            onChange={(e) => setsurName(e.target.value)} 
-                                                            // onBlur={(e) => onBlur("lastName", e.target.value)}
-                                                            className="form-control form-control-user"
-                                                            id="exampleInputPassword"
-                                                            placeholder="Müşteri Soyad"
-                                                        />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <input
-                                                            type="email"
-                                                            value={email} 
-                                                            onChange={(e) => setEmail(e.target.value)}
-                                                            // onBlur={(e) => onBlur("email", e.target.value)}
-                                                            className="form-control form-control-user"
-                                                            id="exampleInputPassword"
-                                                            placeholder="Müşteri Email"
-                                                        />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <input
-                                                            type="text"
-                                                            value={phone} 
-                                                            onChange={(e) => setPhone(e.target.value)}
-                                                            // onBlur={(e) => onBlur("phone", e.target.value)}
-                                                            className="form-control form-control-user"
-                                                            id="exampleInputPassword"
-                                                            placeholder="Müşteri Telefon"
-                                                        />
-                                                    </div>
-                                                    <div className="form-group">
-                                                        <input
-                                                            type="text"
-                                                            value={projectName} 
-                                                            onChange={(e) => setProjectName(e.target.value)} 
-                                                            // onBlur={(e) => onBlur("projectName", e.target.value)}
-                                                            className="form-control form-control-user"
-                                                            id="exampleInputPassword"
-                                                            placeholder="Proje Adı"
-                                                        />
-                                                    </div>
-                                                    
+                  <div className="row justify-content-center">
+                    <div className="col-xl-10 col-lg-12 col-md-9">
+                      <div className="my-5">
+                        <div className="p-0">
+                          <div className="row">
+                            <div  >
+                              <div className="p-5">
+                                <Button
+                                className=" musteri1"
+                                  variant="outlined"
+                                  color="primary"
+                                  onClick={handleClickOpen}
+                                >
+                                  Müşteri Ekle
+                                </Button>
+                                <Dialog
+                                  open={open1}
+                                  onClose={handleClose1}
+                                  maxWidth="xl"
+                                  PaperProps={{
+                                    sx: {
+                                      Height: "5000px",
+                                   
+                                      Width: "500px",
+                                    },
+                                  }}
+                                >
+                                  <div className="text-center">
+                                                  <h1 className="h4 text-gray-900 mb-4">Müşteri Ekle  </h1>
+                                              </div>
+                                  <form className="user" onSubmit={handleFormSubmit}>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="text"
+                                                          value={name} 
+                                                          onChange={(e) => setName(e.target.value)}
+                                                          //onBlur={(e) => onBlur("firstName", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputEmail"
+                                                          aria-describedby="emailHelp"
+                                                          placeholder="Müşteri Ad"
+                                                      />
+                                                  </div>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="text"
+                                                          value={surname} 
+                                                          onChange={(e) => setsurName(e.target.value)} 
+                                                          // onBlur={(e) => onBlur("lastName", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputPassword"
+                                                          placeholder="Müşteri Soyad"
+                                                      />
+                                                  </div>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="email"
+                                                          value={email} 
+                                                          onChange={(e) => setEmail(e.target.value)}
+                                                          // onBlur={(e) => onBlur("email", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputPassword"
+                                                          placeholder="Müşteri Email"
+                                                      />
+                                                  </div>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="text"
+                                                          value={phone} 
+                                                          onChange={(e) => setPhone(e.target.value)}
+                                                          // onBlur={(e) => onBlur("phone", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputPassword"
+                                                          placeholder="Müşteri Telefon"
+                                                      />
+                                                  </div>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="text"
+                                                          value={projectName} 
+                                                          onChange={(e) => setProjectName(e.target.value)} 
+                                                          // onBlur={(e) => onBlur("projectName", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputPassword"
+                                                          placeholder="Proje Adı"
+                                                      />
+                                                  </div>
+                                                  
 
-                                                    
+                                                  
 
-                                                   
-                                                    <button type="submit" className="btn btn-primary btn-user btn-block">
-                                                       Ekle
-                                                    </button>
-                                                   
-                                                   
-                                                </form>
-                                             
-                                            </div>
-                                  
-                                        </div>
-                                        <div className="col-lg-6 ">
-                                        <div class="flex align-items-center  mb-4">
-           <h1 class="h3 mb-0 text-gray-800"></h1> 
+                                                 
+                                                  <button type="submit" className="btn btn-primary btn-user btn-block">
+                                                     Ekle
+                                                  </button>
+                                                 
+                                                 
+                                              </form> 
+                         
+                                </Dialog>
+                                {/* <div className="text-center">
+                                                  <h1 className="h4 text-gray-900 mb-4">Müşteri Ekle  </h1>
+                                              </div>
+                                              <form className="user" onSubmit={handleFormSubmit}>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="text"
+                                                          value={name} 
+                                                          onChange={(e) => setName(e.target.value)}
+                                                          //onBlur={(e) => onBlur("firstName", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputEmail"
+                                                          aria-describedby="emailHelp"
+                                                          placeholder="Müşteri Ad"
+                                                      />
+                                                  </div>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="text"
+                                                          value={surname} 
+                                                          onChange={(e) => setsurName(e.target.value)} 
+                                                          // onBlur={(e) => onBlur("lastName", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputPassword"
+                                                          placeholder="Müşteri Soyad"
+                                                      />
+                                                  </div>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="email"
+                                                          value={email} 
+                                                          onChange={(e) => setEmail(e.target.value)}
+                                                          // onBlur={(e) => onBlur("email", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputPassword"
+                                                          placeholder="Müşteri Email"
+                                                      />
+                                                  </div>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="text"
+                                                          value={phone} 
+                                                          onChange={(e) => setPhone(e.target.value)}
+                                                          // onBlur={(e) => onBlur("phone", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputPassword"
+                                                          placeholder="Müşteri Telefon"
+                                                      />
+                                                  </div>
+                                                  <div className="form-group">
+                                                      <input
+                                                          type="text"
+                                                          value={projectName} 
+                                                          onChange={(e) => setProjectName(e.target.value)} 
+                                                          // onBlur={(e) => onBlur("projectName", e.target.value)}
+                                                          className="form-control form-control-user"
+                                                          id="exampleInputPassword"
+                                                          placeholder="Proje Adı"
+                                                      />
+                                                  </div>
+                                                  
 
-          
+                                                  
 
-            <div style={{ height: 500, width: 700 }}>
-            <DataGrid
-  rows={rows}
-  columns={columns}
-  pageSize={10}
-  rowsPerPageOptions={[10, 20, 50]}
-  checkboxSelection
-  onCellEditStop={(params, event) => {
-    if (params.field !== undefined) {
-
-     handleRowEditCommit(params);
-    }
-  }}/>
-
-    </div>
-
-
-
-
-     {/* <Box
-      sx={{
-        height: 500,
-        width: '100%',
-        marginRight: 200,
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
-      }}
-    />
-    <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-      />  */}
-     
-            {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>  */}
-        </div>
-
-
-    </div>
-  
-
-</div>
-
-
-
-                                         
-                                        </div>
-                                    </div>
-                                </div>
+                                                 
+                                                  <button type="submit" className="btn btn-primary btn-user btn-block">
+                                                     Ekle
+                                                  </button>
+                                                 
+                                                 
+                                              </form> */}
+                              </div>
                             </div>
-                        </div>
-                    </div>
-                   
-                    <footer class="sticky-footer ">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto ">
-           
-        </div>
-    </div>
-    
-</footer>
+                            <div className="">
+                              <div class="flex align-items-center  mb-4">
+                                <h1 class="h3 mb-0 text-gray-800"></h1>
 
+                                <div style={{marginLeft:-50, height: 500, width: 1000, backgroundColor:"#ffffff",marginTop:-150, padding:"10px"
+                              
+                                
+                            }}>
+                                  <DataGrid
+                                    rows={rows}
+                                    columns={columns}
+                                   
+                                    onCellEditStop={(params, event) => {
+                                      if (params.field !== undefined) {
+                                        handleRowEditCommit(params);
+                                      }
+                                    }}
+                                  />
+                                </div>
 
-         
-{/* <div id="content-wrapper" class="d-flex flex-column">
-
-
-            <div id="content">
-
-
-              <Header />
-
-
-    <div class="container-fluid">
-    <form onSubmit={handleFormSubmit}>
-      <label>
-        Adı:
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-      </label>
-      <label>
-        Soyadı:
-        <input type="text" value={surname} onChange={(e) => setsurName(e.target.value)} />
-      </label>
-      <label>
-        E-Posta:
-        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
-      </label>
-      <label>
-        Numara:
-        <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
-      </label>
-      <label>
-        Proje Adı:
-        <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
-      </label>
-      <button type="submit">Müşteri Ekle</button>
-    </form> */}
-    
-        {/* <div class="flex align-items-center  mb-4"> */}
-            {/* <h1 class="h3 mb-0 text-gray-800"></h1> */}
-
-
-                  <Dialog open={open} onClose={handleClose} maxWidth="xl" PaperProps={{
-                    sx: {
-                      minHeight: "25%",
-                      maxHeight: "25%",maxWidth:"90%"
-
-                    }
-                  }} >
-                    <form 
-                    style={{justifyContent:"center",margin:"80px"}}
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column"
-                    }} onSubmit={handleUpdate}>
-                      <label>
-                        Adı:
-                        <input
-                        style={{ marginLeft: "15px" }}
-                          type="text"
-                          value={editedData.firstName}
-                          onChange={(e) =>
-                            setEditedData({ ...editedData, firstName: e.target.value })
-                          }
-                        />
-                      </label>
-
-                      <label style={{ marginLeft: "15px" }}>
-                        Soyadı:
-                        <input
-                        style={{ marginLeft: "15px" }}
-                          type="text"
-                          value={editedData.lastName}
-                          onChange={(e) =>
-                            setEditedData({ ...editedData, lastName: e.target.value })
-                          }
-                        />
-                      </label>
-                      <label style={{ marginLeft: "15px" }}>
-                        E-Posta:
-                        <input
-                        style={{ marginLeft: "15px" }}
-                          type="text"
-                          value={editedData.email}
-                          onChange={(e) =>
-                            setEditedData({ ...editedData, email: e.target.value })
-                          }
-                        />
-                      </label>
-                      <label style={{ marginLeft: "15px" }}>
-                        Numara:
-                        <input
-                        style={{ marginLeft: "15px" }}
-                          type="text"
-                          value={editedData.phone}
-                          onChange={(e) =>
-                            setEditedData({ ...editedData, phone: e.target.value })
-                          }
-                        />
-                      </label >
-                      <label style={{ marginLeft: "15px" }}>
-                        Proje Adı:
-                        <input
-                        style={{ marginLeft: "15px" }}
-                          type="text"
-                          value={editedData.projectName}
-                          onChange={(e) =>
-                            setEditedData({ ...editedData, projectName: e.target.value })
-                          }
-                        />
-                      </label>
-                      <Button style={{ marginLeft: "15px" }} type="submit">Değişiklikleri Kaydet</Button>
-                    </form>
-                  </Dialog>
-
-            {/* <div style={{ height: 500, width: '100%' }}>
-            <DataGrid
-  rows={rows}
-  columns={columns}
-  pageSize={10}
-  rowsPerPageOptions={[10, 20, 50]}
-  checkboxSelection
-  onCellEditStop={(params, event) => {
-    if (params.field !== undefined) {
-
-     handleRowEditCommit(params);
-    }
-  }}/>
-
-    </div> */}
-
-
-
-
-    {/* <Box
-      sx={{
-        height: 500,
-        width: '100%',
-        marginRight: 200,
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
+                                {/* <Box
+    sx={{
+      height: 500,
+      width: '100%',
+      marginRight: 200,
+      '& .actions': {
+        color: 'text.secondary',
+      },
+      '& .textPrimary': {
+        color: 'text.primary',
+      },
+    }}
+  />
+  <DataGrid
+      rows={rows}
+      columns={columns}
+      editMode="row"
+      rowModesModel={rowModesModel}
+      onRowModesModelChange={handleRowModesModelChange}
+      onRowEditStop={handleRowEditStop}
+      processRowUpdate={processRowUpdate}
+      slots={{
+        toolbar: EditToolbar,
       }}
-    >
-      {/* <DataGrid
-        rows={rows}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar,
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel },
-        }}
-      /> */}
-     
-            {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
-        {/* </div>
+      slotProps={{
+        toolbar: { setRows, setRowModesModel },
+      }}
+    />  */}
 
-
+                                {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                  class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>  */}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
+
+              <footer class="sticky-footer ">
+                <div class="container my-auto">
+                  <div class="copyright text-center my-auto "></div>
+                </div>
+              </footer>
+
+              {/* <div id="content-wrapper" class="d-flex flex-column">
+
+
+          <div id="content">
+
+
+            <Header />
+
+
+  <div class="container-fluid">
+  <form onSubmit={handleFormSubmit}>
+    <label>
+      Adı:
+      <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+    </label>
+    <label>
+      Soyadı:
+      <input type="text" value={surname} onChange={(e) => setsurName(e.target.value)} />
+    </label>
+    <label>
+      E-Posta:
+      <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
+    </label>
+    <label>
+      Numara:
+      <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} />
+    </label>
+    <label>
+      Proje Adı:
+      <input type="text" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
+    </label>
+    <button type="submit">Müşteri Ekle</button>
+  </form> */}
+
+              {/* <div class="flex align-items-center  mb-4"> */}
+              {/* <h1 class="h3 mb-0 text-gray-800"></h1> */}
+
+              <Dialog
+                open={open}
+                onClose={handleClose}
+                maxWidth="xl"
+                PaperProps={{
+                  sx: {
+                    minHeight: "25%",
+                    maxHeight: "25%",
+                    maxWidth: "90%",
+                  },
+                }}
+              >
+                <form
+                  style={{ justifyContent: "center", margin: "80px" }}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                  onSubmit={handleUpdate}
+                >
+                  <label>
+                    Adı:
+                    <input
+                      style={{ marginLeft: "15px" }}
+                      type="text"
+                      value={editedData.firstName}
+                      onChange={(e) =>
+                        setEditedData({
+                          ...editedData,
+                          firstName: e.target.value,
+                        })
+                      }
+                    />
+                  </label>
+
+                  <label style={{ marginLeft: "15px" }}>
+                    Soyadı:
+                    <input
+                      style={{ marginLeft: "15px" }}
+                      type="text"
+                      value={editedData.lastName}
+                      onChange={(e) =>
+                        setEditedData({
+                          ...editedData,
+                          lastName: e.target.value,
+                        })
+                      }
+                    />
+                  </label>
+                  <label style={{ marginLeft: "15px" }}>
+                    E-Posta:
+                    <input
+                      style={{ marginLeft: "15px" }}
+                      type="text"
+                      value={editedData.email}
+                      onChange={(e) =>
+                        setEditedData({
+                          ...editedData,
+                          email: e.target.value,
+                        })
+                      }
+                    />
+                  </label>
+                  <label style={{ marginLeft: "15px" }}>
+                    Numara:
+                    <input
+                      style={{ marginLeft: "15px" }}
+                      type="text"
+                      value={editedData.phone}
+                      onChange={(e) =>
+                        setEditedData({
+                          ...editedData,
+                          phone: e.target.value,
+                        })
+                      }
+                    />
+                  </label>
+                  <label style={{ marginLeft: "15px" }}>
+                    Proje Adı:
+                    <input
+                      style={{ marginLeft: "15px" }}
+                      type="text"
+                      value={editedData.projectName}
+                      onChange={(e) =>
+                        setEditedData({
+                          ...editedData,
+                          projectName: e.target.value,
+                        })
+                      }
+                    />
+                  </label>
+                  <Button style={{ marginLeft: "15px" }} type="submit">
+                    Değişiklikleri Kaydet
+                  </Button>
+                </form>
+              </Dialog>
+
+              {/* <div style={{ height: 500, width: '100%' }}>
+          <DataGrid
+rows={rows}
+columns={columns}
+pageSize={10}
+rowsPerPageOptions={[10, 20, 50]}
+checkboxSelection
+onCellEditStop={(params, event) => {
+  if (params.field !== undefined) {
+
+   handleRowEditCommit(params);
+  }
+}}/>
+
+  </div> */}
+
+              {/* <Box
+    sx={{
+      height: 500,
+      width: '100%',
+      marginRight: 200,
+      '& .actions': {
+        color: 'text.secondary',
+      },
+      '& .textPrimary': {
+        color: 'text.primary',
+      },
+    }}
+  >
+    {/* <DataGrid
+      rows={rows}
+      columns={columns}
+      editMode="row"
+      rowModesModel={rowModesModel}
+      onRowModesModelChange={handleRowModesModelChange}
+      onRowEditStop={handleRowEditStop}
+      processRowUpdate={processRowUpdate}
+      slots={{
+        toolbar: EditToolbar,
+      }}
+      slotProps={{
+        toolbar: { setRows, setRowModesModel },
+      }}
+    /> */}
+
+              {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+                  class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
+              {/* </div>
 
 
             </div>
 
 
+          </div>
 
-            <footer class="sticky-footer bg-white">
-              <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                  <span>Copyright &copy; Your Website 2021</span>
-                </div>
+
+
+          <footer class="sticky-footer bg-white">
+            <div class="container my-auto">
+              <div class="copyright text-center my-auto">
+                <span>Copyright &copy; Your Website 2021</span>
               </div>
-            </footer>
+            </div>
+          </footer>
 
 
 </div>*/}
-
-    </div> 
-
-
-
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    </div>
-    </div>
-    </div>
-   
-    </>
-
-  );
+  </>
+);
 }
 
 export default Customers;
