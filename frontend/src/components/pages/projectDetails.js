@@ -329,6 +329,8 @@ function ProjectManagement() {
     await api.column.updateColumnName(updatedColumn);
   };
 
+  
+
   function deleteColumn(id) {
     const filteredColumns = columns.filter((col) => col.id !== id);
     api.column.deleteColumn(id);
@@ -487,6 +489,10 @@ function ProjectManagement() {
 
     
     <div
+
+    style={{margin:"auto", display: "flex",minHeight: "100vh",width: "100%",alignItems: "center", overflowX: "auto",
+    overflowY: "hidden",
+    paddingLeft: "40px"}}
       className="
         m-auto
         flex
@@ -532,6 +538,12 @@ function ProjectManagement() {
             onClick={() => {
               createNewColumn();
             }}
+
+            // style={{ height: "60px",width: "100px",cursor: "pointer",borderRadius: "8px",
+            //  border: "2px ",
+            //   padding: "16px",
+            //   outline: "none",
+            //   ringColor: "#rose-500"}}
             className="
 
       h-[30000px]
@@ -548,7 +560,7 @@ function ProjectManagement() {
       flex
       gap-2
       "
-      style={{color:"#f2f2f2",height:"500px", width:"600px"}}
+      style={{color:"#f2f2f2",height:"50px"}}
           >
         Kolon Ekle
           </button> 

@@ -43,20 +43,23 @@ const UpdateColumnName = async (req,res)=>{
     try {
         const { columnId, newTitle } = req.body;
     
-        // Veritabanında güncellenmek istenen kolonu bulun
+        
         const updatedColumn = await Column.findByIdAndUpdate(
           columnId,
           { title: newTitle },
-          { new: true } // Güncellenmiş belgeyi dönmek için
+          { new: true } 
         );
     
         if (!updatedColumn) {
+            console.log("Nil anka mı diyim");
           return res.status(404).json({ error: 'Kolon bulunamadı.' });
+        
         }
     
         res.json(updatedColumn);
       } catch (error) {
         console.error('Kolon güncelleme hatası:', error);
+        console.log("ne oldu sana Hiroş")
         res.status(500).json({ error: 'Internal Server Error' });
       }
     // try{

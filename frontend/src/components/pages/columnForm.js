@@ -104,6 +104,7 @@ function ColumnForm({
           backgroundColor: "#161C22",
           fontSize: "1.25rem",
           height: "60px",
+          width:"250px",
           cursor: "grab",
           borderRadius: "0.375rem",
           // border-bottom-left-radius: "0",
@@ -135,7 +136,7 @@ function ColumnForm({
       "
       >
         <div className="flex gap-2"
-        style={{ textAlign:"center",color:"#f2f2f2",textTransform: 'uppercase'}}>
+        style={{ textAlign:"center",color:"#f2f2f2",textTransform: 'uppercase',width:"550px"}}>
           {/* <div
           style={{backgroundColor:"green"}}
             className="

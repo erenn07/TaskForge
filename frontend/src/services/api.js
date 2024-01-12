@@ -236,13 +236,23 @@ async getColumn(projectId) {
 async updateColumn(newColumn){
   try {
     const response = await axios.post("http://localhost:3001/column/updateColumn",{newColumn}, { withCredentials: true });
+console.log("burada mı hata")
+    return response.data;
+
+  } catch (error) {
+    alert(error)
+  }
+}, 
+async updateColumnName(title,projectId){
+  try {
+    const response = await axios.post("http://localhost:3001/column/updateColumnName",{title,projectId}, { withCredentials: true });
 
     return response.data;
 
   } catch (error) {
     alert(error)
   }
-},  
+}, 
  async deleteColumn(project){
   try {
     const response = await axios.post("http://localhost:3001/column/deleteColumn",{project}, { withCredentials: true });
