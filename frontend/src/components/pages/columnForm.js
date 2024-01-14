@@ -4,7 +4,7 @@ import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "../icons/TrashIcon";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
-// import PlusIcon from "../icons/PlusIcon";
+import PlusIcon from "../icons/PlusIcon";
 import TaskForm from "./taskForm";
 
 function ColumnForm({
@@ -101,7 +101,7 @@ function ColumnForm({
           setEditMode(true);
         }}
         style={{
-          backgroundColor: "#161C22",
+          backgroundColor: "#003466",
           fontSize: "1.25rem",
           height: "60px",
           width:"250px",
@@ -160,11 +160,11 @@ function ColumnForm({
               onChange={(e) => updateColumn(column.id, e.target.value)}
               autoFocus
               onBlur={() => {
-                setEditMode(true);
+                setEditMode(false);
               }}
               onKeyDown={(e) => {
                 if (e.key !== "Enter") return;
-                setEditMode(false);
+                setEditMode(true);
               }}
             />
           )}
@@ -176,7 +176,7 @@ function ColumnForm({
           }}
           style={{ width:"50px"}}
           onMouseEnter={() => {
-            setMouseIsOver(true);
+            setMouseIsOver(false);
           }}
           onMouseLeave={() => {
             setMouseIsOver(false);
@@ -215,14 +215,14 @@ function ColumnForm({
       </div>
       {/* Column footer */}
       <button
-      style={{backgroundColor:"#f2f2f2",borderRadius:"8px"}}
+      style={{backgroundColor:"#003466",borderRadius:"8px",color:'#f2f2f2'}}
       
         className="flex gap-2 items-center border-columnBackgroundColor border-2 rounded-md p-4 border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-rose-500 active:bg-black"
         onClick={() => {
           createTask(column.id);
         }}
       >
-        {/* <PlusIcon /> */}
+         <PlusIcon /> 
         TASK EKLE
         
       </button>

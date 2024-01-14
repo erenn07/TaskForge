@@ -1,5 +1,5 @@
 import { useState } from "react";
-// import TrashIcon from "../icons/TrashIcon";
+import TrashIcon from "../icons/TrashIcon";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { green, red } from "@mui/material/colors";
@@ -120,10 +120,12 @@ function TaskForm({ task, deleteTask, updateTask }) {
           onClick={() => {
             deleteTask(task.id);
           }}
+          style={{width:40,height:40}}
           className="stroke-white absolute right-4 top-1/2 -translate-y-1/2 bg-columnBackgroundColor p-2 rounded opacity-60 hover:opacity-100" 
         >
-          SİL
-          {/* <TrashIcon /> */}
+          
+         
+          <TrashIcon />
         </button>
       )}
     </div>

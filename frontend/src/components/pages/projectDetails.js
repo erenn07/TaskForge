@@ -560,7 +560,7 @@ function ProjectManagement() {
       flex
       gap-2
       "
-      style={{color:"#f2f2f2",height:"50px"}}
+      style={{color:"#f2f2f2",height:"50px",position:'relative',top:-200,lineHeight:'normal'}}
           >
         Kolon Ekle
           </button> 
