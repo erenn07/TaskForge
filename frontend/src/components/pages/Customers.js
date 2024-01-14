@@ -804,7 +804,7 @@ function Customers() {
                   maxWidth="xl"
                   PaperProps={{
                     style: {
-                      height: "500px",
+                      height: "700px",
 
                       width: "500px",
                       padding: "25px",
@@ -816,6 +816,7 @@ function Customers() {
                   </div>
                   <form className="user" onSubmit={handleUpdate}>
                     <div className="form-group">
+                      <label>Müşteri Ad:</label>
                       <input
                         type="text"
                         value={editedData.firstName}
@@ -832,6 +833,7 @@ function Customers() {
                       />
                     </div>
                     <div className="form-group">
+                    <label>Müşteri Soyad:</label>
                       <input
                         type="text"
                         value={editedData.lastName}
@@ -847,6 +849,7 @@ function Customers() {
                       />
                     </div>
                     <div className="form-group">
+                    <label>Müşteri Email:</label>
                       <input
                         type="email"
                         value={editedData.email}
@@ -862,6 +865,7 @@ function Customers() {
                       />
                     </div>
                     <div className="form-group">
+                    <label>Müşteri Telefon:</label>
                       <input
                         type="text"
                         value={editedData.phone}
@@ -877,6 +881,7 @@ function Customers() {
                       />
                     </div>
                     <div className="form-group">
+                    <label>Proje Adı:</label>
                       <input
                         type="text"
                         value={editedData.projectName}
