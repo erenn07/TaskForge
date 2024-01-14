@@ -513,10 +513,10 @@ function ProjectManagement() {
       >
         <div className="m-auto flex gap-4 flex-row"style={{ justifyContent:"center",display: "flex",
   flexDirection: "row",
-  gap: "4rem",}}>
+  gap: "4rem"}}>
           <div className="flex gap-4 "style={{ justifyContent:"center",display: "flex",
   flexDirection: "row",
-  gap: "6rem",height:"16rem"}}  >
+  gap: "6rem",height:"16rem",position:'relative',top:-200}}  >
             <SortableContext items={columnsId}>
   {columns.map((col) => (
     <ColumnForm
