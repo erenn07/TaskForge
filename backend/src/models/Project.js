@@ -6,6 +6,10 @@ const ProjectSchema = new mongoose.Schema(
         type:String,
         required:false
     },
+    description:{
+      type:String,
+      required:false
+  },
     customer: {
         type: String,
         ref: 'Customer',

@@ -157,6 +157,7 @@ function Projects() {
         <TableHead>
           <TableRow >
             <TableCell align="left"style={{fontWeight: 'bold'}}>Proje </TableCell>
+            <TableCell align="center" style={{fontWeight: 'bold'}}>Proje Künyesi</TableCell>
             <TableCell align="center" style={{fontWeight: 'bold'}}>Müşteri Bilgileri</TableCell>
             <TableCell align="center" style={{fontWeight: 'bold'}}>Yönet</TableCell>
            
@@ -172,6 +173,7 @@ function Projects() {
               <TableCell align="left"scope="row">
                 {row.ProjectName}
               </TableCell>
+              <TableCell align="center" >{row.description}</TableCell>
               <TableCell align="center" >{row.CustomerName}</TableCell>
               <TableCell align="center" >   
                 <Button
@@ -190,7 +192,7 @@ function Projects() {
                   startIcon={<SearchOutlinedIcon />}
                   onClick={() => handleRowClick(row.projectId)}
                 >
-                  İncele
+                  Panoya Git
                 </Button>
               </TableCell>
 
