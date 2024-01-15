@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate  } from 'react-router-dom';
 import Table from '@mui/material/Table';
@@ -36,14 +35,23 @@ function Projects() {
       const userInfos = await Promise.all(
         response.map(async (item) => {
           const customerInfo = await api.user.getInfo(item.customer);
-          console.log(item.customer)
           return { projectName: item.projectName, customerInfo, projectId: item._id };
         })
       );
-
-      const newRows = userInfos.map(({ projectName, customerInfo, projectId }) =>
-        createData(projectName, customerInfo, projectId)
-      );
+      const newRows = userInfos.map(({ projectName, customerInfo, projectId }) => {
+        if (customerInfo && customerInfo.firstName && customerInfo.lastName) {
+          return createData(projectName, `${customerInfo.firstName} ${customerInfo.lastName}`, projectId);
+        } else {
+          // customerInfo veya özellikleri null veya tanımsızsa başa çıkmak için bir şey yapın
+          if (!customerInfo) {
+            return createData(projectName, 'Bilinmeyen Müşteri (Bilgi Yok)', projectId);
+          } else {
+            return createData(projectName, 'Bilinmeyen Müşteri (Ad veya Soyad Yok)', projectId);
+          }
+        }
+      });
+      
+      
 
       setRows(newRows);
     } catch (error) {
@@ -157,7 +165,6 @@ function Projects() {
         <TableHead>
           <TableRow >
             <TableCell align="left"style={{fontWeight: 'bold'}}>Proje </TableCell>
-            <TableCell align="center" style={{fontWeight: 'bold'}}>Proje Künyesi</TableCell>
             <TableCell align="center" style={{fontWeight: 'bold'}}>Müşteri Bilgileri</TableCell>
             <TableCell align="center" style={{fontWeight: 'bold'}}>Yönet</TableCell>
            
@@ -173,7 +180,6 @@ function Projects() {
               <TableCell align="left"scope="row">
                 {row.ProjectName}
               </TableCell>
-              <TableCell align="center" >{row.description}</TableCell>
               <TableCell align="center" >{row.CustomerName}</TableCell>
               <TableCell align="center" >   
                 <Button
@@ -192,7 +198,7 @@ function Projects() {
                   startIcon={<SearchOutlinedIcon />}
                   onClick={() => handleRowClick(row.projectId)}
                 >
-                  Panoya Git
+                  İncele
                 </Button>
               </TableCell>
 
