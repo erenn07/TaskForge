@@ -19,9 +19,9 @@ function Projects() {
 
   const navigate = useNavigate();
 
-  function createData(ProjectName, CustomerName,description, projectId) {
+  function createData(ProjectName, CustomerName,projectDescription, projectId) {
 
-    return { ProjectName, CustomerName,description, projectId };
+    return { ProjectName, CustomerName,projectDescription, projectId };
   }
 
   const getProject = async () => {
@@ -35,12 +35,14 @@ function Projects() {
       const userInfos = await Promise.all(
         response.map(async (item) => {
           const customerInfo = await api.user.getInfo(item.customer);
-          return { projectName: item.projectName,projectDescription:item.projectDescription, customerInfo, projectId: item._id };
+          return { projectName: item.projectName, customerInfo,projectDescription:item.projectDescription, projectId: item._id };
         })
       );
-      const newRows = userInfos.map(({ projectName,projectDescription,customerInfo, projectId }) => {
+      const newRows = userInfos.map(({ projectName,customerInfo,projectDescription, projectId }) => {
+        console.log("Burada açıklamayı bakcam");
+        console.log(projectDescription)
         if (customerInfo && customerInfo.firstName && customerInfo.lastName) {
-          return createData(projectName, projectDescription,`${customerInfo.firstName} ${customerInfo.lastName}`, projectId);
+          return createData(projectName, `${customerInfo.firstName} ${customerInfo.lastName}`,projectDescription, projectId);
         } else {
           // customerInfo veya özellikleri null veya tanımsızsa başa çıkmak için bir şey yapın
           if (!customerInfo) {
@@ -183,6 +185,7 @@ function Projects() {
               </TableCell>
               <TableCell align="center" >{row.projectDescription}</TableCell>
               <TableCell align="center" >{row.CustomerName}</TableCell>
+
            
               <TableCell align="center" >   
                 <Button
