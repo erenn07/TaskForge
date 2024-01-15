@@ -89,9 +89,9 @@ export default{
             alert(error)
           }
         },
-        async addCustomer(name,surname,email,phone,projectName,userId){
+        async addCustomer(name,surname,email,phone,projectName,projectDescription,userId){
           try {
-            const response = await axios.post("http://localhost:3001/customer/addCustomer",{name,surname,email,phone,projectName,userId} ,{withCredentials: true});
+            const response = await axios.post("http://localhost:3001/customer/addCustomer",{name,surname,email,phone,projectName,projectDescription,userId} ,{withCredentials: true});
 
               return response.data;
           

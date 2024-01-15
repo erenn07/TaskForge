@@ -19,9 +19,9 @@ function Projects() {
 
   const navigate = useNavigate();
 
-  function createData(ProjectName, CustomerName, projectId) {
+  function createData(ProjectName, CustomerName,description, projectId) {
 
-    return { ProjectName, CustomerName, projectId };
+    return { ProjectName, CustomerName,description, projectId };
   }
 
   const getProject = async () => {
@@ -35,12 +35,12 @@ function Projects() {
       const userInfos = await Promise.all(
         response.map(async (item) => {
           const customerInfo = await api.user.getInfo(item.customer);
-          return { projectName: item.projectName, customerInfo, projectId: item._id };
+          return { projectName: item.projectName,projectDescription:item.projectDescription, customerInfo, projectId: item._id };
         })
       );
-      const newRows = userInfos.map(({ projectName, customerInfo, projectId }) => {
+      const newRows = userInfos.map(({ projectName,projectDescription,customerInfo, projectId }) => {
         if (customerInfo && customerInfo.firstName && customerInfo.lastName) {
-          return createData(projectName, `${customerInfo.firstName} ${customerInfo.lastName}`, projectId);
+          return createData(projectName, projectDescription,`${customerInfo.firstName} ${customerInfo.lastName}`, projectId);
         } else {
           // customerInfo veya özellikleri null veya tanımsızsa başa çıkmak için bir şey yapın
           if (!customerInfo) {
@@ -165,6 +165,7 @@ function Projects() {
         <TableHead>
           <TableRow >
             <TableCell align="left"style={{fontWeight: 'bold'}}>Proje </TableCell>
+            <TableCell align="center" style={{fontWeight: 'bold'}}>Proje Künyesi</TableCell>
             <TableCell align="center" style={{fontWeight: 'bold'}}>Müşteri Bilgileri</TableCell>
             <TableCell align="center" style={{fontWeight: 'bold'}}>Yönet</TableCell>
            
@@ -180,7 +181,9 @@ function Projects() {
               <TableCell align="left"scope="row">
                 {row.ProjectName}
               </TableCell>
+              <TableCell align="center" >{row.projectDescription}</TableCell>
               <TableCell align="center" >{row.CustomerName}</TableCell>
+           
               <TableCell align="center" >   
                 <Button
                     align="right"

@@ -43,6 +43,7 @@ function Customers() {
   const [email, setEmail] = React.useState("");
   const [phone, setPhone] = React.useState("");
   const [projectName, setProjectName] = React.useState("");
+  const [projectDescription, setProjectDescription] = React.useState("");
   const [gridData, setGridData] = React.useState([]);
   const [newInputValue, setNewInputValue] = React.useState("");
   const [updatedValue, setUpdatedValue] = React.useState("");
@@ -56,6 +57,7 @@ function Customers() {
     email: "",
     phone: "",
     projectName: "",
+    
   });
   const userToken = localStorage.getItem("userToken");
 
@@ -117,17 +119,20 @@ function Customers() {
         email,
         phone,
         projectName,
+        projectDescription,
         creatorID
       );
       const {
         userId: customerId,
         email: customerEmail,
         projectName: customerProjectName,
+        projectDescription:customerprojectDescription
       } = response;
       const projectPayload = {
         customerId: customerId,
         customerEmail: customerEmail,
         customerProjectName: customerProjectName,
+        projectDescription:customerprojectDescription
       };
       //    const projectRes=await api.project.addProject(projectPayload)
 
@@ -137,6 +142,8 @@ function Customers() {
       setEmail("");
       setPhone("");
       setProjectName("");
+      setProjectDescription("");
+      
       window.location.reload();
     } catch (error) {
       if (error.response) {
@@ -605,6 +612,19 @@ function Customers() {
                                           className="form-control form-control-user"
                                           id="exampleInputPassword"
                                           placeholder="Proje Adı"
+                                        />
+                                      </div>
+                                      <div className="form-group">
+                                        <input
+                                          type="text"
+                                          value={projectDescription}
+                                          onChange={(e) =>
+                                            setProjectDescription(e.target.value)
+                                          }
+                                          // onBlur={(e) => onBlur("projectName", e.target.value)}
+                                          className="form-control form-control-user"
+                                          id="exampleInputPassword"
+                                          placeholder="Proje Künyesi"
                                         />
                                       </div>
 

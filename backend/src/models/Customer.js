@@ -25,6 +25,11 @@ const CustomerSchema = new mongoose.Schema(
       required: true,
 
     },
+    projectDescription: {
+      type: String,
+      required: true,
+
+    },
     creatorID: {
       type: String,
       required: false
