@@ -204,7 +204,7 @@ function Projects() {
                   startIcon={<SearchOutlinedIcon />}
                   onClick={() => handleRowClick(row.projectId)}
                 >
-                  İncele
+                 Panoya Git
                 </Button>
               </TableCell>
 
