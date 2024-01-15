@@ -164,7 +164,7 @@ function ColumnForm({
               }}
               onKeyDown={(e) => {
                 if (e.key !== "Enter") return;
-                setEditMode(true);
+                setEditMode(false);
               }}
             />
           )}
@@ -176,7 +176,7 @@ function ColumnForm({
           }}
           style={{ width:"50px"}}
           onMouseEnter={() => {
-            setMouseIsOver(false);
+            setMouseIsOver(true);
           }}
           onMouseLeave={() => {
             setMouseIsOver(false);

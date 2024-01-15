@@ -277,7 +277,8 @@ function ProjectManagement() {
     const columnToAdd = {
       id: generateId(),
       title: `Column ${columns.length + 1}`,
-     columnName:`Column ${columns.length + 1}`,
+      projectId
+     //columnName:`Column ${columns.length + 1}`,
     };
 
     api.column.addColumn(columnToAdd);
@@ -302,43 +303,43 @@ function ProjectManagement() {
 
   }
 
-  const updateColumnName = async (id,columnName,projectId)=>{
-    const columnToUpdate= columns.find((column)=> column.id ===id);
-    console.log(projectId + "update column")
-    if (!columnToUpdate) {
-      console.error('Güncellenecek kolon bulunamadı.');
-      return;
-    }
+  // const updateColumnName = async (id,columnName,projectId)=>{
+  //   const columnToUpdate= columns.find((column)=> column.id ===id);
+  //   console.log(projectId + "update column")
+  //   if (!columnToUpdate) {
+  //     console.error('Güncellenecek kolon bulunamadı.');
+  //     return;
+  //   }
   
-    const updatedColumn = {
-      projectId,
-      columnName, 
+  //   const updatedColumn = {
+  //     projectId,
+  //     columnName, 
       
-    };
-    console.log("Güncellenen column: ", updatedColumn); 
+  //   };
+  //   console.log("Güncellenen column: ", updatedColumn); 
 
-    const updatedcolumns = columns.map((column) => {
-      if (column.id === id) {
-        return { ...column, ...updatedColumn };
-      }
-      return column;
-    });
+  //   const updatedcolumns = columns.map((column) => {
+  //     if (column.id === id) {
+  //       return { ...column, ...updatedColumn };
+  //     }
+  //     return column;
+  //   });
   
-    setColumns(updatedcolumns);
+  //   setColumns(updatedcolumns);
   
-    await api.column.updateColumnName(updatedColumn);
-  };
+  //   await api.column.updateColumnName(updatedColumn);
+  // };
 
   
 
-  function deleteColumn(id) {
-    const filteredColumns = columns.filter((col) => col.id !== id);
-    api.column.deleteColumn(id);
-    setColumns(filteredColumns);
+  // function deleteColumn(id,columnName) {
+  //   const filteredColumns = columns.filter((col) => col.id !== id);
+  //   api.column.deleteColumn(id);
+  //   setColumns(filteredColumns);
 
-    const newTasks = tasks.filter((t) => t.columnId !== id);
-    setTasks(newTasks);
-  }
+  //   const newTasks = tasks.filter((t) => t.columnId !== id);
+  //   setTasks(newTasks);
+  // }
 
   // function updateColumn(id, title) {
   //   const newColumns = columns.map((col) => {
@@ -349,37 +350,36 @@ function ProjectManagement() {
   //   setColumns(newColumns);
   
   //  }
-  const updateColumn = async (id, title, columnId) => {
-    const columnToUpdate = columns.find((column) => column.id === id);
-    console.log(projectId + "update taskkkkkk");
-    if (!columnToUpdate) {
-      console.error('Güncellenecek görev bulunamadı.');
-      return;
-    }
+  const deleteColumn = async (id, columnName) => {
+    try {
+      const columnToDelete = columns.find((col) => col.id === id);
   
-    const updatedColumn = {
-      projectId,
-      oldTitle:columnToUpdate.title,
-      title,
-      columnId, 
-      
-    };
-
-    console.log("Güncellenen Task: ", updatedColumn); 
-
-    const updatedColumns = columns.map((column) => {
-    
-      if (column.id === id) {
-        return { ...column,...title ,...updatedColumn };
+      if (!columnToDelete) {
+        console.error('Silinecek sütun bulunamadı.');
+        return;
       }
-      return column;
-    });
   
-    setColumns(updatedColumns);
-   
-    await api.column.updateColumn(updatedColumn);
+      console.log(columnToDelete.title, "cooolllll")
+      await api.column.deleteColumn({ projectId, columnName: columnToDelete.title });
+      const filteredColumns = columns.filter((col) => col.id !== id);
+      setColumns(filteredColumns);
+  
+      const newTasks = tasks.filter((task) => task.columnId !== id);
+      setTasks(newTasks);
+    } catch (error) {
+      console.error("Sütun silme hatası:", error);
+    }
   };
+  
+  
+  function updateColumn(id, title) {
+    const newColumns = columns.map((col) => {
+      if (col.id !== id) return col;
+      return { ...col, title };
+    });
 
+    setColumns(newColumns);
+  }
   useEffect(()=>{
     getTask();
     getExistColumn()
@@ -524,7 +524,7 @@ function ProjectManagement() {
       column={col}
       deleteColumn={deleteColumn}
       updateColumn={updateColumn}
-      updateColumnName={updateColumnName}
+      // updateColumnName={updateColumnName}
       createTask={createTask}
       deleteTask={(taskId, content) => deleteTask(taskId, content, col.id)}
       updateTask={(taskId, content) => updateTask(taskId, content, col.id )}
