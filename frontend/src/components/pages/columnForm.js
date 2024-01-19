@@ -1,8 +1,10 @@
+
+
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "../icons/TrashIcon";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
-// import PlusIcon from "../icons/PlusIcon";
+import PlusIcon from "../icons/PlusIcon";
 import TaskForm from "./taskForm";
 
 function ColumnForm({ 
@@ -14,7 +16,7 @@ function ColumnForm({
   deleteTask,
   updateTask,
 }) {
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(true);
   const [mouseIsOver, setMouseIsOver] = useState(false);
 
   const tasksIds = useMemo(() => {
@@ -41,6 +43,16 @@ function ColumnForm({
     
     transition,
     transform: CSS.Transform.toString(transform),
+    backgroundColor:"#E0E0E0",
+    // opacity: "0.4",
+    borderWidth: "2px",
+    borderColor: "pink",
+    width:"250px",
+    height: "800px",
+    maxHeight: "500px",
+    borderRadius:"15px",
+    display:"flex",
+    flexDirection: "column"
   };
 
   if (isDragging) {
@@ -60,7 +72,10 @@ function ColumnForm({
       flex
       flex-col
       "
-      ></div>
+      
+      >
+      
+      </div>
     );
   }
 
@@ -85,7 +100,25 @@ function ColumnForm({
         onClick={() => {
           setEditMode(true);
         }}
-        style={{height:"20%"}}
+        style={{
+          backgroundColor: "#003466",
+          fontSize: "1.25rem",
+          height: "60px",
+          width:"250px",
+          cursor: "grab",
+          borderRadius: "0.375rem",
+          // border-bottom-left-radius: "0",
+          // border-bottom-right-radius: 0
+
+          padding: "0.75rem",
+          fontWeight: "bold",
+          borderColor: "#2ecc71",
+          borderWidth: "0.25rem" ,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+ 
+        }}
         className="
       bg-mainBackgroundColor
       text-md
@@ -103,7 +136,7 @@ function ColumnForm({
       "
       >
         <div className="flex gap-2"
-        style={{ textAlign:"center",color:"#f2f2f2",textTransform: 'uppercase'}}>
+        style={{ textAlign:"center",color:"#f2f2f2",textTransform: 'uppercase',width:"550px"}}>
           {/* <div
           style={{backgroundColor:"green"}}
             className="
@@ -166,7 +199,8 @@ function ColumnForm({
       </div>
 
       {/* Column task container */}
-      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto"
+      <div className=""
+      style={{display:"flex",  flexDirection: "column",flexGrow: 1,gap: "1rem", padding: "0.5rem",overflowX: "hidden",  overflowY: "auto"}}
       >
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
@@ -181,14 +215,14 @@ function ColumnForm({
       </div>
       {/* Column footer */}
       <button
-      style={{backgroundColor:"#f2f2f2",borderRadius:"8px"}}
+      style={{backgroundColor:"#003466",borderRadius:"8px",color:'#f2f2f2'}}
       
         className="flex gap-2 items-center border-columnBackgroundColor border-2 rounded-md p-4 border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-rose-500 active:bg-black"
         onClick={() => {
           createTask(column.title);
         }}
       >
-        {/* <PlusIcon /> */}
+         <PlusIcon /> 
         TASK EKLE
         
       </button>
@@ -225,3 +259,4 @@ export default ColumnForm;
 // };
 
 // export default ColumnForm;
+

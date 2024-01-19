@@ -6,8 +6,9 @@ import userRoutes from './src/routes/user.js';
 import customerRoutes from './src/routes/customer.js';
 import projectRoutes from './src/routes/project.js';
 import taskRoutes from './src/routes/task.js';
-import cookieParser from 'cookie-parser';
 import columnRoutes from './src/routes/column.js';
+import cookieParser from 'cookie-parser';
+
 
 dotenv.config()
 
@@ -35,6 +36,7 @@ app.use("/auth",authRoutes)
 app.use("/user",userRoutes)
 app.use("/customer",customerRoutes)
 app.use("/task",taskRoutes)
+app.use("/column",columnRoutes)
 app.use("/project",projectRoutes)
 app.use("/column",columnRoutes)
 

@@ -5,7 +5,7 @@ import Project from "../models/Project.js";
 const addCustomer= async(req,res)=>{
     try {
       
-      const {name, surname,phone,email,projectName,userId} = req.body;
+      const {name, surname,phone,email,projectName,projectDescription,userId} = req.body;
 
       const isEmailValid = validateEmail(email);
       if (!isEmailValid) {
@@ -31,6 +31,7 @@ const addCustomer= async(req,res)=>{
         lastName:surname,
         phone:phone,
         projectName:projectName,
+        projectDescription:projectDescription,
         email:email,
         creatorID:userId,
       })
@@ -42,6 +43,7 @@ const addCustomer= async(req,res)=>{
         
         const project = await Project.create({
           projectName: projectName,
+          projectDescription:projectDescription,
           customer: customerId,
           creatorID:customer.creatorID,
         });
@@ -51,7 +53,8 @@ const addCustomer= async(req,res)=>{
           message: 'customer added successfully',
           userId: customerId,
           email: email,
-          projectName: projectName
+          projectName: projectName,
+          projectDescription:projectDescription
         });
       
     } catch (error) {

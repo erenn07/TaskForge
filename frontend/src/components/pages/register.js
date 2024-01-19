@@ -27,7 +27,7 @@ const navigate = useNavigate();
         
             if(response.status===201){    
                 alert(response.data.message)
-                navigate("/")
+                navigate('/');
             }else{
                 if (response.message){
                   alert(response.message);  

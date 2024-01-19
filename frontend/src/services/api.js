@@ -1,3 +1,5 @@
+
+
 import axios from "axios";
 
 
@@ -47,8 +49,8 @@ export default{
            });
           return response;
         },
-        async getInfo(id){
-          const response = await instance.get("http://localhost:3001/user/getInfo",{params:{id}},{withCredentials: true});
+        async getInfo(Id){
+          const response = await instance.get("http://localhost:3001/user/getInfo",{params:{Id}},{withCredentials: true});
           return response.data;
         },
         
@@ -87,9 +89,9 @@ export default{
             alert(error)
           }
         },
-        async addCustomer(name,surname,email,phone,projectName,userId){
+        async addCustomer(name,surname,email,phone,projectName,projectDescription,userId){
           try {
-            const response = await axios.post("http://localhost:3001/customer/addCustomer",{name,surname,email,phone,projectName,userId} ,{withCredentials: true});
+            const response = await axios.post("http://localhost:3001/customer/addCustomer",{name,surname,email,phone,projectName,projectDescription,userId} ,{withCredentials: true});
 
               return response.data;
           
@@ -154,9 +156,15 @@ export default{
             alert(error)
           }
         }, 
-        async deleteProject(projectId){
-          const response = await axios.post("http://localhost:3001/project/deleteProject",{projectId},{withCredentials: true});
-          return response.data;
+        async deleteColumn(project){
+          try {
+            const response = await axios.post("http://localhost:3001/column/deleteColumn",{project}, { withCredentials: true });
+        
+            return response.data;
+        
+          } catch (error) {
+            alert(error)
+          }
         }
       },
      
@@ -241,6 +249,16 @@ async updateColumn(newColumn){
     alert(error)
   }
 },  
+async updateColumnName(title,projectId){
+  try {
+    const response = await axios.post("http://localhost:3001/column/updateColumnName",{title,projectId}, { withCredentials: true });
+
+    return response.data;
+
+  } catch (error) {
+    alert(error)
+  }
+}, 
  async deleteColumn(project){
   try {
     const response = await axios.post("http://localhost:3001/column/deleteColumn",{project}, { withCredentials: true });

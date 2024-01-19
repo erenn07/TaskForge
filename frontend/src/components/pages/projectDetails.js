@@ -266,17 +266,20 @@ function ProjectManagement() {
       });
     }
   };
-  
   function createNewColumn() {
     const columnToAdd = {
       id: `Column ${columns.length + 1}`,
       //id: `Column ${columns.length + 1}`,
       title: `Column ${columns.length + 1}`,
       projectId
+     //columnName:`Column ${columns.length + 1}`,
     };
+
     api.column.addColumn(columnToAdd);
+
     setColumns([...columns, columnToAdd]);
   }
+
   const  getExistColumn = async ()=>{
     console.log("get column front:", projectId);
     const response = await api.column.getColumn(projectId);
@@ -289,6 +292,7 @@ function ProjectManagement() {
      title: item.columnName,
       
     }));
+   
   
     setColumns([...defaultCols, ...newColumns]);
 
@@ -374,6 +378,10 @@ const updateColumn = async (id, content, columnId) => {
     
 
   },[])
+
+  
+
+
 
 
   return (
@@ -468,6 +476,10 @@ const updateColumn = async (id, content, columnId) => {
 
     
     <div
+
+    style={{margin:"auto", display: "flex",minHeight: "100vh",width: "100%",alignItems: "center", overflowX: "auto",
+    overflowY: "hidden",
+    paddingLeft: "40px"}}
       className="
         m-auto
         flex
@@ -488,11 +500,11 @@ const updateColumn = async (id, content, columnId) => {
       >
         <div className="m-auto flex gap-4 flex-row"style={{ justifyContent:"center",display: "flex",
   flexDirection: "row",
-  gap: "4rem",}}>
+  gap: "4rem"}}>
           <div className="flex gap-4 "style={{ justifyContent:"center",display: "flex",
   flexDirection: "row",
-  gap: "6rem",height:"16rem"}}  >
-          <SortableContext items={columnsId}>
+  gap: "6rem",height:"16rem",position:'relative',top:-200}}  >
+            <SortableContext items={columnsId}>
   {columns.map((col) => (
     <ColumnForm
       key={col.id}
@@ -515,6 +527,12 @@ const updateColumn = async (id, content, columnId) => {
             onClick={() => {
               createNewColumn();
             }}
+
+            // style={{ height: "60px",width: "100px",cursor: "pointer",borderRadius: "8px",
+            //  border: "2px ",
+            //   padding: "16px",
+            //   outline: "none",
+            //   ringColor: "#rose-500"}}
             className="
 
       h-[30000px]
@@ -531,7 +549,7 @@ const updateColumn = async (id, content, columnId) => {
       flex
       gap-2
       "
-      style={{color:"#f2f2f2"}}
+      style={{color:"#f2f2f2",height:"50px",position:'relative',top:-200,lineHeight:'normal'}}
           >
         Kolon Ekle
           </button> 
@@ -545,6 +563,7 @@ const updateColumn = async (id, content, columnId) => {
                 column={activeColumn}
                 deleteColumn={deleteColumn}
                 updateColumn={updateColumn}
+                //columns={columns.filter((column)=>column.id=== activeColumn.id)}
                 createTask={createTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}

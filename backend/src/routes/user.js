@@ -1,3 +1,4 @@
+
 import express from 'express';
 import { authenticate } from '../middlewares/auth.js';
 import * as userController from "../controllers/userController.js"
@@ -16,3 +17,4 @@ router.route("/getInfo").get(userController.getInfo)
 
 
 export default router;
+

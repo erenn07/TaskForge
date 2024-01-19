@@ -19,9 +19,9 @@ function Projects() {
 
   const navigate = useNavigate();
 
-  function createData(ProjectName, CustomerName, projectId) {
+  function createData(ProjectName, CustomerName,projectDescription, projectId) {
 
-    return { ProjectName, CustomerName, projectId };
+    return { ProjectName, CustomerName,projectDescription, projectId };
   }
 
   const getProject = async () => {
@@ -35,14 +35,25 @@ function Projects() {
       const userInfos = await Promise.all(
         response.map(async (item) => {
           const customerInfo = await api.user.getInfo(item.customer);
-          console.log(item.customer)
-          return { projectName: item.projectName, customerInfo, projectId: item._id };
+          return { projectName: item.projectName, customerInfo,projectDescription:item.projectDescription, projectId: item._id };
         })
       );
-
-      const newRows = userInfos.map(({ projectName, customerInfo, projectId }) =>
-        createData(projectName, `${customerInfo.firstName} ${customerInfo.lastName}`, projectId)
-      );
+      const newRows = userInfos.map(({ projectName,customerInfo,projectDescription, projectId }) => {
+        console.log("Burada açıklamayı bakcam");
+        console.log(projectDescription)
+        if (customerInfo && customerInfo.firstName && customerInfo.lastName) {
+          return createData(projectName, `${customerInfo.firstName} ${customerInfo.lastName}`,projectDescription, projectId);
+        } else {
+          // customerInfo veya özellikleri null veya tanımsızsa başa çıkmak için bir şey yapın
+          if (!customerInfo) {
+            return createData(projectName, 'Bilinmeyen Müşteri (Bilgi Yok)', projectId);
+          } else {
+            return createData(projectName, 'Bilinmeyen Müşteri (Ad veya Soyad Yok)', projectId);
+          }
+        }
+      });
+      
+      
 
       setRows(newRows);
     } catch (error) {
@@ -156,6 +167,7 @@ function Projects() {
         <TableHead>
           <TableRow >
             <TableCell align="left"style={{fontWeight: 'bold'}}>Proje </TableCell>
+            <TableCell align="center" style={{fontWeight: 'bold'}}>Proje Künyesi</TableCell>
             <TableCell align="center" style={{fontWeight: 'bold'}}>Müşteri Bilgileri</TableCell>
             <TableCell align="center" style={{fontWeight: 'bold'}}>Yönet</TableCell>
            
@@ -171,7 +183,10 @@ function Projects() {
               <TableCell align="left"scope="row">
                 {row.ProjectName}
               </TableCell>
+              <TableCell align="center" >{row.projectDescription}</TableCell>
               <TableCell align="center" >{row.CustomerName}</TableCell>
+
+           
               <TableCell align="center" >   
                 <Button
                     align="right"
@@ -189,7 +204,7 @@ function Projects() {
                   startIcon={<SearchOutlinedIcon />}
                   onClick={() => handleRowClick(row.projectId)}
                 >
-                  İncele
+                 Panoya Git
                 </Button>
               </TableCell>
 

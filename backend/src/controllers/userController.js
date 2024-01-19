@@ -14,8 +14,8 @@ const getProfile = async(req,res)=>{
 }
 const getInfo = async(req,res)=>{
   try {
-    const {id}= req.query;
-      const user= await Customer.findById(id);      
+    const {Id}= req.query;
+      const user= await Customer.findById(Id);      
       res.status(200).json(user);
     } catch (error) {
       throw error;
