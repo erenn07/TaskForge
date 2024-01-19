@@ -6,7 +6,7 @@ import Header from './componentss/header';
 import api from ".././../services/api.js"
 import { useMemo } from "react";
 import { Column, Id, Task } from "./types";
-import ColumnForm from "./columnForm";
+import ColumnForm from "./columnForm";                                                                         
 import {
   DndContext,
   DragEndEvent,
@@ -24,15 +24,15 @@ import TaskForm from "./taskForm";
 
 const defaultCols = [
   {
-    id: "todo",
+    id: "YAPILACAK",
     title: "YAPILACAK",
   },
   {
-    id: "doing",
+    id: "İŞLEMDE",
     title: "İŞLEMDE",
   },
   {
-    id: "done",
+    id: "TAMAMLANDI",
     title: "TAMAMLANDI",
   },
 ];
@@ -71,14 +71,7 @@ function ProjectManagement() {
     //setTasks(response);
     
   }
-  const getColumn=async()=>{
-    //console.log("get task front:",projectId)
-    //const response = await api.task.getTask(projectId);
-    //console.log("gelen cevap da bu:",response)
-    
-    //setTasks(response);
-    
-  }
+
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -88,61 +81,61 @@ function ProjectManagement() {
     })
   );
 
-  const  createTask= async (columnId)=>{
+  const createTask = async (columnName) => {
     const newTask = {
       id: generateId(),
-      columnId,
+      columnId: columnName,
       content: `Task ${tasks.length + 1}`,
-      projectId
-
+      projectId,
     };
-
-        api.task.addTask(newTask);
     setTasks([...tasks, newTask]);
-  }
-  const  getExistTask= async (columnId)=>{
+
+    api.task.addTask(newTask);
+  };
+  
+  
+  const getExistTask = async () => {
     console.log("get task front:", projectId);
     const response = await api.task.getTask(projectId);
-    console.log("gelen cevap da bu:", response);
+    console.log("API Response:", response);
   
     const newTasks = response.map((item) => ({
-     id: generateId(),
+      id: generateId(),
       columnId: item.status,
       content: item.taskName,
-      
     }));
   
     setTasks(newTasks);
-
-  }
-
-
-  const updateStatus = async (id, content, columnId) => {
-    const taskToUpdate = tasks.find((task) => task.id === id);
-    console.log(projectId + "update taskkkkkk");
-    if (!taskToUpdate) {
-      console.error('Güncellenecek görev bulunamadı.');
-      return;
-    }
-  
-    const updatedTask = {
-      projectId,
-      content, 
-      status: columnId, 
-    };
-    console.log("Güncellenen Task: ", updatedTask); 
-
-    const updatedTasks = tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, ...updatedTask };
-      }
-      return task;
-    });
-  
-    setTasks(updatedTasks);
-  
-    await api.task.updateTask(updatedTask);
   };
+  
+
+
+  // const updateStatus = async (id, content, columnId) => {
+  //   const taskToUpdate = tasks.find((task) => task.id === id);  
+  //   console.log(projectId + "update taskkkkkk");
+  //   if (!taskToUpdate) {
+  //     console.error('Güncellenecek görev bulunamadı.');
+  //     return;
+  //   }
+  
+  //   const updatedTask = {
+  //     projectId,
+  //     content, 
+  //     status: columnId, 
+  //   };
+  //   console.log("Güncellenen Task: ", updatedTask); 
+
+  //   const updatedTasks = tasks.map((task) => {
+  //     if (task.id === id) {
+  //       return { ...task, ...updatedTask };
+  //     }
+  //     return task;
+  //   });
+  
+  //   setTasks(updatedTasks);
+  
+  //   await api.task.updateTask(updatedTask);
+  // };
 
   //delete
   const deleteTask = async (id, content) => {
@@ -276,7 +269,7 @@ function ProjectManagement() {
   
   function createNewColumn() {
     const columnToAdd = {
-      id: generateId(),
+      id: `Column ${columns.length + 1}`,
       //id: `Column ${columns.length + 1}`,
       title: `Column ${columns.length + 1}`,
       projectId
@@ -321,18 +314,53 @@ function ProjectManagement() {
     }
   };
   
-  
-  function updateColumn(id, title) {
-    const newColumns = columns.map((col) => {
-      if (col.id !== id) return col;
-      return { ...col, title };
+ // updateColumn fonksiyonu...
+const updateColumn = async (id, content, columnId) => {
+  try {
+    const colToUpdate = columns.find((column) => column.id === id);
+    if (!colToUpdate) {
+      console.error('Güncellenecek sütun bulunamadı.');
+      return;
+    }
+
+    const updatedCol = {
+      projectId,
+      oldContent: colToUpdate.content,
+      content,
+      columnId,
+      status: columnId,
+      oldColumnName: colToUpdate.title,
+    };
+
+    console.log("Güncellenen Task: ", updatedCol);
+
+    const updatedCols = columns.map((col) => {
+      if (col.id === id) {
+        return { ...col, ...updatedCol };
+      }
+      return col;
     });
 
-    setColumns(newColumns);
+
+    console.log(updatedCols,"updateeee")
+    setColumns(updatedCols);
+
+    await api.column.updateColumn(updatedCol);
+
+    if (colToUpdate.title !== updatedCol.title) {
+    }
+  } catch (error) {
+    console.error("Sütun güncelleme hatası:", error);
   }
+};
 
   
+  // ...
+  useEffect(() => {
+    console.log("Columns güncellendi:", columns);
+  }, [columns]);
   
+
 
 
   useEffect(()=>{
@@ -464,20 +492,23 @@ function ProjectManagement() {
           <div className="flex gap-4 "style={{ justifyContent:"center",display: "flex",
   flexDirection: "row",
   gap: "6rem",height:"16rem"}}  >
-            <SortableContext items={columnsId}>
+          <SortableContext items={columnsId}>
   {columns.map((col) => (
     <ColumnForm
       key={col.id}
       column={col}
       deleteColumn={deleteColumn}
-      updateColumn={updateColumn}
+      updateColumn={(colId, content) => updateTask(colId, content)}
+
+      //updateColumn={updateColumn}
       createTask={createTask}
       deleteTask={(taskId, content) => deleteTask(taskId, content, col.id)}
-      updateTask={(taskId, content) => updateTask(taskId, content, col.id )}
+      updateTask={(taskId, content) => updateTask(taskId, content, col.id)}
       tasks={tasks.filter((task) => task.columnId === col.id)}
     />
   ))}
 </SortableContext>
+
 
           </div>
           <button

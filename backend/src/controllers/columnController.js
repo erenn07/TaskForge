@@ -17,26 +17,29 @@ const addColumn= async(req,res)=>{
 
     }
 }
-const updateColumn=async(req,res)=>{
+const updateColumn = async (req, res) => {
     try {
-        const {newColumn} =req.body;
-        const updateColumn = await Column.findByIdAndUpdate(
-            {project:newColumn.projectId,columnName:newColumn.oldColumn},
-            {columnName:newColumn.columnName},
-            {new:true}
+        const { newColumn } = req.body;
+
+       
+
+        const updateColumn = await Column.findOneAndUpdate(
+            { project: newColumn.projectId, columnName: newColumn.oldColumnName },
+            { columnName: newColumn.content },
+            { new: true } 
         );
+
         if (!updateColumn) {
-            return res.status(404).json({succeed:false,message:"güncellenmiş kolon bulunanmadı"});
-
+            return res.status(404).json({ succeed: false, message: "Güncellenmiş kolon bulunamadı" });
         }
-        res.status(200).json({succeed:true,message:"Kolon güncelleme başarılı",updateColumn})
 
+        res.status(200).json({ succeed: true, message: "Kolon güncelleme başarılı", updateColumn });
     } catch (error) {
-        console.error("hata: ",error);
-        res.status(500).json({succeed:false,message:"sunucu hatası",error});
-
+        console.error("hata: ", error);
+        res.status(500).json({ succeed: false, message: "Sunucu hatası", error });
     }
 };
+
 const getColumn = async(req,res)=>{
     const{projectId}=req.body;
     const columns=await Column.find({project:projectId})
