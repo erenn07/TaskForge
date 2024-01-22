@@ -51,8 +51,7 @@ const DeleteColumn= async (req,res)=>{
     try {
         const {project} =req.body;
 
-console.log(project.projectId,"backeddd")
-console.log(project.columnName,"bcc")
+
 
         const columnToDelete = await Column.findOne({
             project: project.projectId,

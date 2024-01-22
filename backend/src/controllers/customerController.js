@@ -68,9 +68,7 @@ const getCustomers = async (req, res) => {
 
          
           const { userId } = req.query;
-          console.log("duzenlenmisuserIDdegeri:",userId)
           const customer = await Customer.find({creatorID:userId});
-          console.log("musteriler",customer)
 
     res.status(200).json({ customer })
 
@@ -79,6 +77,7 @@ const getCustomers = async (req, res) => {
         }
     }
 
+    
     
 
     const deleteCustomer = async (req, res) => {

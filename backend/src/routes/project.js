@@ -9,6 +9,7 @@ const router = express.Router();
 
 router.route("/addProject").post(projectController.addProject)
 router.route("/getProjects").post(projectController.getProjects)
+router.route("/getProjectss").get(projectController.getProjects2)
 
 
 router.route("/projectDetails/:id").post(projectController.projectDetails)

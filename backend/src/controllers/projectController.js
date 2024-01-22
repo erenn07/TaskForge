@@ -39,6 +39,33 @@ const addProject =async(req,res)=>{
      
       
   }
+
+  const getProjects2 = async (req, res) => {
+    try {
+      const { creatorID, selectedProject } = req.query;
+  
+      console.log("aliii ", selectedProject);
+      const projects = await Project.find({ creatorID: creatorID, projectName: selectedProject });
+  
+      if (projects.length > 0) {
+        const customerid = projects[0].customer;
+        const customer = await Customer.findById(customerid);
+  
+        console.log(projects);
+        let name=customer.firstName+" "+customer.lastName
+        console.log(name);
+  
+        res.status(200).json(name);
+      } else {
+        res.status(404).json({ error: 'Proje bulunamadı' });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Sunucu hatası' });
+    }
+  };
+  
+
   const projectDetails =async (req,res)=>{
       try {
       
@@ -72,4 +99,4 @@ const addProject =async(req,res)=>{
   }
   
 
-export{addProject,getProjects,projectDetails,deleteProject}
+export{addProject,getProjects,projectDetails,deleteProject,getProjects2}

@@ -201,7 +201,8 @@ function Projects() {
                   align="right"
                   variant="outlined"
                   color="primary"
-                  startIcon={<SearchOutlinedIcon />}
+                  startIcon={<SearchOutlinedIcon 
+                  />}
                   onClick={() => handleRowClick(row.projectId)}
                 >
                  Panoya Git
@@ -223,7 +224,8 @@ function Projects() {
     </div>
 
   
-    </> )
+    </> 
+    )
 }
 
 export default Projects;
