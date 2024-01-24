@@ -188,7 +188,18 @@ export default{
       } catch (error) {
         alert(error)
       }
+    },async getTask2(projectName,creatorID) {
+      try {
+        const response = await axios.post("http://localhost:3001/task/getTask2",{projectName,creatorID}, { withCredentials: true });
+
+        return response.data;
+
+      } catch (error) {
+        alert(error)
+      }
     },
+
+
     async updateTask(newTasks){
       try {
         const response = await axios.post("http://localhost:3001/task/updateTask",{newTasks}, { withCredentials: true });

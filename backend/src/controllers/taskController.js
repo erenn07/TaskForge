@@ -1,4 +1,5 @@
 import Task from "../models/Task.js";
+import Project from "../models/Project.js";
 
 
 
@@ -73,6 +74,45 @@ const getTask= async(req,res)=>{
 
     res.status(200).json(tasks)
 }
+
+const getTask2= async(req,res)=>{
+  const{selectedProject,creatorID}= req.query;
+
+  console.log(selectedProject," selectedProject")
+  console.log(creatorID," creatorID")
+
+  const project= await Project.find({projectName:selectedProject,creatorID:creatorID})
+console.log(project,"project")
+
+if (project.length > 0) {
+  const projectId = project[0]._id;
+  const tasks = await Task.find({project:projectId});
+
+console.log(tasks,"taskkaau")
+
+  res.status(200).json(tasks);
+} else {
+  res.status(404).json({ error: 'task bulunamadı' });
+}
+
+//console.log(project[0]._id," undefined mı ???")
+
+//   const tasks=await Task.find({project:projectId})
+
+//  console.log(tasks,"ttttt")
+//  res.status(200).json(tasks)
+
+//   if(!tasks){
+//       res.status(400).json({succeed:false,message:"tasklar bulunamadı"})
+//   }
+
+}
+
+
+
+
+
+
 const deleteTask = async (req, res) => {
     try {
       const { deletedTask } = req.body;
@@ -93,4 +133,4 @@ const deleteTask = async (req, res) => {
     }
   };
   
-export{addTask,getTask,updateTask,deleteTask,taskStatusUpdate}
+export{addTask,getTask,updateTask,deleteTask,taskStatusUpdate,getTask2}

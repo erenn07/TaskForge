@@ -23,15 +23,22 @@
   import Header from './componentss/header';
   import api from '../../services/api.js';
 import axios from 'axios';
-
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DateTimePicker from '@mui/lab/DateTimePicker';
   function BusinessRegistration() {
     const [rows, setRows] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [projectName, setProjectName] = useState([]);
     const [selectedProject, setSelectedProject] = useState("");
     const [selectedName, setSelectedName] = useState("");
+    const [selectedDateTime, setSelectedDateTime] = useState(new Date()); 
+    const [startDateTime, setStartDateTime] = useState(null);
+    const [endDateTime, setEndDateTime] = useState(null);
+    const[taskName,setTaskName]=useState([])
+    const[selectedTaskName,setselectedTaskName]=useState([])
 
-
+    
     const [customerName, setCustomerName] = useState('');
     const openModal = () => setModalOpen(true);
     const closeModal = () => {
@@ -48,17 +55,52 @@ try {
     params: {creatorID,selectedProject},  
     withCredentials: true
   });
+
+  console.log(response.data,"resdaata")
   return response.data
   
 } catch (error) {
   
 }
 
-
-
     }
 
 
+    const gettaskName = async () => {
+      try {
+        const userToken = localStorage.getItem('userToken');
+        const user = jwtDecode(userToken);
+        const creatorID = user.userId;
+        const response = await axios.get("http://localhost:3001/task/getTask2",{
+          params: {creatorID,selectedProject},
+          withCredentials: true
+      });
+
+console.log(response.data," taskanameeeee")
+const taskNames = response.data.map(task => task.taskName);
+
+        return taskNames
+        
+      } catch (error) {
+        
+      }
+      
+      
+      
+          }
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const name = await gettaskName();
+          setTaskName(name);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+    
+      fetchData();
+    }, [selectedProject]);
 
     useEffect(() => {
       const fetchData = async () => {
@@ -73,10 +115,24 @@ try {
       fetchData();
     }, [selectedProject]);
 
+    const handleDateTimeChange = (e) => {
+      const selectedDate = new Date(e.target.value);
+      setSelectedDateTime(selectedDate);
+      // Seçilen tarih ve saat değeri ile yapmak istediğiniz işlemleri burada gerçekleştirebilirsiniz
+    };
 
-
+    const handleStartDateTimeChange = (e) => {
+      const startDate = new Date(e.target.value);
+      setStartDateTime(startDate);
+    };
+  
+    const handleEndDateTimeChange = (e) => {
+      const endDate = new Date(e.target.value);
+      setEndDateTime(endDate);
+    };
     useEffect(() => {
       getProject();
+      getBusinessRegistration()
     }, []);
 
     const getProject = async () => {
@@ -86,7 +142,6 @@ try {
         const creatorID = user.userId;
         const response = await api.project.getProjects(creatorID);
     
-        // Sadece projelerin isimlerini al
         const projectNames = response.map(project => project.projectName);
 
         setProjectName(projectNames);
@@ -96,9 +151,67 @@ try {
       }
     };
 
+
+
+    const getBusinessRegistration = async () => { 
+try {
+  const userToken = localStorage.getItem('userToken');
+  const user = jwtDecode(userToken);
+  const creatorID = user.userId;
+
+  const response =await axios.get("http://localhost:3001/business/getbusiness",{
+    params: {creatorID},
+    withCredentials: true
+});
+
+console.log(response,"ressoo")
+
+setRows(response.data)
+
+
+  
+} catch (error) {
+  console.log(error)
+}
+
+
+
+    }
+
+
+
     const addBusinessRegistration = async () => {
-      closeModal();
+      try {    
+        const userToken = localStorage.getItem('userToken');
+        const user = jwtDecode(userToken);
+        const creatorID = user.userId;
+
+        const newRow = {
+          ProjectName: selectedProject,
+          projectTask:selectedTaskName,
+          projectDescription: `${selectedDateTime.toLocaleDateString()} ${selectedDateTime.toLocaleTimeString()}`,
+          CustomerName: selectedName,
+          creatorID:creatorID
+        };
+        const response = await axios.post("http://localhost:3001/business/addbusiness",{
+          newRow,
+           withCredentials: true
+       });
+        setRows((prevRows) => [...prevRows, newRow]);
+    
+        window.location.reload()
+        closeModal();
+        
+
+      console.log(response)
+
+      }
+      
+      catch (error) {
+        console.error('Error adding business registration:', error);
+      }
     };
+    
 
     const navigate = useNavigate();
 
@@ -148,10 +261,12 @@ try {
                           sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                           <TableCell align="left" scope="row">
-                            {row.ProjectName}
+                            {row.projectName}
                           </TableCell>
                           <TableCell align="center">{row.projectDescription}</TableCell>
-                          <TableCell align="center">{row.CustomerName}</TableCell>
+                          <TableCell align="center">{row.tasks}</TableCell>
+
+                          <TableCell align="center">{row.customer}</TableCell> 
                           <TableCell align="center">
                             <Button
                               variant="outlined"
@@ -204,7 +319,6 @@ try {
     value={selectedProject}
   
     onChange={(e) => setSelectedProject(e.target.value)}
-    //style={{ color: 'black' }}
   >
     {Array.isArray(projectName) &&
       projectName.map((project) => (
@@ -215,18 +329,59 @@ try {
   </Select>
 </FormControl>
 
+<FormControl fullWidth margin="normal">
+  <InputLabel id="project-name-label" style={{ color: 'black' }}>
+    Proje Taskları
+  </InputLabel>
+  <Select
+    labelId="project-name-label"
+    id="project-name"
+    value={selectedTaskName}
+  
+    onChange={(e) => setselectedTaskName(e.target.value)}
+  >
+    {Array.isArray(taskName) &&
+      taskName.map((task) => (
+        <MenuItem key={task} value={task} style={{ color: 'black' }}>
+          {task}
+        </MenuItem>
+      ))}
+  </Select>
+</FormControl>
+Müşteri adı
                     <TextField
-                      label="Müşteri Adı"
+                      //label="Müşteri Adı"
+                      disabled
                       fullWidth
                       margin="normal"
                       value={selectedName}
                       onChange={(e) => setCustomerName(e.target.value)}
                     />
+
+<label>
+        Başlangıç Tarih ve Saat:
+        <input
+          type="datetime-local"
+          value={startDateTime ? startDateTime.toISOString().slice(0, 16) : ''}
+          onChange={handleStartDateTimeChange}
+        />
+      </label>
+
+      <label>
+        Bitiş Tarih ve Saat:
+        <input
+          type="datetime-local"
+          value={endDateTime ? endDateTime.toISOString().slice(0, 16) : ''}
+          onChange={handleEndDateTimeChange}
+        />
+      </label>
+
                     <Button variant="outlined" color="primary" onClick={addBusinessRegistration}>
                       Kaydet
                     </Button>
                   </div>
                 </Modal>
+
               </div>
             </div>
           </div>

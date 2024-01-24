@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 import express from 'express';
 import authRoutes from './src/routes/auth.js';
 import userRoutes from './src/routes/user.js';
+import businessRoutes from './src/routes/business.js';
+
 import customerRoutes from './src/routes/customer.js';
 import projectRoutes from './src/routes/project.js';
 import taskRoutes from './src/routes/task.js';
@@ -39,6 +41,7 @@ app.use("/task",taskRoutes)
 app.use("/column",columnRoutes)
 app.use("/project",projectRoutes)
 app.use("/column",columnRoutes)
+app.use("/business",businessRoutes)
 
 
 app.listen(port, () => {
