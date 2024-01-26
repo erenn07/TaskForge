@@ -8,6 +8,7 @@ const router = express.Router();
 
 router.route("/addbusiness").post(businessController.addBusiness)
 router.route("/getbusiness").get(businessController.getBusiness)
+router.route("/deletebusiness").get(businessController.deleteBusiness)
 
 
 

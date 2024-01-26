@@ -86,11 +86,14 @@ function ProjectManagement() {
       id: generateId(),
       columnId: columnName,
       content: `Task ${tasks.length + 1}`,
-      projectId,
+      projectId:projectId,
     };
     setTasks([...tasks, newTask]);
 
     api.task.addTask(newTask);
+
+
+
   };
   
   
@@ -103,6 +106,8 @@ function ProjectManagement() {
       id: generateId(),
       columnId: item.status,
       content: item.taskName,
+      projectId:projectId,
+
     }));
   
     setTasks(newTasks);

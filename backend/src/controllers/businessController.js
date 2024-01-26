@@ -46,5 +46,26 @@ console.log(business)
   };
 
 
+
+  const deleteBusiness= async(req,res)=>{
   
-  export {addBusiness,getBusiness}
+    try {
+      const {businessId}= req.query;
+      
+      const business = await Business.findByIdAndDelete(businessId);
+  
+      if(!business){
+       
+        res.status(404).json({succeed:false,message:"business was not found"})
+      }
+      res.status(200).json({succeed:true,message:"business has been deleted succesfully" })
+     
+    } catch (error) {
+      
+      
+    }
+  }
+  
+
+  
+  export {addBusiness,getBusiness,deleteBusiness}

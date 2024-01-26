@@ -136,9 +136,35 @@ export default{
             alert(error)
           }
         },
+
+        async deleteProject(projectId){
+try {
+  const response=await axios.get("http://localhost:3001/project/deleteProject",{
+    params: {projectId},
+    withCredentials: true
+  })
+
+  return response.data;
+
+
+
+} catch (error) {
+  alert(error)
+
+}
+
+
+        }
+        
+        
+        
+        ,
         async getProjects(creatorID){
           try {
-            const response = await axios.post("http://localhost:3001/project/getProjects" ,{creatorID},{withCredentials: true});
+            const response = await axios.get("http://localhost:3001/project/getProjects" ,{
+              params: {creatorID},
+              withCredentials: true
+            });
 
         return response.data;
 

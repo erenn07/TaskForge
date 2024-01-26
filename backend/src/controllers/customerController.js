@@ -5,7 +5,7 @@ import Project from "../models/Project.js";
 const addCustomer= async(req,res)=>{
     try {
       
-      const {name, surname,phone,email,projectName,projectDescription,userId} = req.body;
+      const {name, surname,phone,email,userId} = req.body;
 
       const isEmailValid = validateEmail(email);
       if (!isEmailValid) {
@@ -30,31 +30,28 @@ const addCustomer= async(req,res)=>{
         firstName:name,
         lastName:surname,
         phone:phone,
-        projectName:projectName,
-        projectDescription:projectDescription,
+        // projectName:projectName,
+        // projectDescription:projectDescription,
         email:email,
         creatorID:userId,
       })
 /*         await customer.save();
  */
-        const findCustomer = await Customer.findOne({email:email})
-        const customerId=findCustomer._id.toString();
-        console.log("CustomerID VALUE:",customerId) 
+        // const findCustomer = await Customer.findOne({email:email})
+        // const customerId=findCustomer._id.toString();
+        // console.log("CustomerID VALUE:",customerId) 
         
-        const project = await Project.create({
-          projectName: projectName,
-          projectDescription:projectDescription,
-          customer: customerId,
-          creatorID:customer.creatorID,
-        });
-        await project.save();
+        // const project = await Project.create({
+        //   projectName: projectName,
+        //   projectDescription:projectDescription,
+        //   customer: customerId,
+        //   creatorID:customer.creatorID,
+        // });
+        // await project.save();
          
         res.status(200).json({
           message: 'customer added successfully',
-          userId: customerId,
           email: email,
-          projectName: projectName,
-          projectDescription:projectDescription
         });
       
     } catch (error) {

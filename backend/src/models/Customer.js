@@ -22,12 +22,12 @@ const CustomerSchema = new mongoose.Schema(
     },
     projectName: {
       type: String,
-      required: true,
+      required: false,
 
     },
     projectDescription: {
       type: String,
-      required: true,
+      required: false,
 
     },
     creatorID: {

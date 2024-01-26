@@ -215,6 +215,12 @@ setRows(response.data)
 
     const navigate = useNavigate();
 
+    const onDeleteBusiness = async (businessId) => {
+     const response=await axios.get("http://localhost:3001/business/deletebusiness",{params:{businessId}},{withCredentials: true})
+     
+      window.location.reload();
+    };
+
     const onDeleteProject = async (projectId) => {
       await api.project.deleteProject(projectId);
       window.location.reload();
@@ -272,18 +278,16 @@ setRows(response.data)
                               variant="outlined"
                               color="error"
                               startIcon={<DeleteIcon />}
-                              onClick={() => onDeleteProject(row.projectId)}
+                              onClick={() => onDeleteBusiness(row._id)}
                             >
                               SİL
                             </Button>
                             <Button
                               variant="outlined"
                               color="primary"
-                              startIcon={<SearchOutlinedIcon />}
-                              onClick={() => handleRowClick(row.projectId)}
+                              onClick={() => handleRowClick(row._id)}
                             >
-                              Panoya Git
-                            </Button>
+Düzenle                            </Button>
                           </TableCell>
                         </TableRow>
                       ))}

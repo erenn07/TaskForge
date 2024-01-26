@@ -8,7 +8,7 @@ const addTask= async(req,res)=>{
         const {newTask}= req.body;
 
       
-
+console.log("addooota",newTask.projectId)
       const task = Task.create({
         taskId:newTask.id,
         taskName:newTask.content,

@@ -8,12 +8,14 @@ const router = express.Router();
 
 
 router.route("/addProject").post(projectController.addProject)
-router.route("/getProjects").post(projectController.getProjects)
+router.route("/getProjects").get(projectController.getProjects)
+//router.route("/getProjects").post(projectController.getProjects)
+
 router.route("/getProjectss").get(projectController.getProjects2)
 
 
 router.route("/projectDetails/:id").post(projectController.projectDetails)
-router.route("/deleteProject").post(projectController.deleteProject)
+router.route("/deleteProject").get(projectController.deleteProject)
 
 
 export default router;

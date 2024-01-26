@@ -265,12 +265,12 @@ function Customers() {
       width: 120,
       editable: false,
     },
-    {
-      field: "projectName",
-      headerName: "Proje Adı",
-      width: 220,
-      editable: false,
-    },
+    // {
+    //   field: "projectName",
+    //   headerName: "Proje Adı",
+    //   width: 220,
+    //   editable: false,
+    // },
 
     {
       field: "edit",
@@ -577,7 +577,7 @@ function Customers() {
                                           placeholder="Müşteri Telefon"
                                         />
                                       </div>
-                                      <div className="form-group">
+                                      {/* <div className="form-group">
                                         <input
                                           type="text"
                                           value={projectName}
@@ -588,8 +588,8 @@ function Customers() {
                                           id="exampleInputPassword"
                                           placeholder="Proje Adı"
                                         />
-                                      </div>
-                                      <div className="form-group">
+                                      </div> */}
+                                      {/* <div className="form-group">
                                         <input
                                           type="text"
                                           value={projectDescription}
@@ -602,7 +602,7 @@ function Customers() {
                                           id="exampleInputPassword"
                                           placeholder="Proje Künyesi"
                                         />
-                                      </div>
+                                      </div> */}
 
                                       <button
                                         type="submit"
@@ -736,7 +736,7 @@ function Customers() {
                         placeholder="Müşteri Telefon"
                       />
                     </div>
-                    <div className="form-group">
+                    {/* <div className="form-group">
                       <label>Proje Adı:</label>
                       <input
                         type="text"
@@ -751,7 +751,7 @@ function Customers() {
                         id="exampleInputPassword"
                         placeholder="Proje Adı"
                       />
-                    </div>
+                    </div> */}
 
                     <button
                       type="submit"

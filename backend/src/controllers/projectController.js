@@ -2,36 +2,35 @@ import Customer from "../models/Customer.js";
 import Project from "../models/Project.js";
 
 const addProject =async(req,res)=>{
-   /*  try{  
+     try{  
     console.log("addproject controller")
-        const {customerId,customerProjectName,customerEmail} = req.body;
-        console.log("addproject 2",customerProjectName)
-        console.log("addproject 3",customerEmail)
-        console.log("addproject 3",customerId)
+        const {newRow} = req.body;
+        console.log("projectNameeeeeee",newRow.ProjectName)
 
-
-        const isEmailValid = validateEmail(customerEmail);
-        if (!isEmailValid) {
-        return res.status(400).json({ success: false, message: 'Geçerli bir email adresi giriniz.' });
-      }
 
       const project = await Project.create({
-        projectName:customerProjectName,
-        customer:customerId,
-        // tasks:[], 
+        projectName:newRow.ProjectName,
+        projectDescription:newRow.projectDescription,
+        customer:newRow.CustomerName,
+        creatorID:newRow.creatorID
       })
         await project.save();
         res.status(200).json({message:'project added successfully'})
       
     } catch (error) {
       
-    }*/
+    }
     }
     const getProjects =async (req,res)=>{
       try {
-         const {creatorID}=req.body;
-      //console.log("meltem",creatorID)
+         const {creatorID}=req.query;
+console.log("back back", creatorID)
+
+
       const projects = await Project.find({ creatorID: creatorID });
+
+
+      console.log(projects," pooooo")
       res.status(200).json(projects)
       } catch (error) {
         
@@ -81,7 +80,8 @@ const addProject =async(req,res)=>{
   const deleteProject= async(req,res)=>{
   
     try {
-      const {projectId}= req.body;
+      const {projectId}= req.query;
+      
      console.log("deleteProject projectId",projectId)
       const project = await Project.findByIdAndDelete(projectId);
   
