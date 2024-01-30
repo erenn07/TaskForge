@@ -15,6 +15,10 @@ const ProjectSchema = new mongoose.Schema(
         ref: 'Customer',
         required: true,
       },
+      hourlyWage:{
+        type:Number,
+        required:false
+      },
     tasks:[{
         type:String,
         required:false,

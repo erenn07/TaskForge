@@ -241,6 +241,9 @@ function BusinessRegistration() {
                         Müşteri Bilgileri
                       </TableCell>
                       <TableCell align="center" style={{ fontWeight: "bold" }}>
+                        Saatlik Ücret
+                      </TableCell>
+                      <TableCell align="center" style={{ fontWeight: "bold" }}>
                         Yönet
                       </TableCell>
                     </TableRow>
@@ -262,6 +265,9 @@ function BusinessRegistration() {
                         {/* <TableCell align="center">{row.tasks}</TableCell> */}
 
                         <TableCell align="center">{row.customer}</TableCell>
+                        <TableCell align="left" scope="row">
+                          {row.projectName}
+                        </TableCell>
                         <TableCell align="center">
                           <Button
                             variant="outlined"
@@ -370,11 +376,30 @@ function BusinessRegistration() {
                       ))}
                   </Select>
 
+
+                  <FormControl fullWidth margin="normal">
+                  <label style={{ color: "black" }}>Saatlik Ücret</label>
+                    <TextField
+                      labelId="project-name-label"
+                      id="project-name"
+                      value={projectDescriptionName}
+                      onChange={(e) =>
+                        setprojectDescriptionName(e.target.value)
+                      }
+                    />
+                    {/* {Array.isArray(taskName) &&
+    taskName.map((task) => (
+      <MenuItem key={task} value={task} style={{ color: 'black' }}>
+        {task}
+      </MenuItem>
+    ))} */}
+                  </FormControl>
+
                   <Button
                     style={{
                       position:"relative",
                       left:"220px",
-                      top:"80px",
+                      top:"30px",
                      
                       width:"200px",
                       height:"50px"
