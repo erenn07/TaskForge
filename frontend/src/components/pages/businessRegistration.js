@@ -293,7 +293,16 @@ function BusinessRegistration() {
                 </Table>
               </TableContainer>
 
-              <Button onClick={openModal}>İş kaydı ekle</Button>
+              <Button onClick={openModal}
+              style={{
+                backgroundColor:"#003466",
+                color:"#f2f2f2",
+                position:"relative",
+                left:"480px",
+                width:"200px",
+                height:50
+              }} 
+              >İş kaydı ekle</Button>
               {/* Modal for adding business registration */}
               <Modal open={isModalOpen} onClose={closeModal}>
                 <div
