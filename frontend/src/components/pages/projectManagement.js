@@ -31,6 +31,7 @@ function BusinessRegistration() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [projectDescriptionName, setprojectDescriptionName] = useState("");
+  const[hourlyWage,setHourlyWage]=useState("");
 
   const [selectedProject, setSelectedProject] = useState("");
   const [selectedName, setSelectedName] = useState("");
@@ -183,6 +184,7 @@ function BusinessRegistration() {
         //projectTask:selectedTaskName,
         projectDescription: projectDescriptionName,
         CustomerName: selectedCustomerName,
+        hourlyWage:hourlyWage,
         creatorID: creatorID,
       };
       const response = await axios.post(
@@ -224,13 +226,13 @@ function BusinessRegistration() {
               <Header />
 
               <TableContainer
-                style={{ width: "94%", margin: "3%" }}
+                style={{ width: "94%", margin: "3%"}}
                 component={Paper}
               >
                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
-                      <TableCell align="left" style={{ fontWeight: "bold" }}>
+                      <TableCell align="left" style={{ fontWeight: "bold"}}>
                         Proje{" "}
                       </TableCell>
                       <TableCell align="center" style={{ fontWeight: "bold" }}>
@@ -266,7 +268,7 @@ function BusinessRegistration() {
 
                         <TableCell align="center">{row.customer}</TableCell>
                         <TableCell align="left" scope="row">
-                          {row.projectName}
+                          {row.hourlyWage}<span>  TL</span>
                         </TableCell>
                         <TableCell align="center">
                           <Button
@@ -380,13 +382,14 @@ function BusinessRegistration() {
                   <FormControl fullWidth margin="normal">
                   <label style={{ color: "black" }}>Saatlik Ücret</label>
                     <TextField
-                      labelId="project-name-label"
-                      id="project-name"
-                      value={projectDescriptionName}
+                      labelId="hourl-wage-label"
+                      id="hourl-wage"
+                      value={hourlyWage} 
                       onChange={(e) =>
-                        setprojectDescriptionName(e.target.value)
+                        setHourlyWage(e.target.value)
                       }
                     />
+                   
                     {/* {Array.isArray(taskName) &&
     taskName.map((task) => (
       <MenuItem key={task} value={task} style={{ color: 'black' }}>

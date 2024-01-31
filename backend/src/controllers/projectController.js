@@ -12,6 +12,7 @@ const addProject =async(req,res)=>{
         projectName:newRow.ProjectName,
         projectDescription:newRow.projectDescription,
         customer:newRow.CustomerName,
+        hourlyWage:newRow.hourlyWage,
         creatorID:newRow.creatorID
       })
         await project.save();

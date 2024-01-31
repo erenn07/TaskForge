@@ -246,8 +246,8 @@ function Customers() {
   const columns = [
     //{ field: '_id', headerName: 'ID', width: 100 },
 
-    { field: "firstName", headerName: "Adı", width: 100, editable: false },
-    { field: "lastName", headerName: "Soyadı", width: 100, editable: false },
+    { field: "firstName", headerName: "Adı", width: 120, editable: false },
+    { field: "lastName", headerName: "Soyadı", width: 120, editable: false },
 
     {
       field: "email",
@@ -262,7 +262,7 @@ function Customers() {
       field: "phone",
       headerName: "Numara",
       type: "String",
-      width: 120,
+      width: 200,
       editable: false,
     },
     // {
@@ -275,7 +275,7 @@ function Customers() {
     {
       field: "edit",
       headerName: "Düzenle",
-      width: 120,
+      width: 140,
       sortable: false,
       renderCell: (params) => (
         <Button
@@ -290,7 +290,7 @@ function Customers() {
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 130,
       sortable: false,
       renderCell: (params) => (
         <Button
@@ -626,6 +626,7 @@ function Customers() {
                                       backgroundColor: "#ffffff",
                                       marginTop: -150,
                                       padding: "10px",
+                                     
                                     }}
                                   >
                                     <DataGrid
