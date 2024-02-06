@@ -10,15 +10,23 @@ const businessSchema = new mongoose.Schema(
       type:String,
       required:false
   },
+
+   date:{
+    type:String,
+    required:false
+    },
     customer: {
         type: String,
-        //ref: 'Customer',
+        ref: 'Customer',
         required: false,
       },
+
+hour:{type:String,required:false},
+      
     tasks:{
         type:String,
         required:false,
-        //ref:'Task'
+        
     },
     creatorID: {
       type:String,

@@ -21,13 +21,10 @@ export default function Login() {
             try{
             const response= await api.user.login(email,password)
     
-            console.log("bu apiden gelen login cevabı:",response)
     
-            console.log(response,"resppp")
             if(response.success){
                 navigate('/dashboard');
                 const userToken = response.token;
-                console.log("resp succes ici",);
 
                 localStorage.setItem('userToken',userToken)
                 const expirationTime = new Date().getTime() + 24 * 60 * 60 * 1000; 

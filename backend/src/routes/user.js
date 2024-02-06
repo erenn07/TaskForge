@@ -7,7 +7,6 @@ import * as userController from "../controllers/userController.js"
 const router = express.Router();
 
 router.get('/profile', authenticate, (req, res) => {
-  console.log(req.user)
   res.json({ message: `Welcome ${req.user.firstName}` });
 });
 

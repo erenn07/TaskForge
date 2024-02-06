@@ -199,7 +199,6 @@ function ProjectManagement() {
     
   const updateTask = async (id, content, columnId) => {
     const taskToUpdate = tasks.find((task) => task.id === id);
-    console.log(projectId + "update taskkkkkk");
     if (!taskToUpdate) {
       console.error('Güncellenecek görev bulunamadı.');
       return;

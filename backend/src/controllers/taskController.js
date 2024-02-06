@@ -8,7 +8,6 @@ const addTask= async(req,res)=>{
         const {newTask}= req.body;
 
       
-console.log("addooota",newTask.projectId)
       const task = Task.create({
         taskId:newTask.id,
         taskName:newTask.content,
@@ -78,8 +77,6 @@ const getTask= async(req,res)=>{
 const getTask2= async(req,res)=>{
   const{selectedProject,creatorID}= req.query;
 
-  console.log(selectedProject," selectedProject")
-  console.log(creatorID," creatorID")
 
   const project= await Project.find({projectName:selectedProject,creatorID:creatorID})
 console.log(project,"project")

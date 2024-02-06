@@ -84,14 +84,10 @@ function Customers() {
   };
 
   const handleRowEditCommit = async (params) => {
-    console.log("Params:", params);
 
     const { id, field, value } = params;
 
-    console.log("ID:", id);
-    console.log("Field:", field);
-    console.log("Updated Value:", value);
-
+   
     try {
       await api.customer.updateCustomer(id, field, value);
 

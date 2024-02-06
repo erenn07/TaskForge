@@ -38,6 +38,13 @@ function BusinessRegistration() {
   const [taskName, setTaskName] = useState([]);
   const [selectedTaskName, setselectedTaskName] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [projectDescription, setprojectDescription] = useState(); 
+  const [selectedHour, setSelectedHour] = useState('');
+
+  //
+  const [selectedDate, setselectedDate] = useState(new Date()); 
+
+
 
   const [customerName, setCustomerName] = useState("");
   const openModal = () => setModalOpen(true);
@@ -46,66 +53,86 @@ function BusinessRegistration() {
     setModalOpen(false);
   };
 
-  const getName = async () => {
-    try {
-      const userToken = localStorage.getItem("userToken");
-      const user = jwtDecode(userToken);
-      const creatorID = user.userId;
-      const response = await axios.get(
-        "http://localhost:3001/project/getProjectss",
-        {
-          params: { creatorID, selectedProject },
-          withCredentials: true,
+  // const getName = async () => {
+  //   try {
+  //     const userToken = localStorage.getItem("userToken");
+  //     const user = jwtDecode(userToken);
+  //     const creatorID = user.userId;
+  //     const response = await axios.get(
+  //       "http://localhost:3001/project/getProjectss",
+  //       {
+  //         params: { creatorID, selectedProject },
+  //         withCredentials: true,
+  //       }
+  //     );
+
+  //     return response.data;
+  //   } catch (error) {}
+  // };
+
+  // const gettaskName = async () => {
+  //   try {
+  //     const userToken = localStorage.getItem("userToken");
+  //     const user = jwtDecode(userToken);
+  //     const creatorID = user.userId;
+  //     const response = await axios.get("http://localhost:3001/task/getTask2", {
+  //       params: { creatorID, selectedProject },
+  //       withCredentials: true,
+  //     });
+
+  //     console.log(response.data, " taskanameeeee");
+  //     const taskNames = response.data.map((task) => task.taskName);
+
+  //     return taskNames;
+  //   } catch (error) {}
+  // };
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const name = await gettaskName();
+  //       setTaskName(name);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [selectedProject]);
+
+  useEffect(() => {
+    const fetchCustomerName = async () => {
+      try {
+        const userToken = localStorage.getItem("userToken");
+        const user = jwtDecode(userToken);
+        const creatorID = user.userId;
+  
+        const response = await axios.get(
+          "http://localhost:3001/project/getProjectss",
+          {
+            params: { creatorID, selectedProject },
+            withCredentials: true,
+          }
+        );
+  
+
+        if (response.data) {
+          const customerName = response.data.name; // Örnek olarak, projenin müşteri adı buradan alınabilir
+          console.log(customerName,"cussso")
+          setSelectedName(customerName);
         }
-      );
-
-      console.log(response.data, "resdaata");
-      return response.data;
-    } catch (error) {}
-  };
-
-  const gettaskName = async () => {
-    try {
-      const userToken = localStorage.getItem("userToken");
-      const user = jwtDecode(userToken);
-      const creatorID = user.userId;
-      const response = await axios.get("http://localhost:3001/task/getTask2", {
-        params: { creatorID, selectedProject },
-        withCredentials: true,
-      });
-
-      console.log(response.data, " taskanameeeee");
-      const taskNames = response.data.map((task) => task.taskName);
-
-      return taskNames;
-    } catch (error) {}
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const name = await gettaskName();
-        setTaskName(name);
       } catch (error) {
         console.error(error);
       }
     };
-
-    fetchData();
+  
+    fetchCustomerName();
   }, [selectedProject]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const name = await getName();
-        setSelectedName(name);
-      } catch (error) {
-        console.error(error);
-      }
-    };
 
-    fetchData();
-  }, [selectedProject]);
+  const handleHourChange = (event) => {
+    setSelectedHour(event.target.value);
+  };
 
   const handleDateTimeChange = (e) => {
     const selectedDate = new Date(e.target.value);
@@ -133,9 +160,7 @@ function BusinessRegistration() {
       const user = jwtDecode(userToken);
       const creatorID = user.userId;
       const response = await api.project.getProjects(creatorID);
-
       const projectNames = response.map((project) => project.projectName);
-
       setProjectName(projectNames);
       setCustomerName();
     } catch (error) {
@@ -173,9 +198,10 @@ function BusinessRegistration() {
 
       const newRow = {
         ProjectName: selectedProject,
-        projectTask: selectedTaskName,
-        projectDescription: `${selectedDateTime.toLocaleDateString()} ${selectedDateTime.toLocaleTimeString()}`,
         CustomerName: selectedName,
+        projectDescription:projectDescription ,
+        Date:selectedDate,
+        hour:selectedHour,
         creatorID: creatorID,
       };
       const response = await axios.post(
@@ -240,11 +266,13 @@ function BusinessRegistration() {
                         Proje{" "}
                       </TableCell>
                       <TableCell align="center" style={{ fontWeight: "bold" }}>
-                        Çalışma Günü ve Saati
+                      Yapılan İş</TableCell>
+                      <TableCell align="center" style={{ fontWeight: "bold" }}>
+                        Çalışma Günü 
                       </TableCell>
                       <TableCell align="center" style={{ fontWeight: "bold" }}>
-                        Çalışılan Görev
-                      </TableCell>
+                      Çalışılan Saat                      </TableCell>
+                     
                       <TableCell align="center" style={{ fontWeight: "bold" }}>
                         Müşteri Bilgileri
                       </TableCell>
@@ -267,8 +295,12 @@ function BusinessRegistration() {
                         <TableCell align="center">
                           {row.projectDescription}
                         </TableCell>
-                        <TableCell align="center">{row.tasks}</TableCell>
-
+                        <TableCell align="center">
+                          {row.date}
+                        </TableCell>
+                        <TableCell align="center">
+                          {row.hour}
+                        </TableCell>
                         <TableCell align="center">{row.customer}</TableCell>
                         <TableCell align="center">
                           <Button
@@ -345,17 +377,25 @@ function BusinessRegistration() {
                         ))}
                     </Select>
                   </FormControl>
+                  {/* <TextField
+  placeholder="Müşteri Adı"
+  disabled
+  fullWidth
+  margin="normal"
+  value={selectedName} 
+/> */}
+
 
                   <FormControl fullWidth margin="normal">
-                    <label style={{ color: "black" }}> Proje Taskları</label>
+                    <label style={{ color: "black" }}> İş Açıklaması</label>
 
-                    <Select
+                    <TextField
                       labelId="project-name-label"
                       id="project-name"
-                      value={selectedTaskName}
-                      onChange={(e) => setselectedTaskName(e.target.value)}
-                    >
-                      {Array.isArray(taskName) &&
+                      value={projectDescription}
+                      onChange={(e) => setprojectDescription(e.target.value)}
+                    />
+                      {/* {Array.isArray(taskName) &&
                         taskName.map((task) => (
                           <MenuItem
                             key={task}
@@ -364,54 +404,44 @@ function BusinessRegistration() {
                           >
                             {task}
                           </MenuItem>
-                        ))}
-                    </Select>
+                        ))} */}
                   </FormControl>
 
-                  <TextField
-                    //label="Müşteri Adı"
-                    placeholder="Müşteri Adı"
-                    disabled
-                    fullWidth
-                    margin="normal"
-                    value={selectedName}
-                    onChange={(e) => setCustomerName(e.target.value)}
-                  />
+                 
+                  <label style={{ color: "black", display:"block"}}> 
+  Çalışılan Gün Tarih:
+  <input 
+    style={{ marginLeft: "10px", marginTop: "15px", width:"300px"}}
+    type="date"
+    value={selectedDate}
+    onChange={(e) => setselectedDate(e.target.value)}
+    />
+</label>
+<br></br>
+<FormControl fullWidth>
+      <Select
+        value={selectedHour}
+        onChange={handleHourChange}
+        displayEmpty
+        inputProps={{ 'aria-label': 'Hour' }}
+      >
+        <MenuItem value="" disabled>
+          Saat Seçin
+        </MenuItem>
+        {[...Array(24).keys()].map((hour) => (
+          <MenuItem key={hour} value={hour + 1}>{hour + 1}</MenuItem>
+        ))}
+      </Select>
+    </FormControl>
 
-<label style={{ color: "black" }}> 
-                    Başlangıç Tarih ve Saat:
-                    <input style={{marginLeft:"20px",
-                    marginTop:"15px"}}
-                      type="datetime-local"
-                      value={
-                        startDateTime
-                          ? startDateTime.toISOString().slice(0, 16)
-                          : ""
-                      }
-                      onChange={handleStartDateTimeChange}
-                    />
-                  </label>
-
-                  <label style={{ color: "black" }}> 
-                    Bitiş Tarih ve Saat:
-                    <input style={{marginLeft:"58px",
-                    marginTop:"15px"}}
-                      type="datetime-local"
-                      value={
-                        endDateTime
-                          ? endDateTime.toISOString().slice(0, 16)
-                          : ""
-                      }
-                      onChange={handleEndDateTimeChange}
-                    />
-                  </label>
+             
 
                   <Button
                   style={{
                     position:"relative",
                     right:"150px",
-                    top:"80px",
-                   
+                    top:"30px",
+                   left:"210px",
                     width:"200px",
                     height:"50px"
 

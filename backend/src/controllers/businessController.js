@@ -8,13 +8,12 @@ const addBusiness = async (req, res) => {
     try {
       const { newRow } = req.body;
   
-      console.log(newRow, "roowww");
-      console.log(newRow.ProjectName);
   
       const business = await Business.create({
         projectName: newRow.ProjectName,
-        tasks: newRow.projectTask,
         projectDescription: newRow.projectDescription,
+        date:newRow.Date,
+        hour:newRow.hour,
         customer: newRow.CustomerName,
         creatorID:newRow.creatorID
       });
@@ -29,14 +28,12 @@ const addBusiness = async (req, res) => {
     try {
       const {creatorID} = req.query;
   
-      console.log(creatorID, "creatorID businesss");
 
       const business = await Business.find({
         creatorID:creatorID
       });
   
 
-console.log(business)
 
       res.status(200).json(business);
     } catch (error) {
