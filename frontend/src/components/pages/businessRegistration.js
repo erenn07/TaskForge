@@ -18,6 +18,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import { jwtDecode } from "jwt-decode";
+import Dialog from "@mui/material/Dialog";
 
 import Sidebar from "./componentss/sidebar";
 import Header from "./componentss/header";
@@ -40,95 +41,66 @@ function BusinessRegistration() {
   const [open, setOpen] = React.useState(false);
   const [projectDescription, setprojectDescription] = useState(); 
   const [selectedHour, setSelectedHour] = useState('');
+  const [open1, setOpen1] = React.useState(false);
+  const [id, setid] = useState('');
+  const[selectedCustomerName,setSelectedCustomerName]=useState([])
+  const[customerName,setCustomerName]=useState([])
 
   //
   const [selectedDate, setselectedDate] = useState(new Date()); 
+  
+  const [editedData, setEditedData] = React.useState({
+    projectName: "",
+    job: "",
+    workday: "",
+    hour: "",
+    customerName: "",
+
+    });
 
 
-
-  const [customerName, setCustomerName] = useState("");
   const openModal = () => setModalOpen(true);
   const closeModal = () => {
     getProject();
     setModalOpen(false);
   };
 
-  // const getName = async () => {
-  //   try {
-  //     const userToken = localStorage.getItem("userToken");
-  //     const user = jwtDecode(userToken);
-  //     const creatorID = user.userId;
-  //     const response = await axios.get(
-  //       "http://localhost:3001/project/getProjectss",
-  //       {
-  //         params: { creatorID, selectedProject },
-  //         withCredentials: true,
-  //       }
-  //     );
+ 
 
-  //     return response.data;
-  //   } catch (error) {}
-  // };
+  const userToken = localStorage.getItem("userToken");
 
-  // const gettaskName = async () => {
-  //   try {
-  //     const userToken = localStorage.getItem("userToken");
-  //     const user = jwtDecode(userToken);
-  //     const creatorID = user.userId;
-  //     const response = await axios.get("http://localhost:3001/task/getTask2", {
-  //       params: { creatorID, selectedProject },
-  //       withCredentials: true,
-  //     });
-
-  //     console.log(response.data, " taskanameeeee");
-  //     const taskNames = response.data.map((task) => task.taskName);
-
-  //     return taskNames;
-  //   } catch (error) {}
-  // };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
+  const user = jwtDecode(userToken);
+  const creatorID = user.userId;
+  // React.useEffect(() => {
+  //   async function fetchCustomers() {
   //     try {
-  //       const name = await gettaskName();
-  //       setTaskName(name);
+  //       const response = await api.customer.getCustomers(creatorID);
+  //       const modifiedRows = response.data.customer.map((customer) => ({
+  //         ...customer,
+  //         id: customer._id,
+  //       }));
+  //       setRows(modifiedRows);
   //     } catch (error) {
-  //       console.error(error);
+  //       console.error("Veriler alınırken hata oluştu:", error);
   //     }
-  //   };
+  //   }
 
-  //   fetchData();
-  // }, [selectedProject]);
+  //   fetchCustomers();
+  // }, []);
+
+useEffect(()=>{
+getProject()
+
+
+
+
+},[selectedCustomerName])
+
 
   useEffect(() => {
-    const fetchCustomerName = async () => {
-      try {
-        const userToken = localStorage.getItem("userToken");
-        const user = jwtDecode(userToken);
-        const creatorID = user.userId;
-  
-        const response = await axios.get(
-          "http://localhost:3001/project/getProjectss",
-          {
-            params: { creatorID, selectedProject },
-            withCredentials: true,
-          }
-        );
-  
-
-        if (response.data) {
-          const customerName = response.data.name; // Örnek olarak, projenin müşteri adı buradan alınabilir
-          console.log(customerName,"cussso")
-          setSelectedName(customerName);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-  
-    fetchCustomerName();
-  }, [selectedProject]);
-
+    getCustomer()
+    //getBusinessRegistration()
+  }, []);
 
   const handleHourChange = (event) => {
     setSelectedHour(event.target.value);
@@ -139,6 +111,9 @@ function BusinessRegistration() {
     setSelectedDateTime(selectedDate);
     // Seçilen tarih ve saat değeri ile yapmak istediğiniz işlemleri burada gerçekleştirebilirsiniz
   };
+
+  const [minuteInput, setMinuteInput] = useState('');
+
 
   const handleStartDateTimeChange = (e) => {
     const startDate = new Date(e.target.value);
@@ -156,13 +131,15 @@ function BusinessRegistration() {
 
   const getProject = async () => {
     try {
-      const userToken = localStorage.getItem("userToken");
-      const user = jwtDecode(userToken);
-      const creatorID = user.userId;
-      const response = await api.project.getProjects(creatorID);
-      const projectNames = response.map((project) => project.projectName);
+      const response = await axios.get("http://localhost:3001/project/getcustomerproject",{
+        params:{selectedCustomerName,creatorID}
+        ,
+          withCredentials: true,
+      });
+      console.log(response," pronamesss")
+
+      const projectNames = response.data.projects.map((project) => project);
       setProjectName(projectNames);
-      setCustomerName();
     } catch (error) {
       console.log(error);
     }
@@ -198,10 +175,10 @@ function BusinessRegistration() {
 
       const newRow = {
         ProjectName: selectedProject,
-        CustomerName: selectedName,
+        CustomerName: selectedCustomerName,
         projectDescription:projectDescription ,
         Date:selectedDate,
-        hour:selectedHour,
+        minute:minuteInput,
         creatorID: creatorID,
       };
       const response = await axios.post(
@@ -239,9 +216,54 @@ function BusinessRegistration() {
     window.location.reload();
   };
 
-  const handleRowClick = (projectId) => {
-    navigate("/projectDetails", { state: { projectId } });
+  const getCustomer = async () => {
+    try {
+      const userToken = localStorage.getItem('userToken');
+      const user = jwtDecode(userToken);
+      const creatorID = user.userId;
+      const response = await api.customer.getCustomers(creatorID);
+  console.log(response.data.customer,"custooo")
+
+
+      const customerNames = response.data.customer.map(customer => customer.firstName+" "+customer.lastName);
+      console.log(customerNames," custoNamess")
+
+      setCustomerName(customerNames);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+
+  const handleUpdate = async (e) => {  
+    e.preventDefault();
+    try {
+      const updatedData = {
+        projectName: editedData.projectName,
+        job: editedData.job,
+        workday: editedData.workday,
+        hour: editedData.hour,
+        customerName: editedData.customerName
+      };
+      const response = await axios.post(
+        `http://localhost:3001/business/updatebusiness/${id}`,
+         {updatedData },
+        { withCredentials: true }
+      );      
+      window.location.reload();
+      console.log("Güncelleme başarılı:", response);
+    } catch (error) {
+      console.error("Güncelleme işlemi sırasında hata oluştu:", error);
+    }
+  }
+  
+  
+  const handleRowClick = async (rowId) => {
+    console.log(rowId, "rowowo");
+    setOpen(true);
+    setid(rowId)
+  }
+  
   const handleClose = () => {
     setOpen(false);
   };
@@ -271,7 +293,8 @@ function BusinessRegistration() {
                         Çalışma Günü 
                       </TableCell>
                       <TableCell align="center" style={{ fontWeight: "bold" }}>
-                      Çalışılan Saat                      </TableCell>
+                      Çalışılan Dakika
+                      </TableCell>
                      
                       <TableCell align="center" style={{ fontWeight: "bold" }}>
                         Müşteri Bilgileri
@@ -357,6 +380,24 @@ function BusinessRegistration() {
                   }}>
                    İŞ KAYDI EKLE
                   </Typography>
+
+<div>Müşteri</div>
+<Select
+                    label="Müşteri Adı"
+                    
+                    fullWidth
+                    margin="normal"
+                    value={selectedCustomerName}
+                    onChange={(e) => setSelectedCustomerName(e.target.value)}
+                  >
+{Array.isArray(customerName) &&
+    customerName.map((customer) => (
+      <MenuItem key={customer} value={customer} style={{ color: 'black' }}>
+        {customer}
+      </MenuItem>
+    ))}
+
+   </Select>
                   <FormControl fullWidth margin="normal">
                     <label style={{ color: "black" }}>Proje Adı</label>
                     <Select
@@ -419,19 +460,12 @@ function BusinessRegistration() {
 </label>
 <br></br>
 <FormControl fullWidth>
-      <Select
-        value={selectedHour}
-        onChange={handleHourChange}
-        displayEmpty
-        inputProps={{ 'aria-label': 'Hour' }}
-      >
-        <MenuItem value="" disabled>
-          Saat Seçin
-        </MenuItem>
-        {[...Array(24).keys()].map((hour) => (
-          <MenuItem key={hour} value={hour + 1}>{hour + 1}</MenuItem>
-        ))}
-      </Select>
+<TextField
+  label="Harcanan Dakikayı Girin"
+  type="number"
+  inputProps={{ min: 0 }}
+  onChange={(e) => setMinuteInput(e.target.value)}
+/>
     </FormControl>
 
              
@@ -454,6 +488,137 @@ function BusinessRegistration() {
                   </Button>
                 </div>
               </Modal>
+
+              <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  maxWidth="xl"
+                  PaperProps={{
+                    style: {
+                      height: "700px",
+
+                      width: "500px",
+                      padding: "25px",
+                    },
+                  }}
+                >
+                  <div className="text-center">
+                    <h1 className="h4 text-gray-900 mb-4">İş Kaydı Düzenleme</h1>
+                  </div>
+                  <form className="user" onSubmit={handleUpdate}>
+                  <div>Müşteri</div>
+
+<Select
+                    label="Müşteri Adı"
+                  
+                    fullWidth
+                    margin="normal"
+                    value={selectedCustomerName}
+                    onChange={(e) => setSelectedCustomerName(e.target.value)}
+                  >
+{Array.isArray(customerName) &&
+    customerName.map((customer) => (
+      <MenuItem key={customer} value={customer} style={{ color: 'black' }}>
+        {customer}
+      </MenuItem>
+    ))}
+
+   </Select>
+
+                    <div className="form-group">
+                      <label>Proje Adı:</label>
+                      <input
+                        type="text"
+                        value={editedData.projectName}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            projectName: e.target.value,
+                          })
+                        }
+                        className="form-control form-control-user"
+                        id="exampleInputEmail"
+                        aria-describedby="emailHelp"
+                        placeholder="Müşteri Ad"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Yapılan İş:</label>
+                      <input
+                        type="text"
+                        value={editedData.job}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            job: e.target.value,
+                          })
+                        }
+                        className="form-control form-control-user"
+                        id="exampleInputPassword"
+                        placeholder="Müşteri Soyad"
+                      />
+                    </div>
+                    <div className="form-group">
+                    <label style={{ color: "black", display:"block"}}> 
+  Çalışılan Gün Tarih:
+  <input 
+    style={{ marginLeft: "10px", marginTop: "15px", width:"300px"}}
+    type="date"
+    value={editedData.workday}
+    onChange={(e) =>
+      setEditedData({
+        ...editedData,
+        workday: e.target.value,
+      })
+    }    />
+</label>
+    
+                    </div>
+                    <div className="form-group">
+                      <label>Çalışma Saati : </label>
+                      <input
+                        type="text"
+                        value={editedData.hour}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            hour: e.target.value,
+                          })
+                        }
+                        className="form-control form-control-user"
+                        id="exampleInputPassword"
+                        placeholder="Müşteri Telefon"
+                      />
+                    </div>
+                    {/* <div className="form-group">
+                      <label>Proje Adı:</label>
+                      <input
+                        type="text"
+                        value={editedData.projectName}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            projectName: e.target.value,
+                          })
+                        }
+                        className="form-control form-control-user"
+                        id="exampleInputPassword"
+                        placeholder="Proje Adı"
+                      />
+                    </div> */}
+
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-user btn-block"
+                    >
+                      Değişiklikleri Kaydet
+                    </button>
+                  </form>
+                </Dialog>
+
+
+
+
             </div>
           </div>
         </div>

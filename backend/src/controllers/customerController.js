@@ -60,7 +60,7 @@ const addCustomer= async(req,res)=>{
     }
     }
 
-const getCustomers = async (req, res) => {
+const getCustomers = async (req, res) => {    
   try {
 
          
@@ -99,7 +99,6 @@ const updateCustomer = async (req, res) => {
   const id = req.params.id;
   const updatedData = req.body;
 
-  console.log(updatedData, " datalar")
 
   try {
     const customer = await Customer.findById(id);

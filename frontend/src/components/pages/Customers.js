@@ -305,13 +305,18 @@ function Customers() {
     setOpen(true);
 
     setEditedData({
+      
       id: row.id,
       firstName: row.firstName,
       lastName: row.lastName,
       email: row.email,
       phone: row.phone,
       projectName: row.projectName,
+  
+
+  
     });
+  
   };
 
   const handleClose = () => {

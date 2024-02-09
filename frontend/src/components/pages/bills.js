@@ -1,546 +1,620 @@
-import logo from '../../../src/logo.svg';
-import '../../App.css';
-import Header from './componentss/header';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Button from "@mui/material/Button";
+import DeleteIcon from "@mui/icons-material/DeleteOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import Modal from "@mui/material/Modal";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import { jwtDecode } from "jwt-decode";
+import Dialog from "@mui/material/Dialog";
+import Input from '@mui/material/Input';
 
-function Bills() {
+import Sidebar from "./componentss/sidebar";
+import Header from "./componentss/header";
+import api from "../../services/api.js";
+import axios from "axios";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DateTimePicker from "@mui/lab/DateTimePicker";
+function BusinessRegistration() {
+  const [rows, setRows] = useState([]);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [projectName, setProjectName] = useState([]);
+  const [selectedProject, setSelectedProject] = useState("");
+  const [selectedName, setSelectedName] = useState("");
+  const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+  const [startDateTime, setStartDateTime] = useState(null);
+  const [endDateTime, setEndDateTime] = useState(null);
+  const [taskName, setTaskName] = useState([]);
+  const [selectedTaskName, setselectedTaskName] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [projectDescription, setprojectDescription] = useState(); 
+  const [selectedHour, setSelectedHour] = useState('');
+  const [open1, setOpen1] = React.useState(false);
+  const [id, setid] = useState('');
+  const[selectedCustomerName,setSelectedCustomerName]=useState([])
+  const[customerName,setCustomerName]=useState([])
+  const [selectedMinute, setSelectedMinute] = useState(''); 
+  const [selectedfinishDate, setselectedfinishDate] = useState('')
+  //
+  const [selectedDate, setselectedDate] = useState(new Date()); 
+  
+  const [editedData, setEditedData] = React.useState({
+    projectName: "",
+    job: "",
+    workday: "",
+    hour: "",
+    customerName: "",
+
+    });
+
+
+  const openModal = () => setModalOpen(true);
+  const closeModal = () => {
+    getProject();
+    setModalOpen(false);
+  };
+
+ 
+
+  const userToken = localStorage.getItem("userToken");
+
+  const user = jwtDecode(userToken);
+  const creatorID = user.userId;
+  // React.useEffect(() => {
+  //   async function fetchCustomers() {
+  //     try {
+  //       const response = await api.customer.getCustomers(creatorID);
+  //       const modifiedRows = response.data.customer.map((customer) => ({
+  //         ...customer,
+  //         id: customer._id,
+  //       }));
+  //       setRows(modifiedRows);
+  //     } catch (error) {
+  //       console.error("Veriler alınırken hata oluştu:", error);
+  //     }
+  //   }
+
+  //   fetchCustomers();
+  // }, []);
+
+useEffect(()=>{
+getProject()
+
+
+
+
+},[selectedCustomerName])
+
+
+  useEffect(() => {
+    getCustomer()
+    //getBusinessRegistration()
+  }, []);
+
+  const handleHourChange = (event) => {
+    setSelectedHour(event.target.value);
+  };
+
+  const handleDateTimeChange = (e) => {
+    const selectedDate = new Date(e.target.value);
+    setSelectedDateTime(selectedDate);
+    // Seçilen tarih ve saat değeri ile yapmak istediğiniz işlemleri burada gerçekleştirebilirsiniz
+  };
+
+  const handleStartDateTimeChange = (e) => {
+    const startDate = new Date(e.target.value);
+    setStartDateTime(startDate);
+  };
+
+  const [minuteInput, setMinuteInput] = useState('');
+
+
+  const handleMinuteChange = (event) => {
+    setSelectedMinute(event.target.value);
+  };
+  const handleEndDateTimeChange = (e) => {
+    const endDate = new Date(e.target.value);
+    setEndDateTime(endDate);
+  };
+  useEffect(() => {
+    getProject();
+    getbill();
+  }, []);
+
+  const getProject = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/project/getcustomerproject",{
+        params:{selectedCustomerName,creatorID}
+        ,
+          withCredentials: true,
+      });
+      console.log(response," pronamesss")
+
+      const projectNames = response.data.projects.map((project) => project);
+      console.log(projectNames," pronamesss")
+      setProjectName(projectNames);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getbill = async () => {
+    try {
+      
+        const response = await axios.get(
+        "http://localhost:3001/bill/getbill",
+        {
+          params: { creatorID },
+          withCredentials: true,
+        }
+      );
+
+      console.log(response, "ressoosss");
+
+      setRows(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addbill = async () => {
+    try {
+      const userToken = localStorage.getItem("userToken");
+      const user = jwtDecode(userToken);
+      const creatorID = user.userId;
+
+      const newRow = {
+        ProjectName: selectedProject,
+        CustomerName: selectedCustomerName,
+        Date:selectedDate,
+        finishedDate:selectedfinishDate,
+        creatorID:creatorID
+      };
+
+      const response = await axios.post(
+        "http://localhost:3001/bill/addbill",
+        {
+          newRow,
+          withCredentials: true,
+        }
+      );
+      setRows((prevRows) => [...prevRows, newRow]);
+
+      window.location.reload();
+      closeModal();
+
+      console.log(response);
+    } catch (error) {
+      console.error("Error adding business registration:", error);
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const onDeleteBusiness = async (businessId) => {
+    const response = await axios.get(
+      "http://localhost:3001/business/deletebusiness",
+      { params: { businessId } },
+      { withCredentials: true }
+    );
+
+    window.location.reload();
+  };
+
+  const onDeleteProject = async (projectId) => {
+    await api.project.deleteProject(projectId);
+    window.location.reload();
+  };
+
+  const getCustomer = async () => {
+    try {
+      const userToken = localStorage.getItem('userToken');
+      const user = jwtDecode(userToken);
+      const creatorID = user.userId;
+      const response = await api.customer.getCustomers(creatorID);
+  console.log(response.data.customer,"custooo")
+
+
+      const customerNames = response.data.customer.map(customer => customer.firstName+" "+customer.lastName);
+      console.log(customerNames," custoNamess")
+
+      setCustomerName(customerNames);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const handleUpdate = async (e) => {  
+    e.preventDefault();
+    try {
+      const updatedData = {
+        projectName: editedData.projectName,
+        job: editedData.job,
+        workday: editedData.workday,
+        hour: editedData.hour,
+        customerName: editedData.customerName
+      };
+      const response = await axios.post(
+        `http://localhost:3001/business/updatebusiness/${id}`,
+         {updatedData },
+        { withCredentials: true }
+      );      
+      window.location.reload();
+      console.log("Güncelleme başarılı:", response);
+    } catch (error) {
+      console.error("Güncelleme işlemi sırasında hata oluştu:", error);
+    }
+  }
+  
+  
+  const handleRowClick = async (rowId) => {
+    console.log(rowId, "rowowo");
+    setOpen(true);
+    setid(rowId)
+  }
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <>
-    <div id="page-top"> 
-    <div id="wrapper">
+      <div id="page-top">
+        <div id="wrapper">
+          <Sidebar />
+          <div id="content-wrapper" className="d-flex flex-column">
+            <div id="content">
+              <Header />
 
+              <TableContainer
+                style={{ width: "94%", margin: "3%" }}
+                component={Paper}
+              >
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell align="left" style={{ fontWeight: "bold" }}>
+                        Proje{" "}
+                      </TableCell>
+                      <TableCell align="center" style={{ fontWeight: "bold" }}>
+                      Başlangıç Tarihi</TableCell>
+                      <TableCell align="center" style={{ fontWeight: "bold" }}>
+                      Bitiş Tarihi</TableCell>
+                      
+                      <TableCell align="center" style={{ fontWeight: "bold" }}>
+                      Çalışılan Saat                      </TableCell>
+                     
+                      <TableCell align="center" style={{ fontWeight: "bold" }}>
+                        Müşteri Bilgileri
+                      </TableCell>
+                      <TableCell align="center" style={{ fontWeight: "bold" }}>
+Tutar                      </TableCell>
 
-<ul class="navbar-nav bg-gradient-primary1 sidebar sidebar-dark accordion" id="accordionSidebar">
+                      <TableCell align="center" style={{ fontWeight: "bold" }}>
+                        Yönet
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row) => (
+                      <TableRow
+                        key={row.name}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell align="left" scope="row">
+                          {row.project}
+                        </TableCell>
+                        <TableCell align="center">
+                          {row.date}
+                        </TableCell>
+                        <TableCell align="center">
+                          {row.finishdate}
+                        </TableCell>
+                        <TableCell align="center">
+                          {row.totalHoursWorked}
+                        </TableCell>
+                        <TableCell align="center">{row.customer}</TableCell>
+                        <TableCell align="center">{row.amount}</TableCell>
 
-  
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="Dashboard">
-        <div class="sidebar-brand-icon ">
-            <img src="./assets/img/logo.png"  ></img>
-            {/* <i class="fas fa-laugh-wink"></i> */}
-        </div>
-        <div class="sidebar-brand-text mx-3"></div>
-    </a>
+                        <TableCell align="center">
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            startIcon={<DeleteIcon />}
+                            onClick={() => onDeleteBusiness(row._id)}
+                          >
+                            SİL
+                          </Button>
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            onClick={() => handleRowClick(row._id)}
+                          >
+                            Düzenle{" "}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
 
-    <hr class="sidebar-divider my-0"/>
+              <Button onClick={openModal}
+              style={{
+                backgroundColor:"#003466",
+                color:"#f2f2f2",
+                position:"relative",
+                left:"480px",
+                width:"200px",
+                height:50
+              }} 
+              >FATURA EKLE</Button>
+              {/* Modal for adding business registration */}
+              <Modal open={isModalOpen} onClose={closeModal}>
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    width: 700,
+                    height: 600,
+                    padding: 25,
+                    backgroundColor: "white",
+                    boxShadow: 24,
+                    p: 4,
+                  }}
+                >
+                  <Typography  variant="h6" component="div" gutterBottom 
+                  style={{textAlign:"center",
+                  color:"black"
+                  }}>
+                FATURA EKLE
+                
+                  </Typography>
 
-           
-            <li class="nav-item active">
-                <a class="nav-link" href="index.html">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-        
-            <hr class="sidebar-divider"/>
-
-           
-            <div class="sidebar-heading">
-               
-            </div>
-
-            <li class="nav-item">
-                <a class="nav-link " href="/customers"  data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
-                    <span>Müşteriler</span>
-                </a>
-                {/* <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Components:</h6>
-                        <a class="collapse-item" href="buttons.html">Buttons</a>
-                        <a class="collapse-item" href="cards.html">Cards</a>
-                    </div>
-                </div> */}
-            </li>
-
-           
-            <li class="nav-item">
-                <a class="nav-link " href="/projectManagement" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <i class="fas fa-fw fa-wrench"></i>
-                    <span>Proje Yönetimi</span>
-                </a>
-                {/* <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Custom Utilities:</h6>
-                        <a class="collapse-item" href="utilities-color.html">Colors</a>
-                        <a class="collapse-item" href="utilities-border.html">Borders</a>
-                        <a class="collapse-item" href="utilities-animation.html">Animations</a>
-                        <a class="collapse-item" href="utilities-other.html">Other</a>
-                    </div>
-                </div> */}
-            </li>
-
-            {/* <hr class="sidebar-divider"/> */}
-
-
-{/* <div class="sidebar-heading">
-    Addons
-</div> */}
-
-
-<li class="nav-item">
-    <a class="nav-link " href="/businessRegistration"data-target="#collapsePages"
-        aria-expanded="true" aria-controls="collapsePages">
-        <i class="fas fa-fw fa-folder"></i>
-        <span>İş Kaydı</span>
-    </a>
-    {/* <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-        <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="/login">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-            <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item" href="blank.html">Blank Page</a>
-        </div>
-    </div> */}
-</li>
-
-
-<li class="nav-item">
-    <a class="nav-link" href="/bills">
-        <i class="fas fa-fw fa-chart-area"></i>
-        <span>Faturalar</span></a>
-</li>
-
-
-{/* <li class="nav-item">
-    <a class="nav-link" href="tables.html">
-        <i class="fas fa-fw fa-table"></i>
-        <span>Tables</span></a>
-</li> */}
-
-
-{/* <hr class="sidebar-divider d-none d-md-block"/> */}
-
-{/* <button class="rounded-circle border-0" id="sidebarToggle" style={{ backgroundColor: 'your-color' }} aria-label="Toggle Sidebar"></button> */}
-
-
-
-
-
-{/* <div class="sidebar-card d-none d-lg-flex">
-    <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="..."/>
-    <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-    <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
-</div> */}
-
-
-
-</ul>
-<div id="content-wrapper" class="d-flex flex-column">
-
-
-<div id="content">
-
-   
-    
-<Header/>
-
-
-    <div class="container-fluid">
-
-    
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">MERHABA BU BİR FATURALAR SAYFASIDIR.</h1>
-            {/* <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> */}
-        </div>
-
-{/*      
-        <div class="row">
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-primary shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Earnings (Monthly)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Earnings (Annual)</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-info shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                </div>
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
-                                    </div>
-                                    <div class="col">
-                                    <div class="progress progress-sm mr-2">
-    <div
-        class="progress-bar bg-info"
-        role="progressbar"
-        style={{ width: '50%' }}
-        aria-valuenow={50}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-           
-            <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
-                    <div class="card-body">
-                        <div class="row no-gutters align-items-center">
-                            <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Pending Requests</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-comments fa-2x text-gray-300"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    
-
-        <div class="row">
-
-          
-            <div class="col-xl-8 col-lg-7">
-                <div class="card shadow mb-4">
+<div>Müşteri</div>
+<Select
+                    label="Müşteri Adı"
                     
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                   
-                    <div class="card-body">
-                        <div class="chart-area">
-                            <canvas id="myAreaChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                    fullWidth
+                    margin="normal"
+                    value={selectedCustomerName}
+                    onChange={(e) => setSelectedCustomerName(e.target.value)}
+                  >
+{Array.isArray(customerName) &&
+    customerName.map((customer) => (
+      <MenuItem key={customer} value={customer} style={{ color: 'black' }}>
+        {customer}
+      </MenuItem>
+    ))}
 
-            
-            <div class="col-xl-4 col-lg-5">
-                <div class="card shadow mb-4">
-                  
-                    <div
-                        class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Dropdown Header:</div>
-                                <a class="dropdown-item" href="#">Action</a>
-                                <a class="dropdown-item" href="#">Another action</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Something else here</a>
-                            </div>
-                        </div>
-                    </div>
-                  
-                    <div class="card-body">
-                        <div class="chart-pie pt-4 pb-2">
-                            <canvas id="myPieChart"></canvas>
-                        </div>
-                        <div class="mt-4 text-center small">
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-primary"></i> Direct
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-success"></i> Social
-                            </span>
-                            <span class="mr-2">
-                                <i class="fas fa-circle text-info"></i> Referral
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+   </Select>
+                  <FormControl fullWidth margin="normal">
+                    <label style={{ color: "black" }}>Proje Adı</label>
+                    <Select
+                      labelId="project-name-label"
+                      id="project-name"
+                      value={selectedProject}
+                      onChange={(e) => setSelectedProject(e.target.value)}
+                    >
+                      {Array.isArray(projectName) &&
+                        projectName.map((project) => (
+                          <MenuItem
+                            key={project}
+                            value={project}
+                            style={{ color: "black" }}
+                          >
+                            {project}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                  {/* <TextField
+  placeholder="Müşteri Adı"
+  disabled
+  fullWidth
+  margin="normal"
+  value={selectedName} 
+/> */}
 
-   
-        <div class="row">
-
-         
-            <div class="col-lg-6 mb-4">
-
-               
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
-                    </div>
-                    <div class="card-body">
-                        <h4 class="small font-weight-bold">Server Migration <span
-                                class="float-right">20%</span></h4>
-                        <div class="progress mb-4">
-    <div
-        class="progress-bar bg-danger"
-        role="progressbar"
-        style={{ width: '20%' }}
-        aria-valuenow={20}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Sales Tracking <span
-                                class="float-right">40%</span></h4>
-                       <div class="progress mb-4">
-    <div
-        class="progress-bar bg-warning"
-        role="progressbar"
-        style={{ width: '40%' }}
-        aria-valuenow={40}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Customer Database <span
-                                class="float-right">60%</span></h4>
-                      <div class="progress mb-4">
-    <div
-        class="progress-bar"
-        role="progressbar"
-        style={{ width: "60%" }}
-        aria-valuenow={60}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Payout Details <span
-                                class="float-right">80%</span></h4>
-                       <div class="progress mb-4">
-    <div
-        class="progress-bar bg-info"
-        role="progressbar"
-        style={{ width: '80%' }}
-        aria-valuenow={80}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                        <h4 class="small font-weight-bold">Account Setup <span
-                                class="float-right">Complete!</span></h4>
-                     <div class="progress">
-    <div
-        class="progress-bar bg-success"
-        role="progressbar"
-        style={{ width: '100%' }}
-        aria-valuenow={100}
-        aria-valuemin={0}
-        aria-valuemax={100}
-    ></div>
-</div>
-
-                    </div>
-                </div>
-
-              
-                <div class="row">
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-primary text-white shadow">
-                            <div class="card-body">
-                                Primary
-                                <div class="text-white-50 small">#4e73df</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-success text-white shadow">
-                            <div class="card-body">
-                                Success
-                                <div class="text-white-50 small">#1cc88a</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-info text-white shadow">
-                            <div class="card-body">
-                                Info
-                                <div class="text-white-50 small">#36b9cc</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-warning text-white shadow">
-                            <div class="card-body">
-                                Warning
-                                <div class="text-white-50 small">#f6c23e</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-danger text-white shadow">
-                            <div class="card-body">
-                                Danger
-                                <div class="text-white-50 small">#e74a3b</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-secondary text-white shadow">
-                            <div class="card-body">
-                                Secondary
-                                <div class="text-white-50 small">#858796</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-light text-black shadow">
-                            <div class="card-body">
-                                Light
-                                <div class="text-black-50 small">#f8f9fc</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-4">
-                        <div class="card bg-dark text-white shadow">
-                            <div class="card-body">
-                                Dark
-                                <div class="text-white-50 small">#5a5c69</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="col-lg-6 mb-4">
-
-              
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                    </div>
-                    <div class="card-body">
-                    <div class="text-center">
-    <img
-        class="img-fluid px-3 px-sm-4 mt-3 mb-4"
-        style={{ width: '25rem' }}
-        src="img/undraw_posting_photo.svg"
-        alt="..."
-    />
-</div>
-
-                        <p>Add some quality, svg illustrations to your project courtesy of <a
-                                target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                            constantly updated collection of beautiful svg images that you can use
-                            completely free and without attribution!</p>
-                        <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                            unDraw &rarr;</a>
-                    </div>
-                </div>
 
                 
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                    </div>
-                    <div class="card-body">
-                        <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                            CSS bloat and poor page performance. Custom CSS classes are used to create
-                            custom components and custom utility classes.</p>
-                        <p class="mb-0">Before working with this theme, you should become familiar with the
-                            Bootstrap framework, especially the utility classes.</p>
-                    </div>
+
+                 
+                  <label style={{ color: "black", display:"block"}}> 
+  Çalışılan Gün Tarih:
+  <input 
+    style={{ marginLeft: "10px", marginTop: "15px", width:"300px"}}
+    type="date"
+    value={selectedDate}
+    onChange={(e) => setselectedDate(e.target.value)}
+    />
+</label>
+<br></br>
+<label style={{ color: "black", display:"block"}}> 
+  Bitiş Tarihi:
+  <input 
+    style={{ marginLeft: "10px", marginTop: "15px", width:"300px"}}
+    type="date"
+    value={selectedfinishDate}
+    onChange={(e) => setselectedfinishDate(e.target.value)}
+    />
+</label>
+
+
+                  <Button
+                  style={{
+                    position:"relative",
+                    right:"150px",
+                    top:"30px",
+                   left:"210px",
+                    width:"200px",
+                    height:"50px"
+
+                   }}
+                    variant="outlined"
+                    color="primary"
+                    onClick={addbill}
+                  >
+                    Fatura Oluştur
+                  </Button>
                 </div>
+              </Modal>
+
+              <Dialog
+                  open={open}
+                  onClose={handleClose}
+                  maxWidth="xl"
+                  PaperProps={{
+                    style: {
+                      height: "700px",
+
+                      width: "500px",
+                      padding: "25px",
+                    },
+                  }}
+                >
+                  <div className="text-center">
+                    <h1 className="h4 text-gray-900 mb-4">Fatura Düzenleme</h1>
+                  </div>
+                  <form className="user" onSubmit={handleUpdate}>
+                  <div>Müşteri</div>
+
+<Select
+                    label="Müşteri Adı"
+                  
+                    fullWidth
+                    margin="normal"
+                    value={selectedCustomerName}
+                    onChange={(e) => setSelectedCustomerName(e.target.value)}
+                  >
+{Array.isArray(customerName) &&
+    customerName.map((customer) => (
+      <MenuItem key={customer} value={customer} style={{ color: 'black' }}>
+        {customer}
+      </MenuItem>
+    ))}
+
+   </Select>
+
+                    <div className="form-group">
+                      <label>Proje Adı:</label>
+                      <input
+                        type="text"
+                        value={editedData.projectName}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            projectName: e.target.value,
+                          })
+                        }
+                        className="form-control form-control-user"
+                        id="exampleInputEmail"
+                        aria-describedby="emailHelp"
+                        placeholder="Müşteri Ad"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>Yapılan İş:</label>
+                      <input
+                        type="text"
+                        value={editedData.job}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            job: e.target.value,
+                          })
+                        }
+                        className="form-control form-control-user"
+                        id="exampleInputPassword"
+                        placeholder="Müşteri Soyad"
+                      />
+                    </div>
+                    <div className="form-group">
+                    <label style={{ color: "black", display:"block"}}> 
+  Çalışılan Gün Tarih:
+  <input 
+    style={{ marginLeft: "10px", marginTop: "15px", width:"300px"}}
+    type="date"
+    value={editedData.workday}
+    onChange={(e) =>
+      setEditedData({
+        ...editedData,
+        workday: e.target.value,
+      })
+    }    />
+</label>
+    
+                    </div>
+                    
+                    <div className="form-group">
+                      <label>Çalışma Saati : </label>
+                      <input
+                        type="text"
+                        value={editedData.hour}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            hour: e.target.value,
+                          })
+                        }
+                        className="form-control form-control-user"
+                        id="exampleInputPassword"
+                        placeholder="Müşteri Telefon"
+                      />
+                    </div>
+                    {/* <div className="form-group">
+                      <label>Proje Adı:</label>
+                      <input
+                        type="text"
+                        value={editedData.projectName}
+                        onChange={(e) =>
+                          setEditedData({
+                            ...editedData,
+                            projectName: e.target.value,
+                          })
+                        }
+                        className="form-control form-control-user"
+                        id="exampleInputPassword"
+                        placeholder="Proje Adı"
+                      />
+                    </div> */}
+
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-user btn-block"
+                    >
+                      Değişiklikleri Kaydet
+                    </button>
+                  </form>
+                </Dialog>
+
+
+
 
             </div>
-        </div> */}
-
-    </div>
-  
-
-</div>
-
-
-
-<footer class="sticky-footer bg-white">
-    <div class="container my-auto">
-        <div class="copyright text-center my-auto">
-            <span>Copyright &copy; Your Website 2021</span>
+          </div>
         </div>
-    </div>
-</footer>
-
-
-</div>
-
-    </div>
-
-
-
-    </div>
-   
+      </div>
     </>
-   
   );
 }
 
-export default Bills;
+export default BusinessRegistration;

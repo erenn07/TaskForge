@@ -12,6 +12,7 @@ router.route("/getProjects").get(projectController.getProjects)
 //router.route("/getProjects").post(projectController.getProjects)
 
 router.route("/getProjectss").get(projectController.getProjects2)
+router.route("/getcustomerproject").get(projectController.getProjects3)
 
 
 router.route("/projectDetails/:id").post(projectController.projectDetails)

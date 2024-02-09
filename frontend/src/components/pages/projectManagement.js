@@ -42,7 +42,14 @@ function BusinessRegistration() {
   const[selectedTaskName,setselectedTaskName]=useState([])
   const[customerName,setCustomerName]=useState([])
   const[selectedCustomerName,setSelectedCustomerName]=useState([])
-
+  const [editedData, setEditedData] = React.useState({
+    id: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    projectName: "",
+  });
 
 
   const openModal = () => setModalOpen(true);
@@ -81,7 +88,6 @@ return response.data
         withCredentials: true
     });
 
-console.log(response.data," taskanameeeee")
 const taskNames = response.data.map(task => task.taskName);
 
       return taskNames
@@ -172,10 +178,9 @@ const taskNames = response.data.map(task => task.taskName);
       });
   
   
-      // response'daki projeleri dönüştürerek setRows ile state'i güncelle
       const updatedProjects = response.data.map(project => ({
         ...project,
-        customer: project.customerName // customer yerine customerName'i kullan
+        customer: project.customerName 
       }));
       setRows(updatedProjects);
   
@@ -334,11 +339,28 @@ Proje Açıklaması                      </TableCell>
                   <Typography variant="h6" component="div" gutterBottom>
 Proje Ekle                  </Typography>
                   <FormControl fullWidth margin="normal">
-                  Proje Adı
 
+<div>Müşteri Adı</div>
 <InputLabel id="project-name-label" style={{ color: 'black' }}>
 </InputLabel>
+<Select
+                    label="Müşteri Adı"
+                  
+                    fullWidth
+                    margin="normal"
+                    value={selectedCustomerName}
+                    onChange={(e) => setSelectedCustomerName(e.target.value)}
+                  >
+{Array.isArray(customerName) &&
+    customerName.map((customer) => (
+      <MenuItem key={customer} value={customer} style={{ color: 'black' }}>
+        {customer}
+      </MenuItem>
+    ))}
 
+   </Select>
+
+   Proje Adı
 <TextField
   labelId="project-name-label"
   id="project-name"
@@ -373,24 +395,8 @@ Proje Ekle                  </Typography>
       </MenuItem>
     ))} */}
 </FormControl>
-<div>Müşteri</div>
 
-<Select
-                    label="Müşteri Adı"
-                  
-                    fullWidth
-                    margin="normal"
-                    value={selectedCustomerName}
-                    onChange={(e) => setSelectedCustomerName(e.target.value)}
-                  >
-{Array.isArray(customerName) &&
-    customerName.map((customer) => (
-      <MenuItem key={customer} value={customer} style={{ color: 'black' }}>
-        {customer}
-      </MenuItem>
-    ))}
 
-   </Select>
 
    <div>Saatlik Ücret</div>
 

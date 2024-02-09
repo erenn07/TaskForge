@@ -7,14 +7,19 @@ const addTask= async(req,res)=>{
     try {
         const {newTask}= req.body;
 
-      
-      const task = Task.create({
+      const project=await Project.findById(newTask.projectId)
+      const task = await Task.create({
         taskId:newTask.id,
         taskName:newTask.content,
         status:newTask.columnId,
         project:newTask.projectId
           })
         //   await task.save();
+
+project.tasks.push(task._id)
+
+await project.save()
+
           res.status(200).json({succeed:true,message:"task ekleme başarılı"})
     } catch (error) {
         res.status(500).json({succeed:false,message:"server error" + error.message})

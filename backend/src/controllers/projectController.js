@@ -3,30 +3,37 @@ import Project from "../models/Project.js";
 import mongoose from "mongoose"
 const addProject = async (req, res) => {
   try {
+    const { newRow } = req.body;
+      
+    const name = newRow.CustomerName.split(" ")[0];
+      
+    const customers = await Customer.find({ firstName: name });
 
-      const { newRow } = req.body;
-      
-      const name=newRow.CustomerName.split(" ")[0]
-      
-const customer=await Customer.find({firstName:name})
-const customerId=customer[0]._id
-      const project=await Project.create({
-          projectName: newRow.ProjectName,
-          projectDescription: newRow.projectDescription,
-          customer: customerId,
-          hourlyWage: newRow.hourlyWage,
-          creatorID: newRow.creatorID
+    if (customers.length > 0) {
+      const customerId = customers[0]._id;
+
+      const project = await Project.create({
+        projectName: newRow.ProjectName,
+        projectDescription: newRow.projectDescription,
+        customer: customerId,
+        hourlyWage: newRow.hourlyWage,
+        creatorID: newRow.creatorID
       });
 
+      customers[0].projects.push(project._id);
+      await customers[0].save();
+
       if (project) {
-          res.status(200).json({ message: 'project added successfully' });
+        res.status(200).json({ message: 'project added successfully' });
       } else {
-          // Proje oluşturulamazsa uygun bir hata mesajı gönderin
-          res.status(500).json({ error: 'Proje oluşturulamadı' });
+        res.status(500).json({ error: 'Proje oluşturulamadı' });
       }
+    } else {
+      res.status(404).json({ error: 'Müşteri bulunamadı' });
+    }
   } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Sunucu hatası' });
+    console.error(error);
+    res.status(500).json({ error: 'Sunucu hatası' });
   }
 };
 
@@ -92,7 +99,28 @@ const getProjects = async (req, res) => {
     }
 };
 
+const getProjects3 = async (req, res) => {
+  try {
 
+      const { creatorID, selectedCustomerName } = req.query;
+
+let customerName=selectedCustomerName.split(" ")[0];
+
+const customer=await Customer.find({firstName:customerName})
+
+
+
+      const projects = await Project.find({creatorID: creatorID, customer: customer[0]._id});
+
+
+      
+      if (projects.length > 0) {
+        res.status(200).json({ projects: projects.map(project => project.projectName) });
+    } else {
+        res.status(404).json({ error: 'Proje bulunamadı' });
+    }
+}catch(error){};
+}
 
   const projectDetails =async (req,res)=>{
       try {
@@ -126,4 +154,4 @@ const getProjects = async (req, res) => {
   }
   
 
-export{addProject,getProjects,projectDetails,deleteProject,getProjects2}
+export{addProject,getProjects,projectDetails,deleteProject,getProjects2,getProjects3}
